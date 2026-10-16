@@ -1,0 +1,41 @@
+中文说明：正在创建独立 GitHub checkout。
+Cloning into '/home/DIFFER/github_uploads/test2_20261016_141306'...
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+中文解释：GitHub checkout 创建失败，通常是 SSH/HTTPS 凭据或网络权限问题；科研结果保留在本地。
+中文说明：正在创建独立 GitHub checkout。
+Cloning into '/home/DIFFER/github_uploads/test2_20261016_141306'...
+From https://github.com/smallvv1/test2
+ * branch            main       -> FETCH_HEAD
+HEAD is now at f9180bb Upload latest log and updated GPC-v2 code
+Switched to a new branch 'runs/gpc-v2-ltcc-20261016_141306'
+runs/gpc-v2-ltcc-20261016_141306/logs/GPC本轮GitHub归档_20261016_141306.log:3: trailing whitespace.
++git@github.com: Permission denied (publickey).
+中文说明：正在创建独立 GitHub checkout。
+Cloning into '/home/DIFFER/github_uploads/test2_20261016_141306'...
+From https://github.com/smallvv1/test2
+ * branch            main       -> FETCH_HEAD
+HEAD is now at f9180bb Upload latest log and updated GPC-v2 code
+Switched to a new branch 'runs/gpc-v2-ltcc-20261016_141306'
+Missing or invalid credentials.
+Error: connect ECONNREFUSED /tmp/vscode-git-c3d3d989aa.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1706:16) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '/tmp/vscode-git-c3d3d989aa.sock'
+}
+Missing or invalid credentials.
+Error: connect ECONNREFUSED /tmp/vscode-git-c3d3d989aa.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1706:16) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '/tmp/vscode-git-c3d3d989aa.sock'
+}
+remote: No anonymous write access.
+fatal: Authentication failed for 'https://github.com/smallvv1/test2.git/'
+中文解释：commit 已保存在本地发布 checkout，但 GitHub push 因凭据/权限/网络失败；没有删除本地快照。

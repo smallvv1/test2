@@ -1,0 +1,3 @@
+开始 LTCC train-only Caption 资产验证；RUN_TIME=20261015_151937
+资产来源：/data/data/DIFFER_TextCaption/LTCC_ReID
+中文结论：Caption 资产验证失败，禁止启动正式训练。原因：AttributeError: 'str' object has no attribute 'get'

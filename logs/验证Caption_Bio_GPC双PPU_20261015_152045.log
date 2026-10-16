@@ -1,0 +1,77 @@
+W1015 15:22:02.116000 173216 site-packages/torch/distributed/run.py:792] 
+W1015 15:22:02.116000 173216 site-packages/torch/distributed/run.py:792] *****************************************
+W1015 15:22:02.116000 173216 site-packages/torch/distributed/run.py:792] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W1015 15:22:02.116000 173216 site-packages/torch/distributed/run.py:792] *****************************************
+/usr/local/lib/python3.10/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /job_3220505/source/pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/usr/local/lib/python3.10/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /job_3220505/source/pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+using soft triplet loss for training
+using soft triplet loss for training
+/data/DIFFER/scripts/phase5b_id_damage_ds.py:1312: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = amp.GradScaler(init_scale=INITIAL_SCALE)
+/data/DIFFER/scripts/phase5b_id_damage_ds.py:1312: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = amp.GradScaler(init_scale=INITIAL_SCALE)
+中文结论：Caption/Bio/GPC 双 PPU 预检失败；禁止启动正式训练。
+原始错误：KeyError('same_clothes_selected')
+中文结论：Caption/Bio/GPC 双 PPU 预检失败；禁止启动正式训练。
+原始错误：KeyError('same_clothes_selected')
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/DIFFER/scripts/gpc_v2_caption_ppu_preflight.py", line 98, in main
+[rank0]:     selected_info = {"batch_index": batch_index, "matched_count": matched_count, "candidate_counts": info["candidate_counts"], "selected_count": len(chosen["id"]), "same_clothes_selected": info["same_clothes_selected"], "cross_clothes_selected": info["cross_clothes_selected"], "pairs": chosen["id"]}
+[rank0]: KeyError: 'same_clothes_selected'
+
+[rank0]: During handling of the above exception, another exception occurred:
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/DIFFER/scripts/gpc_v2_caption_ppu_preflight.py", line 194, in <module>
+[rank0]:     raise SystemExit(main())
+[rank0]:   File "/home/DIFFER/scripts/gpc_v2_caption_ppu_preflight.py", line 183, in main
+[rank0]:     (output_root / "caption_bio_gpc_ppu_preflight.json").write_text(json.dumps(result, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+[rank0]:   File "/usr/local/lib/python3.10/json/__init__.py", line 238, in dumps
+[rank0]:     **kw).encode(obj)
+[rank0]:   File "/usr/local/lib/python3.10/json/encoder.py", line 201, in encode
+[rank0]:     chunks = list(chunks)
+[rank0]:   File "/usr/local/lib/python3.10/json/encoder.py", line 431, in _iterencode
+[rank0]:     yield from _iterencode_dict(o, _current_indent_level)
+[rank0]:   File "/usr/local/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+[rank0]:     yield from chunks
+[rank0]:   File "/usr/local/lib/python3.10/json/encoder.py", line 405, in _iterencode_dict
+[rank0]:     yield from chunks
+[rank0]:   File "/usr/local/lib/python3.10/json/encoder.py", line 438, in _iterencode
+[rank0]:     o = _default(o)
+[rank0]:   File "/usr/local/lib/python3.10/json/encoder.py", line 179, in default
+[rank0]:     raise TypeError(f'Object of type {o.__class__.__name__} '
+[rank0]: TypeError: Object of type PosixPath is not JSON serializable
+[rank0]:[W1015 15:23:50.951794583 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W1015 15:23:52.384000 173216 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 173287 closing signal SIGTERM
+E1015 15:23:52.448000 173216 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 173286) of binary: /usr/local/bin/python3
+Traceback (most recent call last):
+  File "/usr/local/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/DIFFER/scripts/gpc_v2_caption_ppu_preflight.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-10-15_15:23:52
+  host      : nb-695386d801a3d04b75-7754bfbc9c-mr986
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 173286)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

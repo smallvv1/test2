@@ -1,0 +1,10 @@
+GPC-v2 LTCC 资产恢复与门禁流水线；RUN_TIME=20261015_152045
+关联阻塞运行：RUN_TIME=20261015_145338。
+Caption 资产来源：/data/data/DIFFER_TextCaption/LTCC_ReID。
+train.npz 与历史 SHA256_LIST 精确匹配；Summary Bio JSON 与历史 SHA256_LIST 精确匹配。
+Caption 对齐审计：通过；NPZ、Summary Bio、9576 训练图像、PID/Clothing/Camera、冻结开发划分、query/gallery/test 隔离均通过。
+Bio loss forward/backward：双 PPU 实际模型预检通过；模型参数和梯度位于 PPU-ZW810E。
+GPC loss forward/backward：第二次技术预检在复用已释放 autograd graph 时失败。
+技术恢复次数：2；已达到本轮允许上限。
+中文结论：不启动正式 B0/A1-A5、双 seed 或官方 LTCC 测试；不能绕过 GPC backward 门禁。
+当前状态：BLOCKED_TECHNICAL_PREFLIGHT_AFTER_TWO_RECOVERIES。

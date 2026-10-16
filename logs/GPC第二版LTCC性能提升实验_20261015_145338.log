@@ -1,0 +1,8 @@
+GPC-v2 LTCC 实验流水线；RUN_TIME=20261015_145338
+中文说明：正式训练需要 Source Audit、Data Leakage Audit、双 PPU preflight 全部通过。
+主日志：/home/DIFFER/logs/GPC第二版LTCC性能提升实验_20261015_145338.log
+阶段：来源审计与数据泄漏审计。
+中文结论：Source Audit 和 Data Leakage Audit 未通过，正式训练门禁停止。
+中文原因：当前运行时缺少 LTCC Bio loss 所需的 train-only DIFFER_TextCaption caption 特征；未启动候选训练、双 seed 复核或官方测试。
+双 PPU 预检：已独立通过 forward、backward、optimizer.step；这不解除数据资产阻塞。
+当前状态：BLOCKED_MISSING_TRAIN_CAPTION_ASSETS。

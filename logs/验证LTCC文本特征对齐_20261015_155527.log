@@ -1,0 +1,10 @@
+开始 LTCC train-only Caption 资产验证；RUN_TIME=20261015_155527
+资产来源：/data/data/DIFFER_TextCaption/LTCC_ReID
+train.npz SHA256：c065a1ba8c7325be45f8a33afbb820e323b568f22a032af95039d39598840a30；历史匹配：True
+Summary Bio JSON SHA256：056ed5a99b012c7583b7c3d28869bc5520715282df53684faf9f77800ef834e3；历史匹配：True
+NPZ keys=['data', 'metadata']；data shape=[57456, 512] dtype=float16；metadata count=9576
+Summary Bio：77 个 PID、每项 [1,512]、全部有限；语义键顺序确认：factor-0 Biometrics
+训练图像=9576、query=493、test=7050；metadata 与训练图像一一映射；未混入 query/gallery/test
+冻结开发划分：run_time=20261015_145338，train/validation PID 与路径均不重叠；未重新随机划分
+历史 LTCC loader 逐样本验证通过：caption=[3,512]；factor-1/2 原始特征、factor-0 Summary Bio、PID/Clothing/Camera 全部对齐
+结论：LTCC train-only Caption 资产恢复并验证通过；可以进入 Bio/GPC 双 PPU 门禁。

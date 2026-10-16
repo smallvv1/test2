@@ -1,0 +1,7 @@
+{
+  "run_time": "20261015_145338",
+  "source_audit_pass": false,
+  "leakage_audit_pass": false,
+  "split": "/home/DIFFER/gpc_v2/ltcc_dev_split_20261015_145338.json",
+  "status": "BLOCKED_MISSING_TRAIN_CAPTION_ASSETS"
+}

@@ -1,0 +1,136 @@
+{
+  "leakage": {
+    "decision": "PASS",
+    "dev_validation_features_in_loss": false,
+    "official_query_gallery_candidate_selection": false,
+    "official_query_gallery_reserved_for_final": true,
+    "path_disjoint": true,
+    "phase": "DIFFER+GPC-v2",
+    "pid_disjoint": true,
+    "query_gallery_used_for_split": false,
+    "query_gallery_used_for_training": false,
+    "split_manifest": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_144731/development_split_manifest.json"
+  },
+  "output": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_144731",
+  "ready_for_ppu_preflight": true,
+  "split": {
+    "created_beijing": "2026-10-15T15:05:37.054538+08:00",
+    "dev_pid_count_requested": 15,
+    "dev_validation_protocol": "fixed PID-disjoint LTCC development validation; official query/gallery held out",
+    "eligible_cross_clothes_pids": 46,
+    "phase": "DIFFER+GPC-v2 LTCC development",
+    "query_gallery_used_for_split": false,
+    "query_gallery_used_for_training": false,
+    "source_dataset": "LTCC original train split only",
+    "split_csv": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_144731/development_split.csv",
+    "split_csv_sha256": "88ea3f944c85acd9c3e807dd3a1dfe99abace0def455c90dfece9e238cd71ba7",
+    "split_seed": 20261015,
+    "train_image_count": 7199,
+    "train_pid_count": 62,
+    "train_pids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      19,
+      20,
+      22,
+      23,
+      24,
+      25,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      35,
+      37,
+      38,
+      39,
+      41,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      54,
+      55,
+      57,
+      58,
+      59,
+      60,
+      61,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      72,
+      74,
+      75
+    ],
+    "train_validation_clothing_state_overlap": 0,
+    "train_validation_path_disjoint": true,
+    "train_validation_pid_disjoint": true,
+    "validation_image_count": 2377,
+    "validation_pid_count": 15,
+    "validation_pids": [
+      13,
+      17,
+      18,
+      21,
+      26,
+      34,
+      36,
+      40,
+      42,
+      53,
+      56,
+      62,
+      71,
+      73,
+      76
+    ]
+  }
+}
+[2026-10-15 15:29:26] 开始 screen B0 seed=1234 epochs=30 full_data=false
+Setup environment for PPU
+/usr/local/PPU_SDK/envsetup.sh: line 25: LD_LIBRARY_PATH: unbound variable
+[2026-10-15 15:31:33] 开始 screen B0 seed=1234 epochs=30 full_data=false
+Setup environment for PPU
+
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+/usr/local/lib/python3.10/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /job_3220505/source/pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/usr/local/lib/python3.10/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /job_3220505/source/pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+using soft triplet loss for training
+using soft triplet loss for training
+/data/DIFFER/scripts/phase5b_id_damage_ds.py:1312: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = amp.GradScaler(init_scale=INITIAL_SCALE)
+/data/DIFFER/scripts/phase5b_id_damage_ds.py:1312: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = amp.GradScaler(init_scale=INITIAL_SCALE)

@@ -1,0 +1,19 @@
+时间：2026-10-16 UTC
+事项：配置 GPC-v2 运行结束自动归档到 GitHub。
+
+已完成：
+- 新增 /home/DIFFER/scripts/publish_run_to_github.sh；
+- 接入 run_gpc_v2_ltcc_pipeline.sh 和 run_gpc_v2_ltcc_restored_pipeline.sh 的 EXIT 钩子；
+- 每个 RUN_TIME 使用独立分支 runs/gpc-v2-ltcc-YYYYMMDD_HHMMSS，不覆盖历史分支；
+- 归档内容为 GPC-v2 代码快照、本次 RUN_TIME 日志、小型状态 JSON 和 MANIFEST 摘要；
+- 明确拒绝 dataset、caption features、checkpoint、二进制大文件和密钥；单文件超过5 MiB拒绝；
+- Git 暂存区执行 diff --check 和凭据扫描；
+- GitHub push 失败时保留本地 checkout、状态 JSON 和实验结果，不中断科学结果记录。
+
+验证：
+- publisher、两个流水线脚本均通过 bash -n；
+- 使用本地 Git remote 完成一次 dry-run PASS；
+- 使用本地 Git remote 完成一次真实 commit/push 测试，commit=5e8acffd813dcf82fc1cf0143a0fd2284ce9090e；
+- 当前真实 GitHub SSH/HTTPS 凭据仍不可用，尚未宣称已上传到 GitHub。
+
+真实启用条件：服务器需要可用的 GitHub SSH agent/key，或受控的 HTTPS credential helper。不要把 token、私钥或密码写入脚本、日志或命令行。

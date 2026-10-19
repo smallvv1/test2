@@ -1,0 +1,4 @@
+中文汇总：A5 全 rank train-only batch 审计
+seed=1234 全部batch=1192 有关系batch=142 有关系比例=0.11912752 有效梯度batch=140 全部batch有效梯度比例=0.11744966 选中pair=153 零梯度pair=2
+seed=4321 全部batch=1192 有关系batch=140 有关系比例=0.11744966 有效梯度batch=139 全部batch有效梯度比例=0.11661074 选中pair=148 零梯度pair=1
+中文判定：未观察到大规模 A5 pair-level 饱和失活；主要稀疏性来自关系激活比例。

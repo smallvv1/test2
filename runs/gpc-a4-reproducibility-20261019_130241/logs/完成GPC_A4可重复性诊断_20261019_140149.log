@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "run_time": "20261019_140149",
+  "reports": [
+    "/home/DIFFER/reports/gpc_a4_reproducibility_20261019_140149/GPC_A4_CODE_REPRODUCIBILITY_REPORT.md",
+    "/home/DIFFER/reports/gpc_a4_reproducibility_20261019_140149/GPC_A4_PAIRED_PID_CONFIDENCE_REPORT.md",
+    "/home/DIFFER/reports/gpc_a4_reproducibility_20261019_140149/GPC_A4_OLD_NEW_DIFFERENCE_REPORT.md",
+    "/home/DIFFER/reports/gpc_a4_reproducibility_20261019_140149/GPC_A4_MECHANISM_VALIDITY_REPORT.md",
+    "/home/DIFFER/reports/gpc_a4_reproducibility_20261019_140149/GPC_NEXT_IMPROVEMENT_DECISION.md"
+  ],
+  "code_audit": "/home/DIFFER/outputs/gpc_a4_reproducibility_20261019_140149/gpc_a4_code_file_comparison.json",
+  "artifact_hashes": "/home/DIFFER/outputs/gpc_a4_reproducibility_20261019_140149/gpc_a4_artifact_hashes.json"
+}

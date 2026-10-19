@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/gpc_science_rng_audit.py", line 26, in <module>
+    import gpc_a4_mechanism_probe as probe  # noqa: E402
+  File "/home/DIFFER/scripts/gpc_a4_mechanism_probe.py", line 21, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+{
+  "status": "FAIL",
+  "unit_tests": {
+    "same_seed_different_runtime": true,
+    "different_log_output_paths": true,
+    "b0_a4_same_base_sampler": true,
+    "a4_same_matched_pair_budget": true,
+    "legacy_phase_runtime_sensitivity_observed": false
+  },
+  "output": "/home/DIFFER/outputs/gpc_science_rng_20261019_141702"
+}
+{
+  "status": "PASS",
+  "unit_tests": {
+    "same_seed_different_runtime": true,
+    "different_log_output_paths": true,
+    "b0_a4_same_base_sampler": true,
+    "a4_same_matched_pair_budget": true,
+    "legacy_phase_runtime_sensitivity_observed": true
+  },
+  "output": "/home/DIFFER/outputs/gpc_science_rng_20261019_141702"
+}

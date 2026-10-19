@@ -1,0 +1,17 @@
+中文进度：开始 amp 同 batch 双重复比较，iteration=19
+/usr/local/lib/python3.10/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /job_3220505/source/pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/DIFFER/scripts/gpc_b0_first_divergence.py:267: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = amp.GradScaler(init_scale=base.INITIAL_SCALE)
+/home/DIFFER/scripts/gpc_precision_control_comparison.py:218: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(enabled=autocast_enabled):
+[2026-10-19 16:07:21:600338][ALINPU INFO]: [/job_3220189/source/acompute/include/accontext.hpp:174][34m ACOMPUTE: [device caps] dev=0, name=PPU-ZW810E, sm8.0, smem=256KB, num_of_sm=64, freq_of_sm=1700MHz[0m
+[2026-10-19 16:07:21:902146][ALINPU INFO]: [/job_3220189/source/acompute/include/accontext.hpp:174][34m ACOMPUTE: [device caps] dev=0, name=PPU-ZW810E, sm8.0, smem=256KB, num_of_sm=64, freq_of_sm=1700MHz[0m
+[33m[2026-10-19 16:07:22:207860][ALINPU WARNING]: [offline_cache.hpp:574]The set dir is not accessable: /PPU0010[0m
+[2026-10-19 16:07:22:208002][ALINPU INFO]: [offline_cache.hpp:583]Use root dir: /rtccache/PPU0010
+[33m[2026-10-19 16:07:22:208031][ALINPU WARNING]: [offline_cache.hpp:574]The set dir is not accessable: /PPU0015[0m
+[2026-10-19 16:07:22:208048][ALINPU INFO]: [offline_cache.hpp:583]Use root dir: /rtccache/PPU0015
+[2026-10-19 16:07:22:208125][ALINPU INFO]: [kernel_factory.cu:258]Rtc cache load all offline-cache done.
+
+[33m[2026-10-19 16:07:22:212350][ALINPU WARNING]: [offline_cache.hpp:74]No cache file exist: /rtccache/PPU0010/ppu-64_3016079961_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x128x16x32x128x3_layout0x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin[0m
+中文说明：已将分量梯度改为独立计算图并立即释放，但第二次仍在 PPU runtime 初始化后 SIGABRT；本次不纳入科学结论，保留为技术门禁失败。

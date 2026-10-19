@@ -1,0 +1,26 @@
+运行时间：20261019_160232
+任务：GPC 混合精度分叉定位与 matched-budget 关系机会审计。
+
+中文结果：
+1. 原始 AMP 两次120步轨迹在第1步梯度阶段分叉；一条118次有效更新，另一条120次有效更新。
+2. 固定 GradScaler 初始 scale=1 后仍在第1步梯度阶段分叉。
+3. FP32 两次20步轨迹未超过预设容差；FP32 120步复核在首个进度输出前 PPU runtime SIGABRT，120步结论保持 INCONCLUSIVE。
+4. 分量探针显示 CE 与 Bio 梯度范数一致，Triplet 梯度范数首先不一致，GPC 首批关系数为0。
+5. epoch60 matched-budget 全 rank 审计：seed1234 active=142/1192=11.9128%，seed4321 active=140/1192=11.7450%。
+6. 有同 PID 关系但 matched budget=0 的 batch：seed1234 为1050/1192=88.0872%，seed4321 为1052/1192=88.2550%。
+7. 主要原因是 N_cross=0：seed1234 85.3188%，seed4321 85.4027%；没有同 PID正样本的 batch 为0。
+8. A5 已选关系中的零梯度 pair 仅 seed1234 2/153、seed4321 1/148，稀疏性主要来自关系激活机会而非 tau 截断。
+9. U0/U1 配对更新已有结果方向不稳定，保持 GPC_UPDATE_UTILITY_INCONCLUSIVE。
+10. 本轮不启动正式30/60 epoch，不改变 GPC-v1、PRCC、NDP。
+
+中文技术说明：精细 active-batch A/B/C 分量 harness 两次 SIGABRT，失败日志保留；未使用 CPU 模型回退，也未把失败结果写成科学 PASS。
+
+主要输出：
+/home/DIFFER/outputs/gpc_matched_budget_audit_20261019_160232_epoch060/matched_budget_opportunity_audit.json
+/home/DIFFER/outputs/gpc_matched_budget_audit_20261019_160232_epoch060/matched_budget_by_batch.csv
+/home/DIFFER/reports/GPC_AMP_FIRST_DIVERGENCE_CAUSE.md
+/home/DIFFER/reports/GPC_PRECISION_CONTROL_COMPARISON.md
+/home/DIFFER/reports/GPC_MATCHED_BUDGET_OPPORTUNITY_AUDIT.md
+/home/DIFFER/reports/GPC_ACTIVE_RELATION_COVERAGE.md
+/home/DIFFER/reports/GPC_UPDATE_UTILITY_RECHECK.md
+/home/DIFFER/reports/GPC_NEXT_EXPERIMENT_DECISION.md

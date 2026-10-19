@@ -1,0 +1,15 @@
+/usr/local/lib/python3.10/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /job_3220505/source/pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+using soft triplet loss for training
+/home/DIFFER/scripts/gpc_b0_first_divergence.py:310: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with amp.autocast(enabled=autocast_enabled):
+[2026-10-19 16:08:56:268819][ALINPU INFO]: [/job_3220189/source/acompute/include/accontext.hpp:174][34m ACOMPUTE: [device caps] dev=0, name=PPU-ZW810E, sm8.0, smem=256KB, num_of_sm=64, freq_of_sm=1700MHz[0m
+[2026-10-19 16:08:56:597700][ALINPU INFO]: [/job_3220189/source/acompute/include/accontext.hpp:174][34m ACOMPUTE: [device caps] dev=0, name=PPU-ZW810E, sm8.0, smem=256KB, num_of_sm=64, freq_of_sm=1700MHz[0m
+[33m[2026-10-19 16:08:57:27006][ALINPU WARNING]: [offline_cache.hpp:574]The set dir is not accessable: /PPU0010[0m
+[2026-10-19 16:08:57:27162][ALINPU INFO]: [offline_cache.hpp:583]Use root dir: /rtccache/PPU0010
+[33m[2026-10-19 16:08:57:27195][ALINPU WARNING]: [offline_cache.hpp:574]The set dir is not accessable: /PPU0015[0m
+[2026-10-19 16:08:57:27209][ALINPU INFO]: [offline_cache.hpp:583]Use root dir: /rtccache/PPU0015
+[2026-10-19 16:08:57:27285][ALINPU INFO]: [kernel_factory.cu:258]Rtc cache load all offline-cache done.
+
+[33m[2026-10-19 16:08:57:31724][ALINPU WARNING]: [offline_cache.hpp:74]No cache file exist: /rtccache/PPU0010/ppu-64_3893190877_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile128x128x64x32x32x2_layout0x1x0x0_align0x1x4x4_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin[0m
+中文说明：FP32 120 步复核在首个进度输出前 SIGABRT，未得到120步科学结果；已保留先前成功的FP32 20步结果，不能将本次失败解释为模型数值结论。

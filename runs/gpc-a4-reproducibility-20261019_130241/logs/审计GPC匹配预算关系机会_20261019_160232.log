@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/gpc_matched_budget_opportunity_audit.py", line 26, in <module>
+    import gpc_a4_mechanism_probe as probe  # noqa: E402
+  File "/home/DIFFER/scripts/gpc_a4_mechanism_probe.py", line 21, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
+中文说明：本次失败仅因调用了不含项目 numpy 依赖的系统解释器，未进入数据或模型审计；随后已改用项目运行时重试。

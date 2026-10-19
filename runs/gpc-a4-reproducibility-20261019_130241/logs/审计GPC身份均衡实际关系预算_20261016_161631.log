@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/gpc_a4_implementation_audit.py", line 199, in <module>
+    main()
+  File "/home/DIFFER/scripts/gpc_a4_implementation_audit.py", line 83, in main
+    exposure = {arm: read_csv(directory / "relation_exposure.csv") for arm, directory in arms.items()}
+  File "/home/DIFFER/scripts/gpc_a4_implementation_audit.py", line 83, in <dictcomp>
+    exposure = {arm: read_csv(directory / "relation_exposure.csv") for arm, directory in arms.items()}
+  File "/home/DIFFER/scripts/gpc_a4_implementation_audit.py", line 35, in read_csv
+    with path.open(newline="", encoding="utf-8") as stream:
+  File "/usr/local/lib/python3.10/pathlib.py", line 1119, in open
+    return self._accessor.open(self, mode, buffering, encoding, errors,
+FileNotFoundError: [Errno 2] No such file or directory: '/home/DIFFER/outputs/gpc_a4_ltcc_20261016_144845/training/screen/A4_seed1234/relation_exposure.csv'
+{
+  "status": "PASS_SOURCE_AND_BUDGET;REPAIR_REQUIRED_FOR_PID_BALANCE",
+  "output": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/implementation_audit",
+  "report": "/home/DIFFER/reports/GPC_A4_IMPLEMENTATION_AUDIT_20261016_161631.md"
+}

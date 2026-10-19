@@ -1,0 +1,25 @@
+时间：2026-10-19 13:02:41 UTC+8
+RUN_TIME：20261019_130241
+
+本轮范围：完成 GPC-A4 代码、日志、checkpoint、评估协议、配对 PID 统计和机制有效性审计。
+限制：未进行新的 60 epoch 训练；未运行官方 LTCC 测试；未使用 CPU 进行模型 forward/backward。
+
+已核查结果：
+1. 新运行 20261016_161631 的 B0/A4/R2 × seed1234/4321 六个 checkpoint 已保留，checkpoint/config/run_manifest/v2_arm_manifest SHA256 已写入 gpc_a4_artifact_hashes.json。
+2. common initialization SHA256=72892762c37044b85dc9ed9999c833da574026c3715e760885363201a8a40ed0。
+3. 冻结开发协议为 693 Query、1256 Gallery、11 个有效验证 PID；Query/Gallery/protocol SHA256 已记录。
+4. 配对 PID Bootstrap 固定 2000 次、固定随机种子、PID 为同步重采样单位；逐 PID AP/Rank-1 已导出 CSV。
+5. 评估修复单元测试：5/5 PASS。
+6. 评估修复保留原始 forward、归一化、LTCC 排除、检索排序、逐 Query 指标和 PID 聚合；新增显式名单、资产/配置/权重指纹、缺失文件报错、严格 Query 配对和安全复用门禁。
+7. A4 新 selector 使训练 PID contribution CV/Gini 显著下降，但关系总量、active batch rate 和 matched pair budget 未增加。
+8. A4 专属 GPC 梯度范数、基础损失梯度比、正样本相似度、最近异身份相似度和局部 margin 未在训练日志记录；机制因果结论为 INCONCLUSIVE。
+9. 旧/新 B0 及 A4 的训练 wrapper、Phase7I phase hash、全局/局部 selector 和未记录的 sampler/增强/DDP/RNG 状态不完全可比；旧新根因状态为 REPRODUCIBILITY_UNRESOLVED。
+10. 最终决策：A4 保留 A4_MIXED，不进入正式 LTCC；保留原始 GPC-v1；当前不允许启动下一轮训练；本阶段不加入 NDP。
+
+产物：
+- /home/DIFFER/reports/GPC_A4_CODE_REPRODUCIBILITY_REPORT.md
+- /home/DIFFER/reports/GPC_A4_PAIRED_PID_CONFIDENCE_REPORT.md
+- /home/DIFFER/reports/GPC_A4_OLD_NEW_DIFFERENCE_REPORT.md
+- /home/DIFFER/reports/GPC_A4_MECHANISM_VALIDITY_REPORT.md
+- /home/DIFFER/reports/GPC_NEXT_IMPROVEMENT_DECISION.md
+- /home/DIFFER/outputs/gpc_a4_reproducibility_20261019_130241/

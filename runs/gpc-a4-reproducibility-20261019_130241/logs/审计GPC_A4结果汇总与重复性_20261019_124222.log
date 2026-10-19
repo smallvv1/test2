@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "pair_json": "/home/DIFFER/outputs/gpc_a4_result_audit_20261019_124222/gpc_a4_paired_pid_statistics.json",
+  "reports": [
+    "/home/DIFFER/reports/GPC_A4_EVALUATOR_FIX.md",
+    "/home/DIFFER/reports/GPC_A4_OLD_NEW_REPRODUCIBILITY_AUDIT.md",
+    "/home/DIFFER/reports/GPC_A4_TWO_SEED_PAIRED_STATISTICS.md",
+    "/home/DIFFER/reports/GPC_A4_EXPOSURE_GRADIENT_AUDIT.md",
+    "/home/DIFFER/reports/GPC_A4_RANDOM_CONTROL_AUDIT.md",
+    "/home/DIFFER/reports/GPC_A4_NEXT_STAGE_DECISION.md"
+  ]
+}

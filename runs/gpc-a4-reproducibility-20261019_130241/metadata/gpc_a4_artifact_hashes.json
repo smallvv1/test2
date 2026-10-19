@@ -1,0 +1,81 @@
+{
+  "run_time": "20261019_130241",
+  "new_run": "20261016_161631",
+  "protocol_sha256": "4a73d0382380f8518d638fc2c447db4f2e84e55cbe3264ea7d4b1b07e68f5702",
+  "expanded_query_sha256": "3bb1035b7667fa3836e38594e189bf3c396ef995d6c1ef90ed9dae4880afb1d7",
+  "expanded_gallery_sha256": "5832d32aebfed2204703af6ec9f2a9cb5980a7b2214c8182f2cc10cc915a584e",
+  "development_split_manifest_sha256": "266786038e96fc87ce0b3ddced692d808064dfecc5228122c58d482158a90594",
+  "development_split_csv_sha256": "60b98e7bdfc9f9d31edc1efde4cbb7fe47ac5150b021f9f0d5e195fc681a2722",
+  "common_initialization_sha256": "72892762c37044b85dc9ed9999c833da574026c3715e760885363201a8a40ed0",
+  "common_initialization_meta_sha256": "dd3acd0da3d935b2d734567b8db9bb171d63d64d24fe2a378f5b05cf335bee67",
+  "artifacts": [
+    {
+      "run": "new_20261016_161631",
+      "arm": "B0",
+      "seed": 1234,
+      "checkpoint": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/B0_seed1234/model_final.pth",
+      "checkpoint_sha256": "1f7d3ca9410ab1a3d05cb3b47b651b1ec9fd10e846c8cfcb7aa7be6c8ea18204",
+      "config": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/B0_seed1234/config.yml",
+      "config_sha256": "1047516fb8efd81d5328c52d99065951620ea6a42a9a27aa228eeafde61ee944",
+      "run_manifest_sha256": "27588b4bccaed38c47b3e874cd72309c2139198bec37c24acf862a52220828ff",
+      "arm_manifest_sha256": "113fdd55adab7e2bdb56f07105d3623dad82012ac7b83580a63237472c2cfff7"
+    },
+    {
+      "run": "new_20261016_161631",
+      "arm": "A4",
+      "seed": 1234,
+      "checkpoint": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/A4_seed1234/model_final.pth",
+      "checkpoint_sha256": "e99360713f00efb34212008624cb17ec6d2fb1b2d66d00fa6dcc713235c1c4c1",
+      "config": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/A4_seed1234/config.yml",
+      "config_sha256": "4a7d3f2970619aa21cf59cac7b6b7aabe6ad07a090c5cf7451b5ad62bbe06136",
+      "run_manifest_sha256": "155e23a03f47c818d27a9e0c3fe4f14dda00b1d9fc6cee5bbdbbfcd87add780b",
+      "arm_manifest_sha256": "3c1f0604c3907b1c1f71c135bce78fb4caabe2743d8c767fd6d1d0125498711d"
+    },
+    {
+      "run": "new_20261016_161631",
+      "arm": "R2",
+      "seed": 1234,
+      "checkpoint": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/R2_seed1234/model_final.pth",
+      "checkpoint_sha256": "b9edcaaa8a3e324f53b6ff4163d4572d6fef2d5505bf5f3fa388b7faf6e4dddc",
+      "config": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/R2_seed1234/config.yml",
+      "config_sha256": "256a5736cb94bd53eebf5904d10a57f5d178dd7f1e328ff25c031627a1940038",
+      "run_manifest_sha256": "17a3b2827895b95caec7513989cc6d76de6c777ecc1fc41133f24abbf03fe083",
+      "arm_manifest_sha256": "bcce442ba4c3ef258782827229850364b7242cd66419d804e2ee0fb75f94312f"
+    },
+    {
+      "run": "new_20261016_161631",
+      "arm": "B0",
+      "seed": 4321,
+      "checkpoint": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/B0_seed4321/model_final.pth",
+      "checkpoint_sha256": "0cf6e7d614dd948b429837a110556b91368e9ce3ff26f772f5bb9b2e33e47193",
+      "config": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/B0_seed4321/config.yml",
+      "config_sha256": "2ade31e412c30f4588fa87e346ca946310280ec1b6d1a2992423858951cae631",
+      "run_manifest_sha256": "a9a447172d5bd9836f45cb0a8dff97eedc47e5d3f1fb0f2be76d7d81fab5794d",
+      "arm_manifest_sha256": "f32cf6c0704229874d5308393d208235b4127e1849e0f5bcceb3483d0b2a4b90"
+    },
+    {
+      "run": "new_20261016_161631",
+      "arm": "A4",
+      "seed": 4321,
+      "checkpoint": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/A4_seed4321/model_final.pth",
+      "checkpoint_sha256": "ccbf2c6699d930f71ce3b1c3cefe6b05329072e5df5a875f7a9f6cfbb7e0f8aa",
+      "config": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/A4_seed4321/config.yml",
+      "config_sha256": "3a3550053295b8a97d1e7c4d92d72f84946e47d8939dc24405cd392d6788b0a3",
+      "run_manifest_sha256": "b06208da9331faac4773bab03385943382fade15bf32fa1eb6a319c7c59a89cf",
+      "arm_manifest_sha256": "201b36a97fba64c0747d8a9bb827946ce5b79f793a13c46876f8f3ecc15be410"
+    },
+    {
+      "run": "new_20261016_161631",
+      "arm": "R2",
+      "seed": 4321,
+      "checkpoint": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/R2_seed4321/model_final.pth",
+      "checkpoint_sha256": "4f33f53f48134bec18f063b07784a142bae40b08d9958df3741c6f09c5693890",
+      "config": "/home/DIFFER/outputs/gpc_a4_ltcc_20261016_161631/training/screen/R2_seed4321/config.yml",
+      "config_sha256": "58095e8c76692c3fac56cc4fa71832033680444013178411b4f18bf13c6e8fb2",
+      "run_manifest_sha256": "060cf80f6a310d1eb352df9454156260271e9c8b480806e9663f29793995536b",
+      "arm_manifest_sha256": "7ab893f54d373947baac9bf164df3194e02d7ee735b71d30e29b5f43fb258a1a"
+    }
+  ],
+  "official_ltcc_test_run": false,
+  "large_scale_training_run": false
+}

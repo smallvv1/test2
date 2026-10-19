@@ -1,0 +1,1058 @@
+[
+  {
+    "baseline": "B0_seed1234",
+    "candidate": "A4_seed1234",
+    "seed": 1234,
+    "query_count": 693,
+    "effective_pid_count": 11,
+    "image_micro": {
+      "baseline_rank1": 0.5800865888595581,
+      "candidate_rank1": 0.5757575631141663,
+      "delta_rank1": -0.004329004329004329,
+      "baseline_mAP": 0.4786341049325419,
+      "candidate_mAP": 0.4811933286492103,
+      "delta_mAP": 0.0025592237166683967
+    },
+    "pid_macro": {
+      "baseline_rank1": 0.6603045840805141,
+      "candidate_rank1": 0.640816276935035,
+      "delta_rank1": -0.019488307145479132,
+      "baseline_mAP": 0.5359661117398405,
+      "candidate_mAP": 0.5402743868092932,
+      "delta_mAP": 0.00430827506945257
+    },
+    "query_rank1_wins_ties_losses": [
+      42,
+      606,
+      45
+    ],
+    "query_ap_positive_ties_negative": [
+      359,
+      15,
+      319
+    ],
+    "pid_rank1_improved_tied_worsened": [
+      3,
+      3,
+      5
+    ],
+    "pid_mAP_improved_tied_worsened": [
+      7,
+      0,
+      4
+    ],
+    "pid_rows": [
+      {
+        "raw_pid": 30,
+        "query_count": 83,
+        "baseline_rank1": 0.1927710843373494,
+        "candidate_rank1": 0.2289156626506024,
+        "delta_rank1": 0.03614457831325299,
+        "baseline_mAP": 0.2323774909338695,
+        "candidate_mAP": 0.24691538056752368,
+        "delta_mAP": 0.014537889633654183
+      },
+      {
+        "raw_pid": 36,
+        "query_count": 62,
+        "baseline_rank1": 0.22580645161290322,
+        "candidate_rank1": 0.1774193548387097,
+        "delta_rank1": -0.04838709677419353,
+        "baseline_mAP": 0.3558936205057199,
+        "candidate_mAP": 0.3415692703045981,
+        "delta_mAP": -0.014324350201121772
+      },
+      {
+        "raw_pid": 43,
+        "query_count": 103,
+        "baseline_rank1": 0.7087378640776699,
+        "candidate_rank1": 0.7378640776699029,
+        "delta_rank1": 0.029126213592232997,
+        "baseline_mAP": 0.5794929984408935,
+        "candidate_mAP": 0.5927913169648785,
+        "delta_mAP": 0.013298318523984998
+      },
+      {
+        "raw_pid": 45,
+        "query_count": 58,
+        "baseline_rank1": 0.6379310344827587,
+        "candidate_rank1": 0.6551724137931034,
+        "delta_rank1": 0.01724137931034475,
+        "baseline_mAP": 0.5703245131153143,
+        "candidate_mAP": 0.6397872157558465,
+        "delta_mAP": 0.06946270264053223
+      },
+      {
+        "raw_pid": 48,
+        "query_count": 47,
+        "baseline_rank1": 0.9574468085106383,
+        "candidate_rank1": 0.9574468085106383,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.8806206265845621,
+        "candidate_mAP": 0.8882407838107176,
+        "delta_mAP": 0.0076201572261554995
+      },
+      {
+        "raw_pid": 53,
+        "query_count": 9,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 0.8888888888888888,
+        "delta_rank1": -0.11111111111111116,
+        "baseline_mAP": 0.558280023508166,
+        "candidate_mAP": 0.5418023435310422,
+        "delta_mAP": -0.016477679977123794
+      },
+      {
+        "raw_pid": 88,
+        "query_count": 28,
+        "baseline_rank1": 0.6785714285714286,
+        "candidate_rank1": 0.5714285714285714,
+        "delta_rank1": -0.1071428571428572,
+        "baseline_mAP": 0.5087538063643388,
+        "candidate_mAP": 0.5260073132772082,
+        "delta_mAP": 0.01725350691286942
+      },
+      {
+        "raw_pid": 93,
+        "query_count": 91,
+        "baseline_rank1": 0.5054945054945055,
+        "candidate_rank1": 0.4835164835164835,
+        "delta_rank1": -0.021978021978021955,
+        "baseline_mAP": 0.30807348243535354,
+        "candidate_mAP": 0.2662280635760661,
+        "delta_mAP": -0.04184541885928744
+      },
+      {
+        "raw_pid": 117,
+        "query_count": 30,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.9994809000674894,
+        "candidate_mAP": 0.9998141989610191,
+        "delta_mAP": 0.0003332988935297321
+      },
+      {
+        "raw_pid": 130,
+        "query_count": 61,
+        "baseline_rank1": 0.8524590163934426,
+        "candidate_rank1": 0.8524590163934426,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.5047619012115508,
+        "candidate_mAP": 0.5137621292793038,
+        "delta_mAP": 0.009000228067752913
+      },
+      {
+        "raw_pid": 131,
+        "query_count": 121,
+        "baseline_rank1": 0.5041322314049587,
+        "candidate_rank1": 0.49586776859504134,
+        "delta_rank1": -0.008264462809917328,
+        "baseline_mAP": 0.3975678659709884,
+        "candidate_mAP": 0.38610023887402073,
+        "delta_mAP": -0.011467627096967692
+      }
+    ],
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 20262481,
+      "pid_macro_delta_rank1_ci95": [
+        -0.049611642374434384,
+        0.007136995174007261
+      ],
+      "pid_macro_delta_mAP_ci95": [
+        -0.010351401393001088,
+        0.0208369850011042
+      ],
+      "query_weighted_delta_rank1_ci95": [
+        -0.026286722881832068,
+        0.013598298607170564
+      ],
+      "query_weighted_delta_mAP_ci95": [
+        -0.013785886442088285,
+        0.021554432442642768
+      ]
+    },
+    "evidence_insufficient": true
+  },
+  {
+    "baseline": "B0_seed1234",
+    "candidate": "R2_seed1234",
+    "seed": 1234,
+    "query_count": 693,
+    "effective_pid_count": 11,
+    "image_micro": {
+      "baseline_rank1": 0.5800865888595581,
+      "candidate_rank1": 0.5411255359649658,
+      "delta_rank1": -0.03896103896103896,
+      "baseline_mAP": 0.4786341049325419,
+      "candidate_mAP": 0.43054025319745237,
+      "delta_mAP": -0.0480938517350895
+    },
+    "pid_macro": {
+      "baseline_rank1": 0.6603045840805141,
+      "candidate_rank1": 0.5944998741837295,
+      "delta_rank1": -0.06580470989678462,
+      "baseline_mAP": 0.5359661117398405,
+      "candidate_mAP": 0.4572718066164592,
+      "delta_mAP": -0.07869430512338131
+    },
+    "query_rank1_wins_ties_losses": [
+      65,
+      536,
+      92
+    ],
+    "query_ap_positive_ties_negative": [
+      286,
+      1,
+      406
+    ],
+    "pid_rank1_improved_tied_worsened": [
+      3,
+      2,
+      6
+    ],
+    "pid_mAP_improved_tied_worsened": [
+      3,
+      0,
+      8
+    ],
+    "pid_rows": [
+      {
+        "raw_pid": 30,
+        "query_count": 83,
+        "baseline_rank1": 0.1927710843373494,
+        "candidate_rank1": 0.012048192771084338,
+        "delta_rank1": -0.18072289156626506,
+        "baseline_mAP": 0.2323774909338695,
+        "candidate_mAP": 0.11862795520190537,
+        "delta_mAP": -0.11374953573196413
+      },
+      {
+        "raw_pid": 36,
+        "query_count": 62,
+        "baseline_rank1": 0.22580645161290322,
+        "candidate_rank1": 0.016129032258064516,
+        "delta_rank1": -0.2096774193548387,
+        "baseline_mAP": 0.3558936205057199,
+        "candidate_mAP": 0.1688231336868815,
+        "delta_mAP": -0.18707048681883837
+      },
+      {
+        "raw_pid": 43,
+        "query_count": 103,
+        "baseline_rank1": 0.7087378640776699,
+        "candidate_rank1": 0.7669902912621359,
+        "delta_rank1": 0.058252427184465994,
+        "baseline_mAP": 0.5794929984408935,
+        "candidate_mAP": 0.5801434930873292,
+        "delta_mAP": 0.0006504946464356287
+      },
+      {
+        "raw_pid": 45,
+        "query_count": 58,
+        "baseline_rank1": 0.6379310344827587,
+        "candidate_rank1": 0.05172413793103448,
+        "delta_rank1": -0.5862068965517242,
+        "baseline_mAP": 0.5703245131153143,
+        "candidate_mAP": 0.09317810181532904,
+        "delta_mAP": -0.47714641129998525
+      },
+      {
+        "raw_pid": 48,
+        "query_count": 47,
+        "baseline_rank1": 0.9574468085106383,
+        "candidate_rank1": 0.9148936170212766,
+        "delta_rank1": -0.042553191489361764,
+        "baseline_mAP": 0.8806206265845621,
+        "candidate_mAP": 0.8602003082786862,
+        "delta_mAP": -0.020420318305875873
+      },
+      {
+        "raw_pid": 53,
+        "query_count": 9,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.558280023508166,
+        "candidate_mAP": 0.47631457850215003,
+        "delta_mAP": -0.08196544500601594
+      },
+      {
+        "raw_pid": 88,
+        "query_count": 28,
+        "baseline_rank1": 0.6785714285714286,
+        "candidate_rank1": 0.6428571428571429,
+        "delta_rank1": -0.0357142857142857,
+        "baseline_mAP": 0.5087538063643388,
+        "candidate_mAP": 0.4191942589576868,
+        "delta_mAP": -0.08955954740665195
+      },
+      {
+        "raw_pid": 93,
+        "query_count": 91,
+        "baseline_rank1": 0.5054945054945055,
+        "candidate_rank1": 0.6373626373626373,
+        "delta_rank1": 0.13186813186813184,
+        "baseline_mAP": 0.30807348243535354,
+        "candidate_mAP": 0.41804812917987294,
+        "delta_mAP": 0.1099746467445194
+      },
+      {
+        "raw_pid": 117,
+        "query_count": 30,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.9994809000674894,
+        "candidate_mAP": 0.9649367943398611,
+        "delta_mAP": -0.03454410572762823
+      },
+      {
+        "raw_pid": 130,
+        "query_count": 61,
+        "baseline_rank1": 0.8524590163934426,
+        "candidate_rank1": 0.8032786885245902,
+        "delta_rank1": -0.0491803278688524,
+        "baseline_mAP": 0.5047619012115508,
+        "candidate_mAP": 0.3857555802880783,
+        "delta_mAP": -0.11900632092347252
+      },
+      {
+        "raw_pid": 131,
+        "query_count": 121,
+        "baseline_rank1": 0.5041322314049587,
+        "candidate_rank1": 0.6942148760330579,
+        "delta_rank1": 0.1900826446280992,
+        "baseline_mAP": 0.3975678659709884,
+        "candidate_mAP": 0.5447675394432712,
+        "delta_mAP": 0.14719967347228274
+      }
+    ],
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 20262496,
+      "pid_macro_delta_rank1_ci95": [
+        -0.1896822791337679,
+        0.038450788429559936
+      ],
+      "pid_macro_delta_mAP_ci95": [
+        -0.17446473422707967,
+        0.00816224369560558
+      ],
+      "query_weighted_delta_rank1_ci95": [
+        -0.1858087450848904,
+        0.08111913291225421
+      ],
+      "query_weighted_delta_mAP_ci95": [
+        -0.16711462639018881,
+        0.048870976112801334
+      ]
+    },
+    "evidence_insufficient": true
+  },
+  {
+    "baseline": "A4_seed1234",
+    "candidate": "R2_seed1234",
+    "seed": 1234,
+    "query_count": 693,
+    "effective_pid_count": 11,
+    "image_micro": {
+      "baseline_rank1": 0.5757575631141663,
+      "candidate_rank1": 0.5411255359649658,
+      "delta_rank1": -0.03463203463203463,
+      "baseline_mAP": 0.4811933286492103,
+      "candidate_mAP": 0.43054025319745237,
+      "delta_mAP": -0.0506530754517579
+    },
+    "pid_macro": {
+      "baseline_rank1": 0.640816276935035,
+      "candidate_rank1": 0.5944998741837295,
+      "delta_rank1": -0.04631640275130549,
+      "baseline_mAP": 0.5402743868092932,
+      "candidate_mAP": 0.4572718066164592,
+      "delta_mAP": -0.0830025801928339
+    },
+    "query_rank1_wins_ties_losses": [
+      72,
+      525,
+      96
+    ],
+    "query_ap_positive_ties_negative": [
+      264,
+      0,
+      429
+    ],
+    "pid_rank1_improved_tied_worsened": [
+      5,
+      1,
+      5
+    ],
+    "pid_mAP_improved_tied_worsened": [
+      2,
+      0,
+      9
+    ],
+    "pid_rows": [
+      {
+        "raw_pid": 30,
+        "query_count": 83,
+        "baseline_rank1": 0.2289156626506024,
+        "candidate_rank1": 0.012048192771084338,
+        "delta_rank1": -0.21686746987951805,
+        "baseline_mAP": 0.24691538056752368,
+        "candidate_mAP": 0.11862795520190537,
+        "delta_mAP": -0.12828742536561832
+      },
+      {
+        "raw_pid": 36,
+        "query_count": 62,
+        "baseline_rank1": 0.1774193548387097,
+        "candidate_rank1": 0.016129032258064516,
+        "delta_rank1": -0.16129032258064518,
+        "baseline_mAP": 0.3415692703045981,
+        "candidate_mAP": 0.1688231336868815,
+        "delta_mAP": -0.1727461366177166
+      },
+      {
+        "raw_pid": 43,
+        "query_count": 103,
+        "baseline_rank1": 0.7378640776699029,
+        "candidate_rank1": 0.7669902912621359,
+        "delta_rank1": 0.029126213592232997,
+        "baseline_mAP": 0.5927913169648785,
+        "candidate_mAP": 0.5801434930873292,
+        "delta_mAP": -0.012647823877549369
+      },
+      {
+        "raw_pid": 45,
+        "query_count": 58,
+        "baseline_rank1": 0.6551724137931034,
+        "candidate_rank1": 0.05172413793103448,
+        "delta_rank1": -0.603448275862069,
+        "baseline_mAP": 0.6397872157558465,
+        "candidate_mAP": 0.09317810181532904,
+        "delta_mAP": -0.5466091139405175
+      },
+      {
+        "raw_pid": 48,
+        "query_count": 47,
+        "baseline_rank1": 0.9574468085106383,
+        "candidate_rank1": 0.9148936170212766,
+        "delta_rank1": -0.042553191489361764,
+        "baseline_mAP": 0.8882407838107176,
+        "candidate_mAP": 0.8602003082786862,
+        "delta_mAP": -0.028040475532031373
+      },
+      {
+        "raw_pid": 53,
+        "query_count": 9,
+        "baseline_rank1": 0.8888888888888888,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.11111111111111116,
+        "baseline_mAP": 0.5418023435310422,
+        "candidate_mAP": 0.47631457850215003,
+        "delta_mAP": -0.06548776502889214
+      },
+      {
+        "raw_pid": 88,
+        "query_count": 28,
+        "baseline_rank1": 0.5714285714285714,
+        "candidate_rank1": 0.6428571428571429,
+        "delta_rank1": 0.07142857142857151,
+        "baseline_mAP": 0.5260073132772082,
+        "candidate_mAP": 0.4191942589576868,
+        "delta_mAP": -0.10681305431952137
+      },
+      {
+        "raw_pid": 93,
+        "query_count": 91,
+        "baseline_rank1": 0.4835164835164835,
+        "candidate_rank1": 0.6373626373626373,
+        "delta_rank1": 0.1538461538461538,
+        "baseline_mAP": 0.2662280635760661,
+        "candidate_mAP": 0.41804812917987294,
+        "delta_mAP": 0.15182006560380684
+      },
+      {
+        "raw_pid": 117,
+        "query_count": 30,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.9998141989610191,
+        "candidate_mAP": 0.9649367943398611,
+        "delta_mAP": -0.03487740462115796
+      },
+      {
+        "raw_pid": 130,
+        "query_count": 61,
+        "baseline_rank1": 0.8524590163934426,
+        "candidate_rank1": 0.8032786885245902,
+        "delta_rank1": -0.0491803278688524,
+        "baseline_mAP": 0.5137621292793038,
+        "candidate_mAP": 0.3857555802880783,
+        "delta_mAP": -0.12800654899122543
+      },
+      {
+        "raw_pid": 131,
+        "query_count": 121,
+        "baseline_rank1": 0.49586776859504134,
+        "candidate_rank1": 0.6942148760330579,
+        "delta_rank1": 0.19834710743801653,
+        "baseline_mAP": 0.38610023887402073,
+        "candidate_mAP": 0.5447675394432712,
+        "delta_mAP": 0.15866730056925044
+      }
+    ],
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 20262499,
+      "pid_macro_delta_rank1_ci95": [
+        -0.19189329592415183,
+        0.05917332627607528
+      ],
+      "pid_macro_delta_mAP_ci95": [
+        -0.19849702947445733,
+        0.008963500191597265
+      ],
+      "query_weighted_delta_rank1_ci95": [
+        -0.19464756106219824,
+        0.08621375197093299
+      ],
+      "query_weighted_delta_mAP_ci95": [
+        -0.19029137858259712,
+        0.0543221500885595
+      ]
+    },
+    "evidence_insufficient": true
+  },
+  {
+    "baseline": "B0_seed4321",
+    "candidate": "A4_seed4321",
+    "seed": 4321,
+    "query_count": 693,
+    "effective_pid_count": 11,
+    "image_micro": {
+      "baseline_rank1": 0.542568564414978,
+      "candidate_rank1": 0.5512265563011169,
+      "delta_rank1": 0.008658008658008658,
+      "baseline_mAP": 0.45253928557105844,
+      "candidate_mAP": 0.4373368449828993,
+      "delta_mAP": -0.015202440588159132
+    },
+    "pid_macro": {
+      "baseline_rank1": 0.5915176283129746,
+      "candidate_rank1": 0.5849993107733895,
+      "delta_rank1": -0.006518317539585079,
+      "baseline_mAP": 0.4928676201911242,
+      "candidate_mAP": 0.48153920873970585,
+      "delta_mAP": -0.011328411451418292
+    },
+    "query_rank1_wins_ties_losses": [
+      40,
+      619,
+      34
+    ],
+    "query_ap_positive_ties_negative": [
+      286,
+      0,
+      407
+    ],
+    "pid_rank1_improved_tied_worsened": [
+      4,
+      2,
+      5
+    ],
+    "pid_mAP_improved_tied_worsened": [
+      4,
+      0,
+      7
+    ],
+    "pid_rows": [
+      {
+        "raw_pid": 30,
+        "query_count": 83,
+        "baseline_rank1": 0.060240963855421686,
+        "candidate_rank1": 0.024096385542168676,
+        "delta_rank1": -0.03614457831325301,
+        "baseline_mAP": 0.1883498432046638,
+        "candidate_mAP": 0.1919216101498294,
+        "delta_mAP": 0.0035717669451655887
+      },
+      {
+        "raw_pid": 36,
+        "query_count": 62,
+        "baseline_rank1": 0.04838709677419355,
+        "candidate_rank1": 0.03225806451612903,
+        "delta_rank1": -0.016129032258064516,
+        "baseline_mAP": 0.28321728822161674,
+        "candidate_mAP": 0.2648907874917034,
+        "delta_mAP": -0.01832650072991332
+      },
+      {
+        "raw_pid": 43,
+        "query_count": 103,
+        "baseline_rank1": 0.6893203883495146,
+        "candidate_rank1": 0.7378640776699029,
+        "delta_rank1": 0.04854368932038833,
+        "baseline_mAP": 0.5905128197259704,
+        "candidate_mAP": 0.5770556966230119,
+        "delta_mAP": -0.013457123102958435
+      },
+      {
+        "raw_pid": 45,
+        "query_count": 58,
+        "baseline_rank1": 0.1896551724137931,
+        "candidate_rank1": 0.10344827586206896,
+        "delta_rank1": -0.08620689655172413,
+        "baseline_mAP": 0.21282115313372738,
+        "candidate_mAP": 0.13193986087687276,
+        "delta_mAP": -0.08088129225685461
+      },
+      {
+        "raw_pid": 48,
+        "query_count": 47,
+        "baseline_rank1": 0.9574468085106383,
+        "candidate_rank1": 0.9574468085106383,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.8809800907487617,
+        "candidate_mAP": 0.8899727735886772,
+        "delta_mAP": 0.0089926828399155
+      },
+      {
+        "raw_pid": 53,
+        "query_count": 9,
+        "baseline_rank1": 0.8888888888888888,
+        "candidate_rank1": 0.7777777777777778,
+        "delta_rank1": -0.11111111111111105,
+        "baseline_mAP": 0.5444251628376034,
+        "candidate_mAP": 0.5524337411518391,
+        "delta_mAP": 0.008008578314235626
+      },
+      {
+        "raw_pid": 88,
+        "query_count": 28,
+        "baseline_rank1": 0.5357142857142857,
+        "candidate_rank1": 0.5714285714285714,
+        "delta_rank1": 0.0357142857142857,
+        "baseline_mAP": 0.4054836862449774,
+        "candidate_mAP": 0.41929692904639937,
+        "delta_mAP": 0.013813242801421988
+      },
+      {
+        "raw_pid": 93,
+        "query_count": 91,
+        "baseline_rank1": 0.5494505494505495,
+        "candidate_rank1": 0.6593406593406593,
+        "delta_rank1": 0.10989010989010983,
+        "baseline_mAP": 0.32189453541142576,
+        "candidate_mAP": 0.3158156649856623,
+        "delta_mAP": -0.0060788704257634385
+      },
+      {
+        "raw_pid": 117,
+        "query_count": 30,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.9911805128244934,
+        "candidate_mAP": 0.9910033959700575,
+        "delta_mAP": -0.0001771168544358881
+      },
+      {
+        "raw_pid": 130,
+        "query_count": 61,
+        "baseline_rank1": 0.9016393442622951,
+        "candidate_rank1": 0.8688524590163934,
+        "delta_rank1": -0.032786885245901676,
+        "baseline_mAP": 0.5126768270153883,
+        "candidate_mAP": 0.49754173664182866,
+        "delta_mAP": -0.015135090373559645
+      },
+      {
+        "raw_pid": 131,
+        "query_count": 121,
+        "baseline_rank1": 0.6859504132231405,
+        "candidate_rank1": 0.7024793388429752,
+        "delta_rank1": 0.016528925619834656,
+        "baseline_mAP": 0.49000190273373756,
+        "candidate_mAP": 0.465059099610883,
+        "delta_mAP": -0.024942803122854573
+      }
+    ],
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 20265568,
+      "pid_macro_delta_rank1_ci95": [
+        -0.04024428834914394,
+        0.02867282372563772
+      ],
+      "pid_macro_delta_mAP_ci95": [
+        -0.0276436132393416,
+        0.0012170806454519984
+      ],
+      "query_weighted_delta_rank1_ci95": [
+        -0.026761790582637918,
+        0.04455958969259368
+      ],
+      "query_weighted_delta_mAP_ci95": [
+        -0.030051622721362803,
+        -0.0028135145332501836
+      ]
+    },
+    "evidence_insufficient": true
+  },
+  {
+    "baseline": "B0_seed4321",
+    "candidate": "R2_seed4321",
+    "seed": 4321,
+    "query_count": 693,
+    "effective_pid_count": 11,
+    "image_micro": {
+      "baseline_rank1": 0.542568564414978,
+      "candidate_rank1": 0.5079365372657776,
+      "delta_rank1": -0.03463203463203463,
+      "baseline_mAP": 0.45253928557105844,
+      "candidate_mAP": 0.4261189657140003,
+      "delta_mAP": -0.026420319857058127
+    },
+    "pid_macro": {
+      "baseline_rank1": 0.5915176283129746,
+      "candidate_rank1": 0.5667876036702735,
+      "delta_rank1": -0.024730024642701166,
+      "baseline_mAP": 0.4928676201911242,
+      "candidate_mAP": 0.4751652823887328,
+      "delta_mAP": -0.017702337802391385
+    },
+    "query_rank1_wins_ties_losses": [
+      45,
+      579,
+      69
+    ],
+    "query_ap_positive_ties_negative": [
+      251,
+      2,
+      440
+    ],
+    "pid_rank1_improved_tied_worsened": [
+      2,
+      3,
+      6
+    ],
+    "pid_mAP_improved_tied_worsened": [
+      4,
+      0,
+      7
+    ],
+    "pid_rows": [
+      {
+        "raw_pid": 30,
+        "query_count": 83,
+        "baseline_rank1": 0.060240963855421686,
+        "candidate_rank1": 0.060240963855421686,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.1883498432046638,
+        "candidate_mAP": 0.21350791604346514,
+        "delta_mAP": 0.025158072838801337
+      },
+      {
+        "raw_pid": 36,
+        "query_count": 62,
+        "baseline_rank1": 0.04838709677419355,
+        "candidate_rank1": 0.0967741935483871,
+        "delta_rank1": 0.04838709677419355,
+        "baseline_mAP": 0.28321728822161674,
+        "candidate_mAP": 0.3112106282663905,
+        "delta_mAP": 0.027993340044773773
+      },
+      {
+        "raw_pid": 43,
+        "query_count": 103,
+        "baseline_rank1": 0.6893203883495146,
+        "candidate_rank1": 0.6310679611650486,
+        "delta_rank1": -0.058252427184465994,
+        "baseline_mAP": 0.5905128197259704,
+        "candidate_mAP": 0.5192322234819072,
+        "delta_mAP": -0.07128059624406313
+      },
+      {
+        "raw_pid": 45,
+        "query_count": 58,
+        "baseline_rank1": 0.1896551724137931,
+        "candidate_rank1": 0.20689655172413793,
+        "delta_rank1": 0.017241379310344834,
+        "baseline_mAP": 0.21282115313372738,
+        "candidate_mAP": 0.2947689148696558,
+        "delta_mAP": 0.08194776173592841
+      },
+      {
+        "raw_pid": 48,
+        "query_count": 47,
+        "baseline_rank1": 0.9574468085106383,
+        "candidate_rank1": 0.9361702127659575,
+        "delta_rank1": -0.021276595744680882,
+        "baseline_mAP": 0.8809800907487617,
+        "candidate_mAP": 0.8388983961116284,
+        "delta_mAP": -0.04208169463713329
+      },
+      {
+        "raw_pid": 53,
+        "query_count": 9,
+        "baseline_rank1": 0.8888888888888888,
+        "candidate_rank1": 0.8888888888888888,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.5444251628376034,
+        "candidate_mAP": 0.537316511595695,
+        "delta_mAP": -0.007108651241908404
+      },
+      {
+        "raw_pid": 88,
+        "query_count": 28,
+        "baseline_rank1": 0.5357142857142857,
+        "candidate_rank1": 0.5,
+        "delta_rank1": -0.0357142857142857,
+        "baseline_mAP": 0.4054836862449774,
+        "candidate_mAP": 0.3820652389792382,
+        "delta_mAP": -0.023418447265739162
+      },
+      {
+        "raw_pid": 93,
+        "query_count": 91,
+        "baseline_rank1": 0.5494505494505495,
+        "candidate_rank1": 0.38461538461538464,
+        "delta_rank1": -0.16483516483516486,
+        "baseline_mAP": 0.32189453541142576,
+        "candidate_mAP": 0.22081993679749415,
+        "delta_mAP": -0.10107459861393162
+      },
+      {
+        "raw_pid": 117,
+        "query_count": 30,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.9911805128244934,
+        "candidate_mAP": 0.9958856283147813,
+        "delta_mAP": 0.004705115490287959
+      },
+      {
+        "raw_pid": 130,
+        "query_count": 61,
+        "baseline_rank1": 0.9016393442622951,
+        "candidate_rank1": 0.8688524590163934,
+        "delta_rank1": -0.032786885245901676,
+        "baseline_mAP": 0.5126768270153883,
+        "candidate_mAP": 0.4618834994358711,
+        "delta_mAP": -0.05079332757951721
+      },
+      {
+        "raw_pid": 131,
+        "query_count": 121,
+        "baseline_rank1": 0.6859504132231405,
+        "candidate_rank1": 0.6611570247933884,
+        "delta_rank1": -0.024793388429752095,
+        "baseline_mAP": 0.49000190273373756,
+        "candidate_mAP": 0.4512292123799337,
+        "delta_mAP": -0.038772690353803874
+      }
+    ],
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 20265583,
+      "pid_macro_delta_rank1_ci95": [
+        -0.05649542189766336,
+        0.0015750503115534965
+      ],
+      "pid_macro_delta_mAP_ci95": [
+        -0.044725990759686036,
+        0.0115328895120882
+      ],
+      "query_weighted_delta_rank1_ci95": [
+        -0.07237449715051962,
+        0.0017765166800649457
+      ],
+      "query_weighted_delta_mAP_ci95": [
+        -0.05567556950239819,
+        0.011557744283875728
+      ]
+    },
+    "evidence_insufficient": true
+  },
+  {
+    "baseline": "A4_seed4321",
+    "candidate": "R2_seed4321",
+    "seed": 4321,
+    "query_count": 693,
+    "effective_pid_count": 11,
+    "image_micro": {
+      "baseline_rank1": 0.5512265563011169,
+      "candidate_rank1": 0.5079365372657776,
+      "delta_rank1": -0.04329004329004329,
+      "baseline_mAP": 0.4373368449828993,
+      "candidate_mAP": 0.4261189657140003,
+      "delta_mAP": -0.011217879268898993
+    },
+    "pid_macro": {
+      "baseline_rank1": 0.5849993107733895,
+      "candidate_rank1": 0.5667876036702735,
+      "delta_rank1": -0.018211707103116086,
+      "baseline_mAP": 0.48153920873970585,
+      "candidate_mAP": 0.4751652823887328,
+      "delta_mAP": -0.006373926350973091
+    },
+    "query_rank1_wins_ties_losses": [
+      38,
+      587,
+      68
+    ],
+    "query_ap_positive_ties_negative": [
+      280,
+      0,
+      413
+    ],
+    "pid_rank1_improved_tied_worsened": [
+      4,
+      2,
+      5
+    ],
+    "pid_mAP_improved_tied_worsened": [
+      4,
+      0,
+      7
+    ],
+    "pid_rows": [
+      {
+        "raw_pid": 30,
+        "query_count": 83,
+        "baseline_rank1": 0.024096385542168676,
+        "candidate_rank1": 0.060240963855421686,
+        "delta_rank1": 0.03614457831325301,
+        "baseline_mAP": 0.1919216101498294,
+        "candidate_mAP": 0.21350791604346514,
+        "delta_mAP": 0.02158630589363575
+      },
+      {
+        "raw_pid": 36,
+        "query_count": 62,
+        "baseline_rank1": 0.03225806451612903,
+        "candidate_rank1": 0.0967741935483871,
+        "delta_rank1": 0.06451612903225806,
+        "baseline_mAP": 0.2648907874917034,
+        "candidate_mAP": 0.3112106282663905,
+        "delta_mAP": 0.04631984077468709
+      },
+      {
+        "raw_pid": 43,
+        "query_count": 103,
+        "baseline_rank1": 0.7378640776699029,
+        "candidate_rank1": 0.6310679611650486,
+        "delta_rank1": -0.10679611650485432,
+        "baseline_mAP": 0.5770556966230119,
+        "candidate_mAP": 0.5192322234819072,
+        "delta_mAP": -0.0578234731411047
+      },
+      {
+        "raw_pid": 45,
+        "query_count": 58,
+        "baseline_rank1": 0.10344827586206896,
+        "candidate_rank1": 0.20689655172413793,
+        "delta_rank1": 0.10344827586206896,
+        "baseline_mAP": 0.13193986087687276,
+        "candidate_mAP": 0.2947689148696558,
+        "delta_mAP": 0.16282905399278302
+      },
+      {
+        "raw_pid": 48,
+        "query_count": 47,
+        "baseline_rank1": 0.9574468085106383,
+        "candidate_rank1": 0.9361702127659575,
+        "delta_rank1": -0.021276595744680882,
+        "baseline_mAP": 0.8899727735886772,
+        "candidate_mAP": 0.8388983961116284,
+        "delta_mAP": -0.051074377477048793
+      },
+      {
+        "raw_pid": 53,
+        "query_count": 9,
+        "baseline_rank1": 0.7777777777777778,
+        "candidate_rank1": 0.8888888888888888,
+        "delta_rank1": 0.11111111111111105,
+        "baseline_mAP": 0.5524337411518391,
+        "candidate_mAP": 0.537316511595695,
+        "delta_mAP": -0.01511722955614403
+      },
+      {
+        "raw_pid": 88,
+        "query_count": 28,
+        "baseline_rank1": 0.5714285714285714,
+        "candidate_rank1": 0.5,
+        "delta_rank1": -0.0714285714285714,
+        "baseline_mAP": 0.41929692904639937,
+        "candidate_mAP": 0.3820652389792382,
+        "delta_mAP": -0.03723169006716115
+      },
+      {
+        "raw_pid": 93,
+        "query_count": 91,
+        "baseline_rank1": 0.6593406593406593,
+        "candidate_rank1": 0.38461538461538464,
+        "delta_rank1": -0.2747252747252747,
+        "baseline_mAP": 0.3158156649856623,
+        "candidate_mAP": 0.22081993679749415,
+        "delta_mAP": -0.09499572818816818
+      },
+      {
+        "raw_pid": 117,
+        "query_count": 30,
+        "baseline_rank1": 1.0,
+        "candidate_rank1": 1.0,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.9910033959700575,
+        "candidate_mAP": 0.9958856283147813,
+        "delta_mAP": 0.004882232344723847
+      },
+      {
+        "raw_pid": 130,
+        "query_count": 61,
+        "baseline_rank1": 0.8688524590163934,
+        "candidate_rank1": 0.8688524590163934,
+        "delta_rank1": 0.0,
+        "baseline_mAP": 0.49754173664182866,
+        "candidate_mAP": 0.4618834994358711,
+        "delta_mAP": -0.035658237205957566
+      },
+      {
+        "raw_pid": 131,
+        "query_count": 121,
+        "baseline_rank1": 0.7024793388429752,
+        "candidate_rank1": 0.6611570247933884,
+        "delta_rank1": -0.04132231404958675,
+        "baseline_mAP": 0.465059099610883,
+        "candidate_mAP": 0.4512292123799337,
+        "delta_mAP": -0.0138298872309493
+      }
+    ],
+    "bootstrap": {
+      "repeats": 2000,
+      "seed": 20265586,
+      "pid_macro_delta_rank1_ci95": [
+        -0.08294779954323162,
+        0.038875493946232964
+      ],
+      "pid_macro_delta_mAP_ci95": [
+        -0.04024722272259578,
+        0.036629318762400734
+      ],
+      "query_weighted_delta_rank1_ci95": [
+        -0.11625768962427531,
+        0.02871773527124246
+      ],
+      "query_weighted_delta_mAP_ci95": [
+        -0.04801550824988207,
+        0.03626029208743522
+      ]
+    },
+    "evidence_insufficient": true
+  }
+]

@@ -1,0 +1,167 @@
+{
+  "audit_run_time": "20261019_130241",
+  "github_reference_url": "https://github.com/smallvv1/test2",
+  "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+  "reference_worktree": "/tmp/test2-ref-audit-AniKE8",
+  "data_worktree_is_dirty": true,
+  "records": [
+    {
+      "local": "/home/DIFFER/scripts/gpc_v2_expanded_dev_eval.py",
+      "local_exists": true,
+      "local_sha256": "d0194617549a978495d4cfb47675e61a7fde2ecff183ea10543357dc6eb07fea",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "scripts/gpc_v2_expanded_dev_eval.py",
+      "github_exists": true,
+      "github_sha256": "d7c488437f7d5f25b4d302f54c38c9aa28cbb872661e421ce4b3c0789f955ece",
+      "status": "DIFF",
+      "note": "当前评估修复源码；GitHub main 仍是旧的固定名单实现。评估指标和检索函数未发生修改，新增的是资产/配置指纹、显式名单、复用门禁和严格配对检查。"
+    },
+    {
+      "local": "/home/DIFFER/scripts/gpc_a4_recheck_train.py",
+      "local_exists": true,
+      "local_sha256": "e3099283184cb308944730baf51ee120d1fe6ae4e1913513160a9416ce857266",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "scripts/gpc_a4_recheck_train.py",
+      "github_exists": false,
+      "github_sha256": null,
+      "status": "LOCAL_ONLY",
+      "note": "真实执行的新 A4 训练 wrapper；参考提交不存在。"
+    },
+    {
+      "local": "/data/DIFFER/scripts/gpc_v2_train.py",
+      "local_exists": true,
+      "local_sha256": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "scripts/gpc_v2_train.py",
+      "github_exists": false,
+      "github_sha256": null,
+      "status": "LOCAL_ONLY",
+      "note": "旧运行实际使用的训练 wrapper；参考提交不存在。"
+    },
+    {
+      "local": "/data/DIFFER/scripts/phase7i_relation_specificity.py",
+      "local_exists": true,
+      "local_sha256": "0acc8f2865772f75e19e28272d428a9d6c6d21f05707cccdbd4310556307b294",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "scripts/phase7i_relation_specificity.py",
+      "github_exists": true,
+      "github_sha256": "0acc8f2865772f75e19e28272d428a9d6c6d21f05707cccdbd4310556307b294",
+      "status": "MATCH",
+      "note": "Phase 7I 实际加载源码。"
+    },
+    {
+      "local": "/data/DIFFER/scripts/phase6b_soft_relation_screen.py",
+      "local_exists": true,
+      "local_sha256": "ff8c5a8faae4c6d56b9954f0828b28689e5cfd315173a55226cec48d203d6bb3",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "scripts/phase6b_soft_relation_screen.py",
+      "github_exists": true,
+      "github_sha256": "ff8c5a8faae4c6d56b9954f0828b28689e5cfd315173a55226cec48d203d6bb3",
+      "status": "MATCH",
+      "note": "Phase 6B 实际加载源码。"
+    },
+    {
+      "local": "/data/DIFFER/scripts/phase5b_id_damage_ds.py",
+      "local_exists": true,
+      "local_sha256": "b2d9da0f7f6ccdd9ea9f72a574f3ac14ebdf7e3e53c6eba5a805b6468e22aeee",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "scripts/phase5b_id_damage_ds.py",
+      "github_exists": true,
+      "github_sha256": "b2d9da0f7f6ccdd9ea9f72a574f3ac14ebdf7e3e53c6eba5a805b6468e22aeee",
+      "status": "MATCH",
+      "note": "Phase 5B 基础损失/模型入口实际加载源码。"
+    },
+    {
+      "local": "/data/DIFFER/data/samplers.py",
+      "local_exists": true,
+      "local_sha256": "5eb2701cfbe3961bf18ac3306a71482ae7b0a2b78af2e1f2efff48bcb5228163",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "data/samplers.py",
+      "github_exists": true,
+      "github_sha256": "5eb2701cfbe3961bf18ac3306a71482ae7b0a2b78af2e1f2efff48bcb5228163",
+      "status": "MATCH",
+      "note": "基础 DistributedRandomIdentitySampler；A4 PID selector 在 wrapper 中，不在此文件。"
+    },
+    {
+      "local": "/data/DIFFER/loss/make_loss.py",
+      "local_exists": true,
+      "local_sha256": "9be543c08b50553a95839351929fa9341edf900947593fbd675c0e4847889043",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "loss/make_loss.py",
+      "github_exists": true,
+      "github_sha256": "9be543c08b50553a95839351929fa9341edf900947593fbd675c0e4847889043",
+      "status": "MATCH",
+      "note": "CE、Triplet、Bio 基础身份损失；没有独立 gpc_relation.py。"
+    },
+    {
+      "local": "/data/DIFFER/model/build.py",
+      "local_exists": true,
+      "local_sha256": "a0caa718af9f6a3d42835a03ecfa478a77ae2988eec8f338107771a5bc1b591d",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "model/build.py",
+      "github_exists": true,
+      "github_sha256": "11177e9f7fdee671c3c031887bffa05e30bb2f64fb9fc88aa9e1002714c42aa9",
+      "status": "DIFF",
+      "note": "当前实际模型构建源码与 GitHub 参考提交不同；manifest 记录 EVA02-Large Bio-only topology。"
+    },
+    {
+      "local": "/data/DIFFER/processor/processor.py",
+      "local_exists": true,
+      "local_sha256": "0d9b6b508e1cdecff1ef2126c0a889766766308a048a82c3c8c6c230d10059c2",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "processor/processor.py",
+      "github_exists": false,
+      "github_sha256": null,
+      "status": "LOCAL_ONLY",
+      "note": "当前工作树存在，参考提交不存在。"
+    },
+    {
+      "local": "/data/DIFFER/solver/scheduler.py",
+      "local_exists": true,
+      "local_sha256": "b7517bb0f79a3334e2a3ac5ecb14bdcf69cb28c62dd3c734c4e3d212d0955228",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "solver/scheduler.py",
+      "github_exists": true,
+      "github_sha256": "b7517bb0f79a3334e2a3ac5ecb14bdcf69cb28c62dd3c734c4e3d212d0955228",
+      "status": "MATCH",
+      "note": "调度器源码。"
+    },
+    {
+      "local": "/data/DIFFER/solver/scheduler_factory.py",
+      "local_exists": true,
+      "local_sha256": "ba5b100b68729b5238413d844392a70de7833b9cecde9daf5c8bacaa51d1fc84",
+      "github_reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+      "github_path": "solver/scheduler_factory.py",
+      "github_exists": true,
+      "github_sha256": "ba5b100b68729b5238413d844392a70de7833b9cecde9daf5c8bacaa51d1fc84",
+      "status": "MATCH",
+      "note": "调度器工厂源码。"
+    }
+  ],
+  "evaluator_metric_rule_review": {
+    "status": "CONFIRMED_PRESERVED",
+    "preserved": [
+      "L2 normalization",
+      "LTCC same-PID same-camera removal",
+      "same-PID same-clothing removal",
+      "Euclidean retrieval ordering",
+      "per-query AP and Rank-1",
+      "PID aggregation"
+    ],
+    "changed": [
+      "protocol/query/gallery SHA256 fingerprints",
+      "evaluation config fingerprint",
+      "explicit B0/A4/R2 × seeds spec parsing",
+      "missing-file errors instead of silent skips",
+      "reuse gate",
+      "strict paired Query-set equality"
+    ],
+    "source_diff_review": "current vs GitHub reference diff reviewed; metric and retrieval function bodies are unchanged"
+  },
+  "actual_runtime_chain": [
+    "gpc_a4_recheck_train.py -> phase7i_relation_specificity.py -> phase6b_soft_relation_screen.py -> phase5b_id_damage_ds.py -> loss.make_loss/model/processor/solver",
+    "A4 selector: cumulative_pid_balanced_selection; B0 selector: phase7i stable_selection; R2 selector: random_budget_selection",
+    "base loss: CE + Triplet + Bio; total = base_total + lambda * relation; lambda=0.1",
+    "sampler: DistributedRandomIdentitySampler supplies batches; relation selector is wrapper-level"
+  ]
+}

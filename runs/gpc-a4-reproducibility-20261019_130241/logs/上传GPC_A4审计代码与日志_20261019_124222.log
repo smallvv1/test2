@@ -1,0 +1,25 @@
+中文说明：正在创建独立 GitHub checkout。
+Cloning into '/home/DIFFER/github_uploads/test2_20261019_124222'...
+From https://github.com/smallvv1/test2
+ * branch            main       -> FETCH_HEAD
+HEAD is now at f7bf916 Update latest experiment log
+Switched to a new branch 'runs/gpc-v2-ltcc-20261019_124222'
+Missing or invalid credentials.
+Error: connect ECONNREFUSED /tmp/vscode-git-c3d3d989aa.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1706:16) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '/tmp/vscode-git-c3d3d989aa.sock'
+}
+Missing or invalid credentials.
+Error: connect ECONNREFUSED /tmp/vscode-git-c3d3d989aa.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1706:16) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '/tmp/vscode-git-c3d3d989aa.sock'
+}
+remote: No anonymous write access.
+fatal: Authentication failed for 'https://github.com/smallvv1/test2.git/'
+中文解释：commit 已保存在本地发布 checkout，但 GitHub push 因凭据/权限/网络失败；没有删除本地快照。

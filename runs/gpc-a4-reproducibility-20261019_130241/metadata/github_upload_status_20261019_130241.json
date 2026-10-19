@@ -1,0 +1,18 @@
+{
+  "run_time": "20261019_130241",
+  "repository": "https://github.com/smallvv1/test2",
+  "reference_commit": "3dd98604a38075060d96aeb70506a977dd123be4",
+  "archive_path": "runs/gpc-a4-reproducibility-20261019_130241",
+  "local_checkout": "/tmp/test2-ref-audit-AniKE8",
+  "local_commit": "3c65c1b",
+  "local_commit_full": "3c65c1b56016360b78000e9269fab60b6f2ab733",
+  "push_status": "BLOCKED_GITHUB_AUTH",
+  "attempts": [
+    "SSH with /root/.ssh/id_ed25519_github_smallvv1: Permission denied (publickey)",
+    "HTTPS anonymous read succeeded, write rejected because no credential helper/token is configured"
+  ],
+  "weights_uploaded": false,
+  "datasets_uploaded": false,
+  "secrets_uploaded": false,
+  "local_commit_preserved": true
+}

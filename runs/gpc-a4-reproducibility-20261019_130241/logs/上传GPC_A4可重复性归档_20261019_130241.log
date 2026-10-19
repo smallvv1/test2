@@ -1,0 +1,13 @@
+时间：2026-10-19 13:02:41 UTC+8
+RUN_TIME：20261019_130241
+
+已在本地独立 Git checkout 创建归档：
+runs/gpc-a4-reproducibility-20261019_130241
+本地 commit：3c65c1b
+
+归档内容：修复评估源码、旧/新训练源码、Phase 7I/6B/5B、sampler、loss、测试、五份报告、六模型哈希、配对 PID 统计和最新实验/审计日志。
+安全检查：未发现模型权重、数据集、Query/Gallery 文件或密钥。
+
+GitHub 上传结果：BLOCKED_GITHUB_AUTH。
+SSH 使用 /root/.ssh/id_ed25519_github_smallvv1 返回 Permission denied (publickey)；HTTPS 只允许匿名读取，当前没有可用 credential helper/token。
+本地 commit 未删除，待恢复 GitHub 写入权限后可直接 push。

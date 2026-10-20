@@ -1,0 +1,6 @@
+{
+  "status": "PASS_OFFLINE_PLAN_AUDIT",
+  "output": "/home/DIFFER/outputs/gpc_strict_budget_plan_20261020_094059",
+  "s1_ok": true,
+  "s2_ok": true
+}

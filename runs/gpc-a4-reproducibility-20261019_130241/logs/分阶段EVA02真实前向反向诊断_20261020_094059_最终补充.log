@@ -1,0 +1,9 @@
+运行时间：20261020_094059
+
+中文结论：F0 构建、F1 strict checkpoint load、F2 PPU 输入、F3 EVA02 主干 block 00 至 block 22、F4 Bio 投影与 norm、F5 身份头、F6 Bio 头、F7 完整 forward、F8 CE+Triplet+Bio backward 均 PASS。
+
+中文说明：第一次 F9 诊断使用了 PyTorch 默认 GradScaler 初始 scale=65536，未缩放梯度出现非 finite；这不是正式训练配置。实际 Phase5B/Phase7I 使用 init_scale=1024，因此诊断 harness 已按真实处理器修正，并单独重跑 F9。
+
+最终 F9：正式 init_scale=1024，loss=7.780976295471191，gradient_finite=true，found_inf=false，optimizer_step=true，scale_before=1024，scale_after=1024。
+
+中文结论：当前真实模型单 batch 的完整 PPU forward/backward/optimizer.step 技术门禁 PASS。未使用 CPU model fallback，未启动正式长程训练。第一次 F9 失败记录保留，不覆盖。

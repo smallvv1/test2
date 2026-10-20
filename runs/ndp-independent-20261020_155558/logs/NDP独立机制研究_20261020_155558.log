@@ -8,3 +8,4 @@
 【阶段七】NDP 结构损失单元测试结果为 NDP_STRUCTURE_UNIT_TEST_PASS。NDP 对同一三元组与 Triplet 的当前梯度方向相同，仅使用冻结参考 margin 作为逐关系阈值。
 【中文结论】NDP_PROTOTYPE_INCONCLUSIVE；没有启动 NDP PPU 短程更新、30 epoch 或 60 epoch 训练；GPC-v1、Bio、Triplet、PRCC、NDP 历史产物和 checkpoint 均未修改。
 【产物】详见 /home/DIFFER/reports/GPC_S1_FINAL_CLOSURE.md、NDP_LOCAL_INTRUSION_DIAGNOSIS.md、NDP_REFERENCE_RELIABILITY_AUDIT.md、NDP_LOSS_VS_TRIPLET_ANALYSIS.md、NDP_SHORT_UPDATE_PILOT.md、NDP_NEXT_STAGE_DECISION.md。
+【归档】安全扫描通过；未上传 checkpoint、特征库、Caption、数据集、密钥或 Token。GitHub main 已推送提交 5dae8d2a791e3697f99df7f7f257c1ac36dd0a5c。

@@ -1,0 +1,20 @@
+运行时间=20261020_190552
+=== which python ===
+/usr/bin/python
+=== python executable ===
+/usr/bin/python
+3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]
+=== default python packages ===
+/usr/bin/python: No module named pip
+=== verified interpreter packages ===
+/usr/local/bin/python3.10
+3.10.13 (main, Sep  2 2025, 17:44:18) [GCC 11.4.0]
+numpy 1.23.5
+torch 2.6.0
+torch file /usr/local/lib/python3.10/site-packages/torch/__init__.py
+=== PPU environment ===
+PATH=/root/.codex/packages/app-server-daemon/releases/0.163.0-x86_64-unknown-linux-musl/codex-path:/root/.codex/tmp/arg0-linux/codex-arg0Gub7lD:/root/.codex/tmp/arg0/codex-arg0gu5KCT:/root/.codex/packages/app-server-daemon/releases/0.162.1-x86_64-unknown-linux-musl/codex-path:/root/.codex/tmp/arg0/codex-arg09vSIB2:/root/.codex/packages/standalone/releases/0.162.1-x86_64-unknown-linux-musl/codex-path:/root/.local/bin:/root/.vscode-server/data/User/globalStorage/github.copilot-chat/debugCommand:/root/.vscode-server/data/User/globalStorage/github.copilot-chat/copilotCli:/root/.vscode-server/bin/7debcd0e2acdea1c52de81bf9ee1620444407dda/bin/remote-cli:/usr/bin:/bin:/usr/sbin:/sbin:/nix/store/hpvsf3db2q0ij33aw31n953gdkhlmwrg-openssh-10.2p1/bin
+=== relevant processes ===
+ 839349 S          00:02 tee /home/DIFFER/logs/NDP真实PPU邻居梯度探针_20261020_190552.log
+=== current script hash ===
+8bb94f2faee03f787633dab2e41a27e9ce640f046a22522326d84fa674c85107  /home/DIFFER/scripts/ndp_neighbor_access_activation_audit.py

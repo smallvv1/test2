@@ -4,6 +4,8 @@ RUN_TIME：`20261020_155558`
 
 本轮使用 LTCC train-only 的 9576 张图、77 个 PID、256 个衣物状态，复用已审计的 Bio-only 与 Bio+GPC-v1 E60 特征库。K=5、10、20 在运行前固定；没有读取官方 query/gallery/test，也没有训练或更新 checkpoint。
 
+这里的 Bio-only→Bio+GPC 对照是冻结状态之间的几何差异审计，不是同一条逐步训练轨迹的因果证明；PPU AMP 的 A/A 数值不确定性仍单独保留。
+
 ## 主要结果
 
 | seed | K | 错误 PID 侵入 anchor 比例 | 有正侵入 PID | Δ最近异身份相似度 | Δ局部主 margin | 原本正确但翻转 |

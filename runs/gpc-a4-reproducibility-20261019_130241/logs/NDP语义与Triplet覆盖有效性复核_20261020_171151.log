@@ -1,0 +1,8 @@
+【复用】只读取已完成的 20261020_165332 JSON/CSV，不重新计算特征，不实例化模型。
+【完成】seed=1234 K=5：H1/H2/H3 anchor=275/167/283。
+【完成】seed=1234 K=10：H1/H2/H3 anchor=455/322/588。
+【完成】seed=1234 K=20：H1/H2/H3 anchor=680/581/1209。
+【完成】seed=4321 K=5：H1/H2/H3 anchor=151/168/175。
+【完成】seed=4321 K=10：H1/H2/H3 anchor=254/336/429。
+【完成】seed=4321 K=20：H1/H2/H3 anchor=410/646/802。
+【决策】NDP_LOCAL_RISK_MECHANISM_UNRESOLVED；未启动任何模型计算或训练。

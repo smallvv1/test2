@@ -1,0 +1,4 @@
+
+【运行记录】RUN_TIME=20261020_155558
+【中文说明】NDP-A 子步骤日志启动：NDP训练测试泄漏审计。
+[2026-10-20 07:56:51 UTC] 【泄漏审计】PASS：报告已写入 reports/NDP_A_DATA_LEAKAGE_AUDIT.md。

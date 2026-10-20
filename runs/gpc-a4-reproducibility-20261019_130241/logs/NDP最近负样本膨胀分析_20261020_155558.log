@@ -1,0 +1,7 @@
+
+【运行记录】RUN_TIME=20261020_155558
+【中文说明】NDP-A 子步骤日志启动：NDP最近负样本膨胀分析。
+[2026-10-20 07:57:13 UTC] 【Seed1234】开始 train-only positive/negative anchor 统计。
+[2026-10-20 07:57:18 UTC] 【最近负样本】已计算 all-train different-PID nearest negative、same-ID positive、cross-clothes positive、margin、ordering correctness。
+[2026-10-20 07:57:49 UTC] 【Seed4321】开始 train-only positive/negative anchor 统计。
+[2026-10-20 07:57:54 UTC] 【最近负样本】已计算 all-train different-PID nearest negative、same-ID positive、cross-clothes positive、margin、ordering correctness。

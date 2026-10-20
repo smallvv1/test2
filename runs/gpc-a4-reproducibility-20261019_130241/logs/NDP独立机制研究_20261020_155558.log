@@ -1,0 +1,11 @@
+【运行记录】RUN_TIME=20261020_155558
+【阶段一】S1 已封存：S1_FINAL_DECISION=NO_GO；未删除历史负结果，未重新训练 S1。
+【阶段二】PPU AMP 技术债务保留为 AMP_OPERATOR_ROOT_CAUSE_UNRESOLVED；本轮只读复核，没有无限重试。
+【阶段三】NDP 来源审计通过：四个冻结 Bio/Bio+GPC-v1 checkpoint 与 train-only feature bank 已核对；9576 张图、77 个 PID、256 个衣物状态、1024 维特征，未读取 query/gallery/test。
+【阶段四】K=5/10/20 邻域离线诊断完成；参考关系阈值 tau_ref=0.05，容忍量 epsilon=0.02，均在运行前固定。
+【阶段五】两种子均观察到邻域漂移、最近异身份相似度上升和部分错误 PID 侵入；但局部身份 margin seed1234 为正、seed4321 为负，跨 seed 门禁为 MIXED/STOP。
+【阶段六】严格参考关系审计完成；可靠关系中真正原本正确但翻转约 0.7%～1.7%，不可将所有 hinge 违反当作排序翻转。
+【阶段七】NDP 结构损失单元测试结果为 NDP_STRUCTURE_UNIT_TEST_PASS。NDP 对同一三元组与 Triplet 的当前梯度方向相同，仅使用冻结参考 margin 作为逐关系阈值。
+【中文结论】NDP_PROTOTYPE_INCONCLUSIVE；没有启动 NDP PPU 短程更新、30 epoch 或 60 epoch 训练；GPC-v1、Bio、Triplet、PRCC、NDP 历史产物和 checkpoint 均未修改。
+【产物】详见 /home/DIFFER/reports/GPC_S1_FINAL_CLOSURE.md、NDP_LOCAL_INTRUSION_DIAGNOSIS.md、NDP_REFERENCE_RELIABILITY_AUDIT.md、NDP_LOSS_VS_TRIPLET_ANALYSIS.md、NDP_SHORT_UPDATE_PILOT.md、NDP_NEXT_STAGE_DECISION.md。
+【归档】安全扫描通过；未上传 checkpoint、特征库、Caption、数据集、密钥或 Token。GitHub main 已推送本轮最终提交 7d99c9e762521396d577758b788fce1fe994773a。

@@ -1,0 +1,8 @@
+
+【运行记录】RUN_TIME=20261020_155558
+【中文说明】NDP-A 子步骤日志启动：NDP最终结论。
+[2026-10-20 08:01:30 UTC] 【最终结论】Q1 all-image drift=YES；Q2 negative-only drift=YES；Q3 intrusion=YES；Q4 bad hubness=YES；Q5 nearest-negative inflation=YES；Q6 drift-margin relation=YES；Q7 harmful anchors=NO；Q8 cross-seed=MIXED。
+[2026-10-20 08:01:30 UTC] 【Promotion Gate】A=True B=True C=True D=True E=False；最终=MIXED，决定=STOP。
+[2026-10-20 08:01:30 UTC] 【中文结论】NO NEW TRAINING WAS STARTED；NO NDP LOSS WAS IMPLEMENTED；NO QUERY/GALLERY/TEST DATA WAS USED；NO EXISTING GPC CHECKPOINT WAS MODIFIED。
+[2026-10-20 08:01:30 UTC] 【产物】已生成 Manifest：/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/NDP_A_MANIFEST.json。
+[2026-10-20 08:01:30 UTC] 【阶段结束】NDP-A 离线诊断完成；没有进行任何新训练。

@@ -1,0 +1,7 @@
+
+【运行记录】RUN_TIME=20261020_155558
+【中文说明】NDP-A 子步骤日志启动：NDP构建负样本邻域。
+[2026-10-20 07:56:57 UTC] 【邻域构建】negative-only graph 完成：N=9576，Top-20，仅使用 train feature。
+[2026-10-20 07:57:02 UTC] 【邻域构建】negative-only graph 完成：N=9576，Top-20，仅使用 train feature。
+[2026-10-20 07:57:08 UTC] 【邻域构建】negative-only graph 完成：N=9576，Top-20，仅使用 train feature。
+[2026-10-20 07:57:12 UTC] 【邻域构建】negative-only graph 完成：N=9576，Top-20，仅使用 train feature。

@@ -1,0 +1,6 @@
+
+【运行记录】RUN_TIME=20261020_155558
+【中文说明】NDP-A 子步骤日志启动：NDP跨Seed一致性分析。
+[2026-10-20 07:58:24 UTC] 【相关性】使用 anchor-level Spearman，并以 PID cluster bootstrap（100 次）给出 95% CI。
+[2026-10-20 08:01:08 UTC] 【相关性】已完成 1-Jaccard、intrusion、JS、hub exposure/rank change 与 Delta Margin/Delta Same-ID Recall 的 Spearman。
+[2026-10-20 08:01:08 UTC] 【跨Seed】Intrusion positive both=True；nearest-negative inflation both=True；margin degradation both=False；correlation stable=True；PID coverage=True。

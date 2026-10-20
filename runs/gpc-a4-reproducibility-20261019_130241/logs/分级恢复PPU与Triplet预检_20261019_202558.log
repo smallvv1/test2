@@ -1,0 +1,199 @@
+{
+  "status": "STOPPED_AT_triplet_distance",
+  "run_time": "20261019_202558",
+  "seed": 1234,
+  "stages": [
+    {
+      "stage": "device",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/device.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "device_count": 2,
+        "device_names": [
+          "PPU-ZW810E",
+          "PPU-ZW810E"
+        ],
+        "stage": "device"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "tensor0",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/tensor0.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "device": 0,
+        "grad_finite": true,
+        "loss_finite": true,
+        "optimizer_step": true,
+        "stage": "tensor0"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "tensor1",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/tensor1.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "device": 1,
+        "grad_finite": true,
+        "loss_finite": true,
+        "optimizer_step": true,
+        "stage": "tensor1"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "matmul",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/matmul.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "finite": true,
+        "shape": [
+          128,
+          128
+        ],
+        "stage": "matmul"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "triplet_distance",
+      "returncode": 1,
+      "signal": null,
+      "json_exists": false,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/triplet_distance.log",
+      "status": "FAIL"
+    }
+  ],
+  "cpu_model_fallback": false
+}
+中文补充：修复诊断脚本导入路径后，独立 PPU 分级结果为：device、tensor0、tensor1、matmul、triplet_distance、triplet_backward 均 PASS，梯度 finite 且 Triplet backward 完成。真实模型最小 forward 独立子进程以退出码 134（SIGABRT）终止，最后运行时信息为 GEMM offline cache 缺失；该警告尚不能证明是 SIGABRT 根因。按门禁停止真实模型分支，未执行完整模型 backward/optimizer.step，没有 CPU fallback，也没有清理共享 cache。
+{
+  "status": "STOPPED_AT_real_forward",
+  "run_time": "20261019_202558",
+  "seed": 1234,
+  "stages": [
+    {
+      "stage": "device",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/device.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "device_count": 2,
+        "device_names": [
+          "PPU-ZW810E",
+          "PPU-ZW810E"
+        ],
+        "stage": "device"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "tensor0",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/tensor0.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "device": 0,
+        "grad_finite": true,
+        "loss_finite": true,
+        "optimizer_step": true,
+        "stage": "tensor0"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "tensor1",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/tensor1.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "device": 1,
+        "grad_finite": true,
+        "loss_finite": true,
+        "optimizer_step": true,
+        "stage": "tensor1"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "matmul",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/matmul.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "finite": true,
+        "shape": [
+          128,
+          128
+        ],
+        "stage": "matmul"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "triplet_distance",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/triplet_distance.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "finite": true,
+        "shape": [
+          8,
+          8
+        ],
+        "stage": "triplet_distance"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "triplet_backward",
+      "returncode": 0,
+      "signal": null,
+      "json_exists": true,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/triplet_backward.log",
+      "payload": {
+        "cpu_model_fallback": false,
+        "dist_an_finite": true,
+        "dist_ap_finite": true,
+        "grad_finite": true,
+        "loss": 1.4400858879089355,
+        "loss_finite": true,
+        "stage": "triplet_backward"
+      },
+      "status": "PASS"
+    },
+    {
+      "stage": "real_forward",
+      "returncode": -6,
+      "signal": "SIGABRT",
+      "json_exists": false,
+      "log": "/home/DIFFER/outputs/gpc_ppu_staged_preflight_20261019_202558/real_forward.log",
+      "status": "FAIL"
+    }
+  ],
+  "cpu_model_fallback": false
+}

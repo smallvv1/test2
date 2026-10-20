@@ -1,0 +1,7 @@
+{
+  "status": "PASS_OFFLINE_PLAN_AUDIT",
+  "output": "/home/DIFFER/outputs/gpc_strict_budget_plan_20261019_202558",
+  "s1_ok": true,
+  "s2_ok": true
+}
+中文说明：S1 保持 S0 的 active batch 集合和每 batch 关系数，并通过全局关系键去重；S2 保持每个 seed/rank 的总关系数和 active batch 数。三组均未执行模型 forward/backward，实际梯度预算仍需等待 PPU 真实模型门禁恢复后测量。

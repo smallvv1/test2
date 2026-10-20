@@ -1,0 +1,1 @@
+SyntaxError: Non-UTF-8 code starting with '\xb7' in file /usr/local/bin/python3.10 on line 2, but no encoding declared; see https://python.org/dev/peps/pep-0263/ for details

@@ -1,0 +1,52 @@
+{
+  "cpu_model_fallback": false,
+  "note": "所有成功和失败重复均保留；不因结果方向选择性重跑。",
+  "records": [
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed1234_repeat1/aa_seed1234_repeat1_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed1234_repeat1/child.log",
+      "repeat": 1,
+      "returncode": 2,
+      "seed": 1234
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed1234_repeat2/aa_seed1234_repeat2_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed1234_repeat2/child.log",
+      "repeat": 2,
+      "returncode": 2,
+      "seed": 1234
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed1234_repeat3/aa_seed1234_repeat3_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed1234_repeat3/child.log",
+      "repeat": 3,
+      "returncode": 0,
+      "seed": 1234
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed4321_repeat1/aa_seed4321_repeat1_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed4321_repeat1/child.log",
+      "repeat": 1,
+      "returncode": 2,
+      "seed": 4321
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed4321_repeat2/aa_seed4321_repeat2_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed4321_repeat2/child.log",
+      "repeat": 2,
+      "returncode": 0,
+      "seed": 4321
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed4321_repeat3/aa_seed4321_repeat3_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/aa_steps20/seed4321_repeat3/child.log",
+      "repeat": 3,
+      "returncode": 2,
+      "seed": 4321
+    }
+  ],
+  "repeats_per_seed": 3,
+  "run_time": "20261020_112219",
+  "status": "AA_BASELINE_HAS_INVALID_REPEATS",
+  "steps": 20
+}

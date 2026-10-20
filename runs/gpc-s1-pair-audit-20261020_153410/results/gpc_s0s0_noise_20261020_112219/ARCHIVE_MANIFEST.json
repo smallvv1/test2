@@ -1,0 +1,47 @@
+{
+  "run_time": "20261020_112219",
+  "status": "BASELINE_NUMERICAL_VARIABILITY_HIGH",
+  "method_decision": "S1_NOT_SUPPORTED_OR_INCONCLUSIVE",
+  "cpu_model_fallback": false,
+  "training_scope": "20步A/A噪声基线和20步A/B重复；无30/60 epoch训练",
+  "source_sha256": {
+    "/home/DIFFER/scripts/gpc_s0_s1_controlled_pair.py": "f32007b4c13bee544bca9443c0481ecd13e8ad9919338f9e3df332c29ba7efa8",
+    "/home/DIFFER/scripts/gpc_s0_s0_noise_baseline.py": "52350149e0971402d0136c2dd6eef80a044c475e69eb6265d1e648ac0652549d",
+    "/home/DIFFER/scripts/gpc_s0_s1_ab_repeats.py": "184cfc2688676bc42d081a3e595f91b914a6a73807bc37229d5f223cbec6b364",
+    "/home/DIFFER/scripts/gpc_selected_relation_hash_audit.py": "fec5da402807186213f1039db10a676a041ee49d4c911cb1a2059d4ff455998d"
+  },
+  "environment": {
+    "python": "3.10.13",
+    "torch": "2.6.0",
+    "devices": ["PPU-ZW810E", "PPU-ZW810E"],
+    "ppu_home": "/usr/local/PPU_SDK",
+    "ppu_sdk": "/usr/local/PPU_SDK",
+    "driver": "1.5.1-1d747a",
+    "hggc": "11.1",
+    "ppu_smi": "1.18",
+    "amp_init_scale": 1024
+  },
+  "results": {
+    "aa_summary": "aa_steps20/aa_baseline_summary.json",
+    "aa_summary_sha256": "93475702686180920ac1c9fe22eb948145d888385f8654514eff7a9d116d1ea1",
+    "ab_summary": "../gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/ab_repeats_summary.json",
+    "ab_summary_sha256": "a326aae1e0d00a4f5c008f097ee7c5d96e80d482ec84424e7dcd42c28b661a3e",
+    "relation_hash_audit": "relation_hash_audit_steps20.json",
+    "relation_hash_audit_sha256": "42b3ed868d208421b1b59ecbfda534bf84b153713d9a435d03e1d3a2a608335a",
+    "aa_repeats": 6,
+    "aa_valid_pairs": 2,
+    "ab_repeats": 6,
+    "ab_valid_pairs": 5
+  },
+  "reports": [
+    "../../reports/GPC_S0_S0_NUMERICAL_NOISE_BASELINE.md",
+    "../../reports/GPC_S0_S1_STEPWISE_AMP_AUDIT.md",
+    "../../reports/GPC_S0_S1_RELATION_GRADIENT_AUDIT.md",
+    "../../reports/GPC_S0_S1_EFFECT_VS_NOISE.md",
+    "../../reports/GPC_NEXT_STAGE_DECISION_20261020_112219.md"
+  ],
+  "github": {
+    "push_performed": false,
+    "note": "按用户此前指示，本轮仅本地实验与归档，未推送分支。"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "run_time": "20261020_104944",
+  "scope": "S0/S1严格配对短程复核，不含正式长程训练",
+  "status": "S1_INCONCLUSIVE",
+  "cpu_model_fallback": false,
+  "historical_runs_preserved": ["20261020_094059"],
+  "source": {
+    "/home/DIFFER/scripts/gpc_s0_s1_controlled_pair.py": "c937b9e4e230383849d3d9497faf2ef8d64f745c84ee4a1fdc7f905c0370679c"
+  },
+  "preflight": {
+    "path": "rank_preflight/summary.json",
+    "sha256": "7216977cfa87a0d17afac2bee4d4446ec7669d9b3acf512106cd532cdf763b6b",
+    "status": "PASS_TWO_PPU_RANK_PREFLIGHT"
+  },
+  "pair_results": [
+    {
+      "path": "pair_seed1234_steps10/s0_s1_seed1234_steps10.json",
+      "status": "PASS_CONTROLLED_PAIR"
+    },
+    {
+      "path": "pair_seed1234_steps20_retry2/s0_s1_seed1234_steps20.json",
+      "sha256": "b65ce47d85f8804201c2b6eedc13e95a34d12436d6616a22b709694fb9c7bb13",
+      "status": "PASS_CONTROLLED_PAIR"
+    },
+    {
+      "path": "pair_seed4321_steps20/s0_s1_seed4321_steps20.json",
+      "sha256": "4a56db870dcc2f4890dd291c656b8be953202a1d8811f31145bdda3d0c9b0476",
+      "status": "PASS_CONTROLLED_PAIR"
+    },
+    {
+      "path": "pair_seed1234_steps100/s0_s1_seed1234_steps100.json",
+      "sha256": "944e25c67bdefd96fe956171efb7790888a7a8330ebc230c93a13346b373d543",
+      "status": "INVALID_PAIR",
+      "cause": "S0 step 41 skip, S1 no skip"
+    },
+    {
+      "path": "pair_seed4321_steps100_retry1/s0_s1_seed4321_steps100.json",
+      "sha256": "07a9d46e9afe9d4a197c6577757233353f8cf2d5e3c4362d3db2fb6c73a103a7",
+      "status": "INVALID_PAIR",
+      "cause": "S0 no skip, S1 step 48 skip"
+    }
+  ],
+  "reports": [
+    "../../reports/GPC_S0S1S2_INVALID_PAIR_ROOT_CAUSE.md",
+    "../../reports/GPC_S0_S1_CONTROLLED_PROTOCOL.md",
+    "../../reports/GPC_S0_S1_GRADIENT_BUDGET.md",
+    "../../reports/GPC_S0_S1_SHORT_UPDATE_RESULTS.md",
+    "../../reports/GPC_NEXT_EXPERIMENT_DECISION_20261020_104944.md"
+  ],
+  "github": {
+    "push_performed": false,
+    "note": "按用户最新指示，本轮只做实验和本地归档，不推送分支。"
+  }
+}

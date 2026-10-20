@@ -1,0 +1,57 @@
+{
+  "run_time": "20261020_153410",
+  "source_runs": [
+    "20261020_112219",
+    "20261020_104944",
+    "20261020_141052",
+    "20261020_094059"
+  ],
+  "scope": "S1-Pair完整epoch离线可行性、Exposure混杂与A/A AMP有效干预审计",
+  "model_forward_executed": false,
+  "cpu_model_fallback": false,
+  "official_query_gallery_used": false,
+  "counts": {
+    "s1_pair_batches": 2384,
+    "s1_pair_s0_relations": 301,
+    "s1_pair_replaceable_relations": 55,
+    "s1_pair_unreplaceable_relations": 246,
+    "s1_pair_actual_replaced_relations": 55,
+    "s1_pair_replacement_fraction": 0.18272425249169436,
+    "aa_total": 6,
+    "aa_returncode_0": 2,
+    "aa_returncode_2": 4,
+    "ab_total": 6,
+    "ab_returncode_0": 5,
+    "ab_returncode_2": 1
+  },
+  "input_directories": [
+    "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/",
+    "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/",
+    "/home/DIFFER/outputs/gpc_s0s1_controlled_20261020_104944/"
+  ],
+  "source_sha256": {
+    "/home/DIFFER/scripts/gpc_s1_pair_feasibility_audit.py": "80ca356da102543f5869b4192ea2f588e730b0283f6c94ce5fd6444282278219",
+    "/home/DIFFER/scripts/gpc_strict_budget_plan_audit.py": "8d1a7903201a92b253a4c11a598bff903838a94bedb4a814c636700746388cca",
+    "/data/DIFFER/scripts/phase7i_relation_specificity.py": "0acc8f2865772f75e19e28272d428a9d6c6d21f05707cccdbd4310556307b294"
+  },
+  "result_sha256": {
+    "/home/DIFFER/outputs/gpc_s1_pair_feasibility_20261020_153410/s1_pair_feasibility_audit.json": "5ed42ac47f96e864f271ec3930c8a0e97c73b571f4528c566b2d5d17698a2b91",
+    "/home/DIFFER/outputs/gpc_s1_pair_feasibility_20261020_153410/s1_pair_feasibility_by_batch.csv": "f8988e92db94a0d1414102c820b21d4e17a7e499599da0186f4429941f687ee2",
+    "/home/DIFFER/outputs/gpc_aa_failure_audit_20261020_141052/failure_root_cause_audit.json": "66ee1cdaa4ed224216c72d4d214c31901c89f816d20321617f8098fc7ec81c79"
+  },
+  "report_sha256": {
+    "/home/DIFFER/reports/GPC_AA_FAILURE_ROOT_CAUSE_20261020_153410.md": "ebb5f4597a6010d94802cf3edaa97d9fad51f3727d539da50a6fe3540360aad3",
+    "/home/DIFFER/reports/GPC_S1_PAIR_FEASIBILITY_AUDIT_20261020_153410.md": "ec190f4ddf997774022b22c8d17099fb781436b6f38ac39caed4486f363935ff",
+    "/home/DIFFER/reports/GPC_S1_EXPOSURE_CONFOUNDING_20261020_153410.md": "a1dddbf67bcd6edd8311af6174f5e28f690e80264ca488edfe6ce0da21341352",
+    "/home/DIFFER/reports/GPC_EFFECTIVE_AMP_INTERVENTION_20261020_153410.md": "c89e7a00fa8b9b1de7d7a7f90a3a28052c85f2c649705e9dbb8429d0139ae35b",
+    "/home/DIFFER/reports/GPC_S1_FINAL_GO_NO_GO_20261020_153410.md": "d120c038ec3d396c0478399b20bb814b1093f2963183d876ec7c77419cab7afe"
+  },
+  "decision": [
+    "AA_ROOT_CAUSE_UNRESOLVED",
+    "S1_PAIR_FEASIBILITY_LIMITED",
+    "S1_EXPOSURE_CONFOUNDING_CONFIRMED",
+    "S1_GO_NO_GO",
+    "保留GPC-v1",
+    "不启动30/60 epoch训练"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "cpu_model_fallback": false,
+  "model_forward_executed": false,
+  "note": "原始 A/A JSON 保留；本文件只纠正训练步关系 hash 与含诊断 batch 的 full-plan hash 的口径区别。",
+  "rows": [
+    {
+      "batch_plan_sha256": "48a8a832a6561ace1d2acd2556300165572ff9bbc6aaab7b5a5ce8cb48f79110",
+      "candidate_relation_sha256": "e6c50002cbf33ada1df1c8dd105618341a950d5499574cba6b071b4525b08c3d",
+      "full_plan_s0_selected_relation_sha256": "ef5e6a1234fe1234f479a2d304a9512ab9be92f512edcf75cc09d021ea34d86b",
+      "full_plan_s1_selected_relation_sha256": "4573551021202384b52759e004e35bbc61a52e499ead33682112914841d7940f",
+      "s0_relation_total_training_steps": 2,
+      "s1_relation_total_training_steps": 2,
+      "seed": 1234,
+      "steps": 20,
+      "training_s0_selected_relation_sha256": "6035be813de267d830ff68a877bf7768096b139eed2ec27aa496bfac1ad6b97d",
+      "training_s1_selected_relation_sha256": "de93bd688aeae8c0bef13bce7ca397c173740834015406942d3a00e0ab999ece"
+    },
+    {
+      "batch_plan_sha256": "48a8a832a6561ace1d2acd2556300165572ff9bbc6aaab7b5a5ce8cb48f79110",
+      "candidate_relation_sha256": "45d9507890b0cba55cb0c24e721e7f1ce12a5ccbeba21eaf9057e73ca8fc3e6c",
+      "full_plan_s0_selected_relation_sha256": "7abd5031ff9175296e2e61df9ab2e233b5f5429eefcb6eebbcecbd1b806dace7",
+      "full_plan_s1_selected_relation_sha256": "a1cc6ebd216039e365dd02a6cb78af6df4841535b26032bc93b81e94649e7c81",
+      "s0_relation_total_training_steps": 1,
+      "s1_relation_total_training_steps": 1,
+      "seed": 4321,
+      "steps": 20,
+      "training_s0_selected_relation_sha256": "7abd5031ff9175296e2e61df9ab2e233b5f5429eefcb6eebbcecbd1b806dace7",
+      "training_s1_selected_relation_sha256": "a1cc6ebd216039e365dd02a6cb78af6df4841535b26032bc93b81e94649e7c81"
+    }
+  ],
+  "status": "PASS_TRAINING_RELATION_HASH_AUDIT"
+}

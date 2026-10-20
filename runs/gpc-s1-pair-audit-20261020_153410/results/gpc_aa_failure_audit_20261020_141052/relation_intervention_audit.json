@@ -1,0 +1,92 @@
+[
+  {
+    "active_step_count_s0": 2,
+    "active_step_count_s1": 2,
+    "active_steps_s0": [
+      16,
+      20
+    ],
+    "active_steps_s1": [
+      16,
+      20
+    ],
+    "identical_relation_count": 0,
+    "relation_count_s0": 2,
+    "relation_count_s1": 2,
+    "replaced_relation_count_s0": 2,
+    "replaced_relation_count_s1": 2,
+    "s0_profile": {
+      "cross_clothes_fraction": 0.0,
+      "cross_clothes_relations": 0,
+      "duplicate_relations": 0,
+      "pid_counts": {
+        "58": 1,
+        "71": 1
+      },
+      "same_clothes_fraction": 1.0,
+      "same_clothes_relations": 2,
+      "total_relations": 2,
+      "unique_relations": 2
+    },
+    "s0_relation_sha256": "6035be813de267d830ff68a877bf7768096b139eed2ec27aa496bfac1ad6b97d",
+    "s1_profile": {
+      "cross_clothes_fraction": 0.5,
+      "cross_clothes_relations": 1,
+      "duplicate_relations": 0,
+      "pid_counts": {
+        "35": 1,
+        "67": 1
+      },
+      "same_clothes_fraction": 0.5,
+      "same_clothes_relations": 1,
+      "total_relations": 2,
+      "unique_relations": 2
+    },
+    "s1_relation_sha256": "de93bd688aeae8c0bef13bce7ca397c173740834015406942d3a00e0ab999ece",
+    "seed": 1234,
+    "steps": 20
+  },
+  {
+    "active_step_count_s0": 1,
+    "active_step_count_s1": 1,
+    "active_steps_s0": [
+      16
+    ],
+    "active_steps_s1": [
+      16
+    ],
+    "identical_relation_count": 0,
+    "relation_count_s0": 1,
+    "relation_count_s1": 1,
+    "replaced_relation_count_s0": 1,
+    "replaced_relation_count_s1": 1,
+    "s0_profile": {
+      "cross_clothes_fraction": 0.0,
+      "cross_clothes_relations": 0,
+      "duplicate_relations": 0,
+      "pid_counts": {
+        "49": 1
+      },
+      "same_clothes_fraction": 1.0,
+      "same_clothes_relations": 1,
+      "total_relations": 1,
+      "unique_relations": 1
+    },
+    "s0_relation_sha256": "7abd5031ff9175296e2e61df9ab2e233b5f5429eefcb6eebbcecbd1b806dace7",
+    "s1_profile": {
+      "cross_clothes_fraction": 1.0,
+      "cross_clothes_relations": 1,
+      "duplicate_relations": 0,
+      "pid_counts": {
+        "6": 1
+      },
+      "same_clothes_fraction": 0.0,
+      "same_clothes_relations": 0,
+      "total_relations": 1,
+      "unique_relations": 1
+    },
+    "s1_relation_sha256": "a1cc6ebd216039e365dd02a6cb78af6df4841535b26032bc93b81e94649e7c81",
+    "seed": 4321,
+    "steps": 20
+  }
+]

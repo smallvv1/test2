@@ -1,0 +1,52 @@
+{
+  "cpu_model_fallback": false,
+  "note": "S0/S1 每次只改变当前 batch 内合法关系；所有成功和失败重复均保留。",
+  "records": [
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat1/s0_s1_seed1234_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat1/child.log",
+      "repeat": 1,
+      "returncode": 0,
+      "seed": 1234
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat2/s0_s1_seed1234_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat2/child.log",
+      "repeat": 2,
+      "returncode": 0,
+      "seed": 1234
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat3/s0_s1_seed1234_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat3/child.log",
+      "repeat": 3,
+      "returncode": 2,
+      "seed": 1234
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat1/s0_s1_seed4321_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat1/child.log",
+      "repeat": 1,
+      "returncode": 0,
+      "seed": 4321
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat2/s0_s1_seed4321_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat2/child.log",
+      "repeat": 2,
+      "returncode": 0,
+      "seed": 4321
+    },
+    {
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat3/s0_s1_seed4321_steps20.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat3/child.log",
+      "repeat": 3,
+      "returncode": 0,
+      "seed": 4321
+    }
+  ],
+  "repeats_per_seed": 3,
+  "run_time": "20261020_112219",
+  "status": "AB_REPEATS_INCLUDE_INVALID_PAIRS",
+  "steps": 20
+}

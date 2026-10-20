@@ -1,0 +1,11 @@
+{
+  "batch_plan_sha256": "f0a78c79bbb424b2452b1e336d91ca590329a8b726b7774f5c45c3c136bac251",
+  "cpu_model_fallback": false,
+  "device": "PPU-ZW810E",
+  "found_inf": 0.0,
+  "loss": 8.97851848602295,
+  "optimizer_step": true,
+  "rank": 0,
+  "scale_after": 1024.0,
+  "status": "PASS"
+}

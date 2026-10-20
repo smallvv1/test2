@@ -1,0 +1,47 @@
+{
+  "audit_run_time": "20261020_141052",
+  "source_run_time": "20261020_112219",
+  "scope": "离线读取既有A/A与A/B短程实验；未启动模型训练",
+  "model_forward_executed": false,
+  "cpu_model_fallback": false,
+  "structured_json_missing": false,
+  "counts": {
+    "aa_total": 6,
+    "aa_returncode_0": 2,
+    "aa_returncode_2": 4,
+    "ab_total": 6,
+    "ab_returncode_0": 5,
+    "ab_returncode_2": 1,
+    "aa_child_logs": 6,
+    "ab_child_logs": 6
+  },
+  "input_directories": [
+    "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/",
+    "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/"
+  ],
+  "structured_outputs": {
+    "failure_root_cause_audit.json": "由gpc_aa_ab_failure_audit.py读取全部12个子实验生成",
+    "relation_intervention_audit.json": "由冻结20步关系计划离线重建"
+  },
+  "source_sha256": {
+    "/home/DIFFER/scripts/gpc_aa_ab_failure_audit.py": "1047cf666efd3e1a0dbf6a9067ad0c841979c40e07a0ba6d04d2e2fa0eca2a9c",
+    "/home/DIFFER/scripts/gpc_s0_s0_noise_baseline.py": "52350149e0971402d0136c2dd6eef80a044c475e69eb6265d1e648ac0652549d",
+    "/home/DIFFER/scripts/gpc_s0_s1_controlled_pair.py": "f32007b4c13bee544bca9443c0481ecd13e8ad9919338f9e3df332c29ba7efa8",
+    "/home/DIFFER/scripts/gpc_s0_s1_ab_repeats.py": "184cfc2688676bc42d081a3e595f91b914a6a73807bc37229d5f223cbec6b364",
+    "/home/DIFFER/scripts/gpc_selected_relation_hash_audit.py": "fec5da402807186213f1039db10a676a041ee49d4c911cb1a2059d4ff455998d"
+  },
+  "report_sha256": {
+    "/home/DIFFER/reports/GPC_AA_FAILURE_ROOT_CAUSE.md": "5df0d523681e9004fc718cefb48163ef48873c78db95cb13d8c34ba36798920f",
+    "/home/DIFFER/reports/GPC_AA_NUMERICAL_VARIANCE.md": "387e60e12e459092b7c52094152cbce53e14b6c1bb233ff879285cb3d6151476",
+    "/home/DIFFER/reports/GPC_S1_INTERVENTION_EXPOSURE.md": "85f009416bc3dc54a03b9df1dd2bbebb1c3048ddbcad8fad4f4bf6d45eccc7d4",
+    "/home/DIFFER/reports/GPC_AB_EFFECT_VS_AA_NOISE.md": "18021e303f87b0540910a56de57574d7eb88a62041eebc9b1e10e3f56d35a7d2",
+    "/home/DIFFER/reports/GPC_S1_FINAL_DECISION.md": "de1b650a346eba9acb271bcd10a5b3103eb30b3402327ede142fe7401ba23be4"
+  },
+  "decision": [
+    "NUMERICAL_BASELINE_UNRESOLVED",
+    "INSUFFICIENT_GPC_INTERVENTION_EXPOSURE",
+    "S1_NOT_SUPPORTED_FOR_PROMOTION",
+    "保留GPC-v1",
+    "不启动30/60 epoch训练"
+  ]
+}

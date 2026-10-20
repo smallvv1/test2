@@ -1,0 +1,999 @@
+中文进度：seed=4321 repeat=1 开始 A0
+/usr/local/lib/python3.10/site-packages/torch/functional.py:539: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at /job_3220505/source/pytorch/aten/src/ATen/native/TensorShape.cpp:3637.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+/home/DIFFER/scripts/gpc_s0_s1_controlled_pair.py:242: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler(init_scale=1024)
+[2026-10-20 11:28:48:694618][ALINPU INFO]: [/job_3220189/source/acompute/include/accontext.hpp:174][34m ACOMPUTE: [device caps] dev=0, name=PPU-ZW810E, sm8.0, smem=256KB, num_of_sm=64, freq_of_sm=1700MHz[0m
+[2026-10-20 11:28:49:342785][ALINPU INFO]: [/job_3220189/source/acompute/include/accontext.hpp:174][34m ACOMPUTE: [device caps] dev=0, name=PPU-ZW810E, sm8.0, smem=256KB, num_of_sm=64, freq_of_sm=1700MHz[0m
+[33m[2026-10-20 11:28:49:681254][ALINPU WARNING]: [offline_cache.hpp:574]The set dir is not accessable: /PPU0010[0m
+[2026-10-20 11:28:49:681414][ALINPU INFO]: [offline_cache.hpp:583]Use root dir: /usr/local/PPU_SDK/rtccache/PPU0010
+[33m[2026-10-20 11:28:49:681474][ALINPU WARNING]: [offline_cache.hpp:574]The set dir is not accessable: /PPU0015[0m
+[2026-10-20 11:28:49:681493][ALINPU INFO]: [offline_cache.hpp:583]Use root dir: /usr/local/PPU_SDK/rtccache/PPU0015
+[2026-10-20 11:28:49:681781][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3187888783, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3187888783_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x128x16x32x128x3_layout1x0x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:681850][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3381009755, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3381009755_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile32x64x16x32x32x2_layout0x1x0x0_align1x1x1x1_splitk2_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:681923][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2578511975, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2578511975_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile32x64x16x32x32x2_layout0x1x0x0_align1x1x4x4_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:681986][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 1997282714, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_1997282714_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x64x16x32x64x2_layout0x1x0x0_align1x1x1x1_splitk2_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682055][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2450500725, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2450500725_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x128x32x32x64x4_layout0x1x0x0_align1x1x8x8_splitk2_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682148][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3825267264, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3825267264_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x128x16x32x128x3_layout1x1x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682204][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 3, hash: 2212880359, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2212880359_gemv_dtypeFP32xFP32xFP32_align8x8_block128x1_thread1x2_kslice1_batch1_trans1_fusion0_usek0.bin
+[2026-10-20 11:28:49:682285][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2458468068, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2458468068_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x64x16x32x128x3_layout0x1x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682427][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3893190877, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3893190877_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile128x128x64x32x32x2_layout0x1x0x0_align1x1x4x4_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682584][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2362312834, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2362312834_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile256x128x64x64x32x2_layout0x1x0x0_align1x1x4x4_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682652][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3016079961, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3016079961_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x128x16x32x128x3_layout0x1x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682734][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3250026805, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3250026805_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile64x256x32x32x64x3_layout1x1x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682923][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 480466775, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_480466775_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile64x256x32x64x64x2_layout0x1x0x0_align1x1x1x1_splitk0_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:682989][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 1684667227, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_1684667227_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile16x64x16x16x128x4_layout0x1x0x0_align1x1x4x4_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683055][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2331872891, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2331872891_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x32x16x16x256x4_layout1x0x0x0_align1x1x4x4_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683139][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2672809522, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2672809522_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x64x16x32x128x3_layout1x0x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683217][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3310122749, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3310122749_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x64x16x32x128x3_layout1x1x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683266][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 1, hash: 157701950, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_157701950_reduction_dtypeFP32xFP32_align4_fusion5_prefetch0_conv0_ptrhost1.bin
+[2026-10-20 11:28:49:683357][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2612320762, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2612320762_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile64x256x32x32x64x3_layout1x0x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683409][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 1, hash: 1933543976, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_1933543976_reduction_dtypeFP32xFP32_align1_fusion5_prefetch0_conv0_ptrhost1.bin
+[2026-10-20 11:28:49:683488][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2524066092, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2524066092_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile64x256x32x32x64x3_layout0x1x0x0_align1x1x8x8_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683564][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 210949414, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_210949414_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile64x32x32x32x64x2_layout0x1x0x0_align1x1x1x1_splitk2_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683637][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2268817069, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2268817069_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x32x16x16x256x4_layout0x1x0x0_align1x1x4x4_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683782][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2938875072, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2938875072_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile128x128x64x32x32x2_layout0x1x0x0_align1x1x2x2_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683829][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 1, hash: 2852406823, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2852406823_reduction_dtypeFP32xFP16_align1_fusion5_prefetch0_conv0_ptrhost1.bin
+[2026-10-20 11:28:49:683894][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 1082864744, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_1082864744_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile32x64x16x32x32x2_layout0x1x0x0_align1x1x4x4_splitk2_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:683982][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 1048343832, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_1048343832_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile64x128x32x32x32x2_layout0x1x0x0_align1x1x4x4_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:684026][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 3, hash: 599133751, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_599133751_gemv_dtypeFP16xFP32xFP16_align8x8_block128x1_thread1x2_kslice1_batch1_trans1_fusion5_usek0.bin
+[2026-10-20 11:28:49:684122][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 658176166, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_658176166_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x64x16x32x64x2_layout0x1x0x0_align1x1x4x4_splitk0_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:684180][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 3, hash: 376312601, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_376312601_gemv_dtypeFP16xFP32xFP16_align16x16_block32x4_thread1x2_kslice1_batch1_trans1_fusion5_usek0.bin
+[2026-10-20 11:28:49:684262][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 353624170, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_353624170_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile128x32x32x32x64x2_layout0x1x0x0_align1x1x1x1_splitk2_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:684328][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 1773081485, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_1773081485_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile16x64x16x16x128x4_layout1x0x0x0_align1x1x4x4_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:684383][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 3, hash: 2615157621, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2615157621_gemv_dtypeFP16xFP32xFP16_align16x2_block32x8_thread1x8_kslice1_batch1_trans0_fusion0_usek0.bin
+[2026-10-20 11:28:49:684737][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3142132080, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3142132080_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile256x128x64x64x64x2_layout0x1x0x0_align1x1x1x1_splitk0_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:684809][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3506319028, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3506319028_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile32x32x16x16x256x4_layout1x1x0x0_align1x1x4x4_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:685020][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 3421029535, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3421029535_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile256x128x64x64x32x2_layout0x1x0x0_align1x1x2x2_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:685066][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 3, hash: 3635858867, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_3635858867_gemv_dtypeFP32xFP32xFP32_align16x4_block32x8_thread1x2_kslice1_batch1_trans0_fusion0_usek0.bin
+[2026-10-20 11:28:49:685131][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 643441734, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_643441734_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile64x128x32x32x64x3_layout0x1x0x0_align1x1x8x8_splitk2_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:685336][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 1203465057, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_1203465057_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile128x128x32x64x64x2_layout0x1x0x0_align1x1x1x1_splitk0_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:685399][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 866956098, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_866956098_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile16x64x16x16x128x4_layout1x1x0x0_align1x1x4x4_splitk0_fusion0_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:685484][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 2035988741, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_2035988741_gemm_ktype0_aiu1_mtype1_dtypeFP32xFP32xFP32xFP32xFP32_tile64x128x32x32x32x2_layout0x1x0x0_align1x1x2x2_splitk0_fusion5_prefetch0_fp32tc1_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:685621][ALINPU INFO]: [kernel_factory.cu:201]Pre-load kernel type: 0, hash: 167468266, file: /usr/local/PPU_SDK/rtccache/PPU0010/1.6.1-14620b_167468266_gemm_ktype0_aiu1_mtype1_dtypeFP16xFP16xFP32xFP16xFP16_tile64x128x32x32x64x2_layout0x1x0x0_align1x1x1x1_splitk0_fusion5_prefetch0_fp32tc0_ptrhost1_schedule0.bin
+[2026-10-20 11:28:49:685631][ALINPU INFO]: [kernel_factory.cu:258]Rtc cache load all offline-cache done.
+
+using soft triplet loss for training
+中文进度：seed=4321 repeat=1 开始 A1
+using soft triplet loss for training
+{
+  "status": "INVALID_AA_PAIR",
+  "seed": 4321,
+  "repeat": 1,
+  "comparison": {
+    "first_numeric_divergence_step": 2,
+    "first_tracked_parameter_hash_divergence_step": 2,
+    "max_absolute_delta": {
+      "base_loss": 0.20397090911865234,
+      "ce_loss": 0.0,
+      "triplet_loss": 0.2059239149093628,
+      "bio_loss": 0.001953125,
+      "gpc_loss_raw": 0.004693031311035156,
+      "gpc_loss_applied": 0.0004693027585744858,
+      "gpc_feature_grad_norm_raw": 0.00039196573197841644,
+      "gpc_feature_grad_norm_applied": 3.919634036719799e-05,
+      "base_feature_grad_norm": 0.06023967266082764,
+      "total_feature_grad_norm": 0.06023967266082764,
+      "tracked_parameter_update_norm": 0.00010254224616801366,
+      "gpc_base_feature_grad_cosine": 0.04145310819149017
+    },
+    "stepwise_deltas": {
+      "base_loss": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": -0.00136566162109375
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.00037860870361328125
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": -0.0047702789306640625
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": -0.0054683685302734375
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": -0.04413795471191406
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": -0.04158210754394531
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": -0.01409006118774414
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": -0.025259017944335938
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": -0.18647003173828125
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": -0.046443939208984375
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": -0.05241823196411133
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.181610107421875
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": -0.026281356811523438
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": -0.026457786560058594
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.09986066818237305
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": -0.08169126510620117
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.011258125305175781
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0247802734375
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": -0.20397090911865234
+        }
+      ],
+      "ce_loss": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": 0.0
+        }
+      ],
+      "triplet_loss": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": -0.00136566162109375
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.00037860870361328125
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": -0.004770517349243164
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": -0.005467891693115234
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": -0.04413795471191406
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": -0.041582345962524414
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": -0.014090299606323242
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": -0.025259017944335938
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": -0.18647098541259766
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": -0.04644453525543213
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": -0.05241835117340088
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.181610107421875
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": -0.02628183364868164
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": -0.026458144187927246
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.0998610258102417
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": -0.08169090747833252
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.011258482933044434
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0247805118560791
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": -0.2059239149093628
+        }
+      ],
+      "bio_loss": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": 0.001953125
+        }
+      ],
+      "gpc_loss_raw": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": -0.0
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.004693031311035156
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": 0.0
+        }
+      ],
+      "gpc_loss_applied": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": -0.0
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.0004693027585744858
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": 0.0
+        }
+      ],
+      "gpc_feature_grad_norm_raw": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.00039196573197841644
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": 0.0
+        }
+      ],
+      "gpc_feature_grad_norm_applied": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 3.919634036719799e-05
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": 0.0
+        }
+      ],
+      "base_feature_grad_norm": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 6.574392318725586e-05
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": -0.00030994415283203125
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": -0.00028628110885620117
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": -8.106231689453125e-05
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": -0.0047035813331604
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": -0.005883365869522095
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0009403824806213379
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0038523077964782715
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": -0.025405824184417725
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": -0.00246351957321167
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": -0.00807604193687439
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.00525587797164917
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.011044800281524658
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": -0.002899646759033203
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": -0.005652070045471191
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": -0.058482348918914795
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": -0.005630433559417725
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.003297865390777588
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": -0.06023967266082764
+        }
+      ],
+      "total_feature_grad_norm": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": 6.574392318725586e-05
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": -0.00030994415283203125
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": -0.00028628110885620117
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": -8.106231689453125e-05
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": -0.0047035813331604
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": -0.005883365869522095
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": 0.0009403824806213379
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": 0.0038523077964782715
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": -0.025405824184417725
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": -0.00246351957321167
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": -0.00807604193687439
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.00525587797164917
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 0.011044800281524658
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": -0.002899646759033203
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": -0.005557984113693237
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": -0.058482348918914795
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": -0.005630433559417725
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 0.003297865390777588
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": -0.06023967266082764
+        }
+      ],
+      "tracked_parameter_update_norm": [
+        {
+          "step": 1,
+          "delta_second_minus_first": 0.0
+        },
+        {
+          "step": 2,
+          "delta_second_minus_first": -3.1250237952917814e-09
+        },
+        {
+          "step": 3,
+          "delta_second_minus_first": -6.548361852765083e-10
+        },
+        {
+          "step": 4,
+          "delta_second_minus_first": -4.729372449219227e-10
+        },
+        {
+          "step": 5,
+          "delta_second_minus_first": 2.151500666514039e-08
+        },
+        {
+          "step": 6,
+          "delta_second_minus_first": -2.9933289624750614e-08
+        },
+        {
+          "step": 7,
+          "delta_second_minus_first": -3.109744284301996e-08
+        },
+        {
+          "step": 8,
+          "delta_second_minus_first": -2.837623469531536e-08
+        },
+        {
+          "step": 9,
+          "delta_second_minus_first": -3.463355824351311e-08
+        },
+        {
+          "step": 10,
+          "delta_second_minus_first": -5.885522114112973e-08
+        },
+        {
+          "step": 11,
+          "delta_second_minus_first": 4.604225978255272e-08
+        },
+        {
+          "step": 12,
+          "delta_second_minus_first": -8.755159797146916e-08
+        },
+        {
+          "step": 13,
+          "delta_second_minus_first": 0.00010254224616801366
+        },
+        {
+          "step": 14,
+          "delta_second_minus_first": 4.553105100058019e-06
+        },
+        {
+          "step": 15,
+          "delta_second_minus_first": 4.146408173255622e-06
+        },
+        {
+          "step": 16,
+          "delta_second_minus_first": 4.532448656391352e-06
+        },
+        {
+          "step": 17,
+          "delta_second_minus_first": 3.868619387503713e-06
+        },
+        {
+          "step": 18,
+          "delta_second_minus_first": 2.2632520995102823e-06
+        },
+        {
+          "step": 19,
+          "delta_second_minus_first": 2.3046814021654427e-06
+        },
+        {
+          "step": 20,
+          "delta_second_minus_first": 2.437307557556778e-06
+        }
+      ],
+      "gpc_base_feature_grad_cosine": [
+        {
+          "step": 16,
+          "delta_second_minus_first": 0.04145310819149017
+        }
+      ]
+    },
+    "same_input_batches": true,
+    "same_diagnostic_batch": true,
+    "same_selected_relation_sha256": true,
+    "same_skip_sequence": false,
+    "same_effective_update_sequence": false,
+    "same_initial_state": true,
+    "diagnostic_delta_base_loss_second_minus_first": 0.006680488586425781,
+    "diagnostic_delta_consistency_second_minus_first": 0.0014005601406097412
+  }
+}

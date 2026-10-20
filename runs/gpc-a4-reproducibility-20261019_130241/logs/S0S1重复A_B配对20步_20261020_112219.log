@@ -1,0 +1,52 @@
+{
+  "run_time": "20261020_112219",
+  "steps": 20,
+  "repeats_per_seed": 3,
+  "status": "AB_REPEATS_INCLUDE_INVALID_PAIRS",
+  "records": [
+    {
+      "seed": 1234,
+      "repeat": 1,
+      "returncode": 0,
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat1/child.log",
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat1/s0_s1_seed1234_steps20.json"
+    },
+    {
+      "seed": 1234,
+      "repeat": 2,
+      "returncode": 0,
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat2/child.log",
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat2/s0_s1_seed1234_steps20.json"
+    },
+    {
+      "seed": 1234,
+      "repeat": 3,
+      "returncode": 2,
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat3/child.log",
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed1234_repeat3/s0_s1_seed1234_steps20.json"
+    },
+    {
+      "seed": 4321,
+      "repeat": 1,
+      "returncode": 0,
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat1/child.log",
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat1/s0_s1_seed4321_steps20.json"
+    },
+    {
+      "seed": 4321,
+      "repeat": 2,
+      "returncode": 0,
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat2/child.log",
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat2/s0_s1_seed4321_steps20.json"
+    },
+    {
+      "seed": 4321,
+      "repeat": 3,
+      "returncode": 0,
+      "log": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat3/child.log",
+      "json": "/home/DIFFER/outputs/gpc_s0s1_ab_repeats_20261020_112219/ab_steps20/seed4321_repeat3/s0_s1_seed4321_steps20.json"
+    }
+  ],
+  "cpu_model_fallback": false,
+  "note": "S0/S1 每次只改变当前 batch 内合法关系；所有成功和失败重复均保留。"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PASS_TWO_PPU_RANK_PREFLIGHT",
+  "rows": [
+    {
+      "rank": 0,
+      "returncode": 0,
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/rank_preflight/rank0.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/rank_preflight/rank0.log"
+    },
+    {
+      "rank": 1,
+      "returncode": 0,
+      "json": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/rank_preflight/rank1.json",
+      "log": "/home/DIFFER/outputs/gpc_s0s0_noise_20261020_112219/rank_preflight/rank1.log"
+    }
+  ]
+}

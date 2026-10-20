@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "summary": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/reference_relations/summary.csv",
+  "manifest": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/reference_relations/manifest.json"
+}
+【中文说明】参考关系离线审计通过：仅使用 LTCC train-only 特征；K=5/10/20、tau_ref=0.05、epsilon=0.02 已固定；没有启动模型训练、没有读取官方测试数据。
+【中文结论】两个 seed 存在局部关系违反与少量原本正确关系翻转，但方向不一致；本轮不批准 NDP 长程训练。

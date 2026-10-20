@@ -1,0 +1,55 @@
+{
+  "1234": {
+    "images": 9576,
+    "pids": 77,
+    "rows": {
+      "10": {
+        "count": 83670,
+        "sha256": "211ea82917e657363638bbd483add7934b45f14c922065be4d2428d47fd0845d"
+      },
+      "20": {
+        "count": 167340,
+        "sha256": "d6dfbf351e0e24bdb546333fb03cd73e961136c91f08af7118e35a390cea2755"
+      },
+      "5": {
+        "count": 41835,
+        "sha256": "f68812d674a0b47cd98b13d8cac99c016246360faf9a5d56270b688a2132049c"
+      }
+    },
+    "seed": 1234
+  },
+  "4321": {
+    "images": 9576,
+    "pids": 77,
+    "rows": {
+      "10": {
+        "count": 83670,
+        "sha256": "e910bc59ec91a288a644b904c02610196062475fa79f0d4fd2d9700b63123d11"
+      },
+      "20": {
+        "count": 167340,
+        "sha256": "9a478ccf385fd113da080509859d0f1a397da201d48ac60fe4fa082e7e8d07dc"
+      },
+      "5": {
+        "count": 41835,
+        "sha256": "efaab6ce6e571380d9e3923b7ad7395369712bfd781fc1dd9ca280d73cba2dc8"
+      }
+    },
+    "seed": 4321
+  },
+  "K": [
+    5,
+    10,
+    20
+  ],
+  "current_role": "fixed Bio+GPC GPC-v1 feature bank",
+  "epsilon": 0.02,
+  "model_training_started": false,
+  "official_test_used": false,
+  "purpose": "冻结 Bio 参考状态到 Bio+GPC 当前状态的 train-only 局部关系审计",
+  "query_gallery_used": false,
+  "reference_role": "Bio-only frozen feature bank; stopped-gradient reference in candidate formula",
+  "run_time": "20261020_155558",
+  "summary_sha256": "23bf61b2b93faf431908daa30b56820a0bad7dc68c61eacecf8766978c0cc9c2",
+  "tau_ref": 0.05
+}

@@ -1,0 +1,16 @@
+{
+  "A_two_seeds_significant_neighborhood_drift": true,
+  "B_wrong_pid_intrusion_or_bad_hub_systematic_increase": true,
+  "C_disruption_associated_with_margin_degradation": true,
+  "D_not_only_few_pids": true,
+  "E_two_seed_direction_consistency": false,
+  "all_promotion_conditions": false,
+  "direction_checks": {
+    "intrusion_corr_negative_both": true,
+    "intrusion_positive_both": true,
+    "js_corr_negative_both": false,
+    "margin_degradation_both": false,
+    "negative_inflation_both": true
+  },
+  "gate_rule_note": "Gate requires the stated direction at K=5/10/20; drift CI uses PID bootstrap; non-few-PID rule is at least 39/77 PIDs with positive mean intrusion in both seeds."
+}

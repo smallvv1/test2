@@ -1,0 +1,53 @@
+{
+  "bad_hubness_increase": "YES",
+  "cross_seed_consistency": "MIXED",
+  "decision": "STOP",
+  "harmful_vs_beneficial": "NO",
+  "ndp_motivation": "MIXED",
+  "nearest_negative_inflation": "YES",
+  "neighborhood_drift_vs_delta_margin": "YES",
+  "plots": {},
+  "promotion_gate": {
+    "A_two_seeds_significant_neighborhood_drift": true,
+    "B_wrong_pid_intrusion_or_bad_hub_systematic_increase": true,
+    "C_disruption_associated_with_margin_degradation": true,
+    "D_not_only_few_pids": true,
+    "E_two_seed_direction_consistency": false,
+    "all_promotion_conditions": false,
+    "direction_checks": {
+      "intrusion_corr_negative_both": true,
+      "intrusion_positive_both": true,
+      "js_corr_negative_both": false,
+      "margin_degradation_both": false,
+      "negative_inflation_both": true
+    },
+    "gate_rule_note": "Gate requires the stated direction at K=5/10/20; drift CI uses PID bootstrap; non-few-PID rule is at least 39/77 PIDs with positive mean intrusion in both seeds."
+  },
+  "safety_declarations": {
+    "NO_EXISTING_GPC_CHECKPOINT_WAS_MODIFIED": true,
+    "NO_NDP_LOSS_WAS_IMPLEMENTED": true,
+    "NO_NEW_TRAINING_WAS_STARTED": true,
+    "NO_QUERY_GALLERY_TEST_DATA_WAS_USED": true
+  },
+  "seed1234": {
+    "cross_clothes_valid_percent": 87.37468671679198,
+    "delta_margin_cross_mean": 0.0024490331476575943,
+    "delta_ordering_mean": 0.021274052826580615,
+    "delta_s_neg_mean": 0.005651185872560754,
+    "delta_s_pos_cross_mean": 0.008100219020218348,
+    "harmful_percent": 50.198412698412696,
+    "seed": 1234
+  },
+  "seed4321": {
+    "cross_clothes_valid_percent": 87.37468671679198,
+    "delta_margin_cross_mean": -0.0040433754746777816,
+    "delta_ordering_mean": -0.026054738855025697,
+    "delta_s_neg_mean": 0.006050537739481244,
+    "delta_s_pos_cross_mean": 0.0020071622648034624,
+    "harmful_percent": 56.81913116123643,
+    "seed": 4321
+  },
+  "source_audit": "PASS",
+  "train_only_leakage_audit": "PASS",
+  "wrong_pid_intrusion": "YES"
+}

@@ -1,0 +1,28 @@
+{
+  "run_time": "20261021_082715",
+  "actual_remote_main_at_audit": "1854b4ed960dec7ce3d49310d02f3387abe381a7",
+  "user_reference_commit": "7dcac40f556ef389c4cca7736d1f66396a66353f",
+  "working_sources": {
+    "ndp_risk_common.py": "aff346f07d51840ab48dc62ce7b04c96baaf9252f95a18c3eb724ecaeb1c3448",
+    "ndp_stable_reference_graph.py": "3f5453407f845658695ec87eae83d7437bba3a517860c0ea77d58ddc3843b1b5",
+    "ndp_intrusion_risk_audit.py": "7b503212b39675171d1ee26e7a20b0db7b4f803cad464a63274d99e0f649e994",
+    "ndp_risk_benchmark.py": "c57b13917af4d979f0f9870e6ca02763f02b742945031f3b89d85c256562903c",
+    "ndp_intrusion_loss.py": "d128634c421a99227117f6ed8074a54cf5b6a62f421bcad268ea9aac25ea5f16",
+    "test_ndp_risk_modules.py": "f625c1046b53a786a37c11eecac8e4bba472603906f4e393413902e3ce33c768"
+  },
+  "environment": {
+    "python": "/usr/local/bin/python3.10",
+    "torch": "2.6.0",
+    "model_forward_in_this_run": false,
+    "cpu_offline_statistics_only": true,
+    "official_query_gallery_used": false
+  },
+  "stages": {
+    "P0": "FAIL_existing_PPU_backward_nondeterminism",
+    "P1": "BUILT_temporal_validity_inconclusive",
+    "P2": "COMPLETED_offline_train_only",
+    "P3": "COMPLETED_endpoint_shift_only_not_online_valid",
+    "optimizer_step": "NOT_RUN",
+    "formal_30_60_epoch": "NO_GO"
+  }
+}

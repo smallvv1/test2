@@ -1,0 +1,10 @@
+运行标识：20261021_082715
+实际远端 main：1854b4ed960dec7ce3d49310d02f3387abe381a7
+用户参考提交：7dcac40f556ef389c4cca7736d1f66396a66353f
+
+P0：复核两个 seed 的 PPU A/A 算子结果。第1步 forward/loss 一致，但反向在 EVA02 block22.norm1/q_proj 内部首先出现差异，底层 kernel 未确定；A/A=FAIL。
+P1：使用 Bio E60/GPC E60 冻结 LTCC train-only 特征，1024 anchor、Top-20 负邻域、最多4个正样本。seed1234负Jaccard均值0.2473，seed4321为0.4365；两快照为独立终点，时间稳定性不成立。
+P2：多PID soft intrusion 完成。seed1234 Delta_I>0比例7.52%、边界翻转47；seed4321分别42.97%、31。方向不跨seed稳定。
+P3：完成 R0-R5 endpoint-shift exploratory benchmark；online_predictive_valid=false。R0/R1相同，R2-R5未显示跨seed一致的增量证据。
+单元测试：NDP_RISK_MODULE_TEST_PASS。没有修改GPC-v1，没有执行NDP optimizer.step或30/60 epoch训练。
+最终：NDP_INCREMENTAL_MECHANISM_UNRESOLVED；FORMAL_TRAINING=NO_GO。

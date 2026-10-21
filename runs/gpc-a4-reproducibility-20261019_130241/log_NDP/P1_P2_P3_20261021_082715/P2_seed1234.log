@@ -1,0 +1,1 @@
+{"status": "PASS", "seed": 1234, "rows": 1024, "risk": {"soft_intrusion_delta_i_mean": -0.0226964918667818, "soft_intrusion_delta_i_positive_rate": 0.0751953125, "edge_flip_count": 47, "edge_reliable_count": 985, "edge_drop_mean": 0.0019389006192795932, "bidirectional_rows": 910}}

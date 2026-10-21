@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "seed": 4321,
+  "n_train_images": 9576,
+  "n_train_pids": 77,
+  "sample_anchor_count": 1024,
+  "k": 20,
+  "positive_count": 4,
+  "official_query_gallery_used": false,
+  "snapshot_temporal_valid": false,
+  "temporal_warning": "快照来自独立 Bio/GPC E60 终点，不是同一训练轨迹相邻状态",
+  "snapshots": [
+    {
+      "label": "bio_e60",
+      "path": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/feature_banks/seed4321/bio_feature_bank.npz",
+      "sha256": "b7439b6ad7b8707223b23884dafc39d2cded5bc14b6bfc1adc56063ba5ab3516",
+      "graph_sha256": "9d6cbc21b6664c5271d1f466592d0e9b89ef5f1f45389349722b4daa87013672"
+    },
+    {
+      "label": "gpc_e60",
+      "path": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/feature_banks/seed4321/gpc_feature_bank.npz",
+      "sha256": "841f049ac23eceb88fcf6efaea7906e3eb034acdfae8c0c85654a9cdf9fa9de3",
+      "graph_sha256": "0c8df441b91f65d6d93b3f982f22510671f6789b7490790f8489c40a717c94be"
+    }
+  ],
+  "stability": {
+    "negative_jaccard_mean": 0.4365056450412077,
+    "negative_jaccard_median": 0.42857142857142855,
+    "positive_jaccard_mean": 0.5469680059523809
+  },
+  "hubness": {
+    "bio_e60": {
+      "max": 45,
+      "mean_nonzero": 3.8677998111425875,
+      "top10_sum": 392
+    },
+    "gpc_e60": {
+      "max": 56,
+      "mean_nonzero": 3.803863298662704,
+      "top10_sum": 417
+    }
+  },
+  "pair_rows": "/home/DIFFER/outputs/ndp_second_innovation_20261021_082715/p1_seed4321/seed4321_anchor_graph.csv",
+  "graph_file": "/home/DIFFER/outputs/ndp_second_innovation_20261021_082715/p1_seed4321/seed4321_reference_graph.npz"
+}

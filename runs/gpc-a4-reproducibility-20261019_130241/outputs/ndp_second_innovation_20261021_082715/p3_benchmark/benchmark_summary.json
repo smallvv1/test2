@@ -1,0 +1,316 @@
+{
+  "status": "PASS",
+  "methods": [
+    "R0_hard_margin_drop",
+    "R1_DBP",
+    "R2_soft_intrusion",
+    "R3_soft_plus_history",
+    "R4_soft_hubness_control",
+    "R5_bidirectional"
+  ],
+  "event_definition": "reference selected boundary > 0 and fixed-current selected boundary <= 0",
+  "online_predictive_valid": false,
+  "validity_warning": "当前输入是独立 Bio/GPC E60 endpoint shift，不是同一训练轨迹的未来 checkpoint；结果只作离线诊断，不能证明在线预测。",
+  "rows": [
+    {
+      "seed": 1234,
+      "method": "R0_hard_margin_drop",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.10616520394607896,
+      "pr_auc": 0.3690441144737307,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.22330097087378642,
+        "recall": 0.48936170212765956,
+        "positive_count": 47
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.2408171608399673,
+          0.49251768609070057
+        ],
+        "mean": 0.37332795525178253
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R1_DBP",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.10616520394607896,
+      "pr_auc": 0.3690441144737307,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.22330097087378642,
+        "recall": 0.48936170212765956,
+        "positive_count": 47
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.2374710988568479,
+          0.4933363811648598
+        ],
+        "mean": 0.373591986633846
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R2_soft_intrusion",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.48737995165399944,
+      "pr_auc": 0.19911212964353522,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.13592233009708737,
+        "recall": 0.2978723404255319,
+        "positive_count": 47
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.06745967203823995,
+          0.3319049855060622
+        ],
+        "mean": 0.20006445664782796
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R3_soft_plus_history",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.4887083777956837,
+      "pr_auc": 0.21125506482890613,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.1262135922330097,
+        "recall": 0.2765957446808511,
+        "positive_count": 47
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.08314031938572225,
+          0.3361288295914574
+        ],
+        "mean": 0.21185431526544818
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R4_soft_hubness_control",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.4888608201398114,
+      "pr_auc": 0.19154759219739725,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.13592233009708737,
+        "recall": 0.2978723404255319,
+        "positive_count": 47
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.07950200892547682,
+          0.3366099935205996
+        ],
+        "mean": 0.19722300375929236
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R5_bidirectional",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.4348091204076744,
+      "pr_auc": 0.12086104525926257,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.11650485436893204,
+        "recall": 0.2553191489361702,
+        "positive_count": 47
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.06474628640741993,
+          0.2112102018953238
+        ],
+        "mean": 0.12942429495486754
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R0_hard_margin_drop",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.1461845823993763,
+      "pr_auc": 0.1710074020894163,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.09223411771774122,
+          0.277482717642254
+        ],
+        "mean": 0.17496043181736
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R1_DBP",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.1461845823993763,
+      "pr_auc": 0.1710074020894163,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.08138065368201025,
+          0.2702953442417264
+        ],
+        "mean": 0.1708459438163698
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R2_soft_intrusion",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.2849624792905175,
+      "pr_auc": 0.2954088629424517,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.1553398058252427,
+        "recall": 0.5161290322580645,
+        "positive_count": 31
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.1536902910554251,
+          0.4337514541754613
+        ],
+        "mean": 0.3008130600674533
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R3_soft_plus_history",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.3090342071922815,
+      "pr_auc": 0.22562405554569587,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.10206175627119275,
+          0.4103397473733474
+        ],
+        "mean": 0.23980469115318243
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R4_soft_hubness_control",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.2815515057011987,
+      "pr_auc": 0.3024292484402246,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.16625347314108413,
+          0.46967862869018084
+        ],
+        "mean": 0.3066299587992933
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R5_bidirectional",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.3147191631744794,
+      "pr_auc": 0.20258557295555513,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.10679611650485436,
+        "recall": 0.3548387096774194,
+        "positive_count": 31
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.0909651499312463,
+          0.34397015706129014
+        ],
+        "mean": 0.20233857030205177
+      }
+    }
+  ]
+}

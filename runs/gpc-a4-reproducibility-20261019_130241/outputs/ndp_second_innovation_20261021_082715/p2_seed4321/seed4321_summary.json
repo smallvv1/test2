@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "seed": 4321,
+  "reference": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/feature_banks/seed4321/bio_feature_bank.npz",
+  "current": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/feature_banks/seed4321/gpc_feature_bank.npz",
+  "n_train_images": 9576,
+  "n_train_pids": 77,
+  "sample_anchor_count": 1024,
+  "valid_anchor_count": 1024,
+  "k_negative_pids": 20,
+  "positive_quantile": 0.25,
+  "tau": 0.07,
+  "candidate_rule": "固定正样本与每个负PID的reference代表；current不重新挑选关系",
+  "official_query_gallery_used": false,
+  "risk": {
+    "soft_intrusion_delta_i_mean": -0.0013906240189953678,
+    "soft_intrusion_delta_i_positive_rate": 0.4296875,
+    "edge_flip_count": 31,
+    "edge_reliable_count": 990,
+    "edge_drop_mean": 0.012571407860377803,
+    "bidirectional_rows": 940
+  },
+  "hubness": {
+    "max": 45,
+    "nonzero_count": 5295,
+    "top10_sum": 392,
+    "top10_indices": [
+      8956,
+      8959,
+      8960,
+      4406,
+      8961,
+      2649,
+      5376,
+      9013,
+      4348,
+      4353
+    ]
+  },
+  "rows_csv": "/home/DIFFER/outputs/ndp_second_innovation_20261021_082715/p2_seed4321/seed4321_intrusion_rows.csv",
+  "temporal_validity": "INCONCLUSIVE_ENDPOINT_SHIFT_ONLY"
+}

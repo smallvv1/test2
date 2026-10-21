@@ -1,0 +1,1 @@
+{"status": "PASS", "seed": 4321, "anchors": 1024, "stability": {"negative_jaccard_mean": 0.4365056450412077, "negative_jaccard_median": 0.42857142857142855, "positive_jaccard_mean": 0.5469680059523809}}

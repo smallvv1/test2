@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_overnight_recovery_stage3.py", line 126, in main
+    raise RuntimeError(f'seed{seed} 阶段3失败，停止后续 seed；returncode={proc.returncode}')
+RuntimeError: seed1234 阶段3失败，停止后续 seed；returncode=1
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_overnight_recovery_stage3.py", line 143, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_overnight_recovery_stage3.py", line 138, in main
+    emit(outer, '恢复阶段3失败', **failure)
+TypeError: emit() got multiple values for argument 'message'

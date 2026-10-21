@@ -1,0 +1,417 @@
+{
+  "status": "PASS",
+  "methods": [
+    "R0_hard_margin_drop",
+    "R1_DBP",
+    "R2_soft_intrusion",
+    "R3_soft_plus_history",
+    "R4_soft_hubness_control",
+    "R5_bidirectional"
+  ],
+  "event_definition": "reference selected boundary > 0 and fixed-current selected boundary <= 0",
+  "metric_definitions": {
+    "roc_auc": "tie-correct Mann-Whitney AUC; larger score means greater event risk",
+    "pr_auc": "average precision, not trapezoidal PR integral",
+    "top10": "top ceil(10% of finite rows), descending score order"
+  },
+  "online_predictive_valid": false,
+  "validity_warning": "当前输入是独立 Bio/GPC E60 endpoint shift，不是同一训练轨迹的未来 checkpoint；结果只作离线诊断，不能证明在线预测。",
+  "rows": [
+    {
+      "seed": 1234,
+      "method": "R0_hard_margin_drop",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.893834796053921,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.893834796053921,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.36904411447373076,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.36904411447373076,
+      "average_precision_abs_diff": 0.0,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.22330097087378642,
+        "recall": 0.48936170212765956,
+        "positive_count": 47,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.24556285039433998,
+          0.4954543986365647
+        ],
+        "mean": 0.37776663052523723
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R1_DBP",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.893834796053921,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.893834796053921,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.36904411447373076,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.36904411447373076,
+      "average_precision_abs_diff": 0.0,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.22330097087378642,
+        "recall": 0.48936170212765956,
+        "positive_count": 47,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.24179629847087175,
+          0.4985029659838622
+        ],
+        "mean": 0.3779305211372974
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R2_soft_intrusion",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.5126200483460006,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.5126200483460006,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.19911212964353514,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.1991121296435352,
+      "average_precision_abs_diff": 5.551115123125783e-17,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.13592233009708737,
+        "recall": 0.2978723404255319,
+        "positive_count": 47,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.073166673337669,
+          0.3361875542815847
+        ],
+        "mean": 0.20386023590755498
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R3_soft_plus_history",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.5119558352751584,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.5119558352751583,
+      "roc_auc_abs_diff": 1.1102230246251565e-16,
+      "pr_auc": 0.21114619335945237,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.2111461933594524,
+      "average_precision_abs_diff": 2.7755575615628914e-17,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.1262135922330097,
+        "recall": 0.2765957446808511,
+        "positive_count": 47,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.08547901462871618,
+          0.3377804601675244
+        ],
+        "mean": 0.21306263814662862
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R4_soft_hubness_control",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.5116182843703042,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.5116182843703043,
+      "roc_auc_abs_diff": 1.1102230246251565e-16,
+      "pr_auc": 0.17990515454794584,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.17990515454794573,
+      "average_precision_abs_diff": 1.1102230246251565e-16,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.13592233009708737,
+        "recall": 0.2978723404255319,
+        "positive_count": 47,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.0813100726009434,
+          0.3262069344370881
+        ],
+        "mean": 0.19414714244606393
+      }
+    },
+    {
+      "seed": 1234,
+      "method": "R5_bidirectional",
+      "rows": 1024,
+      "pid_count": 76,
+      "event_count": 47,
+      "roc_auc": 0.5651908795923256,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.5651908795923255,
+      "roc_auc_abs_diff": 1.1102230246251565e-16,
+      "pr_auc": 0.12086104525926254,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.12086104525926256,
+      "average_precision_abs_diff": 1.3877787807814457e-17,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.11650485436893204,
+        "recall": 0.2553191489361702,
+        "positive_count": 47,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 76,
+        "rounds": 500,
+        "ci95": [
+          0.06757922244229723,
+          0.21782437956457903
+        ],
+        "mean": 0.13483987826585592
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R0_hard_margin_drop",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.8538154176006237,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.8538154176006237,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.17100740208941628,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.1710074020894163,
+      "average_precision_abs_diff": 2.7755575615628914e-17,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.09623684902293606,
+          0.28886971093097663
+        ],
+        "mean": 0.18334352438502027
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R1_DBP",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.8538154176006237,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.8538154176006237,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.17100740208941628,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.17100740208941634,
+      "average_precision_abs_diff": 5.551115123125783e-17,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.08302990709515747,
+          0.28493968628301125
+        ],
+        "mean": 0.17906565015118192
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R2_soft_intrusion",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.7150375207094825,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.7150375207094825,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.29540886294245167,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.29540886294245167,
+      "average_precision_abs_diff": 0.0,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.1553398058252427,
+        "recall": 0.5161290322580645,
+        "positive_count": 31,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.15869598135746665,
+          0.4388050395689716
+        ],
+        "mean": 0.3066997393354811
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R3_soft_plus_history",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.6909657928077185,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.6909657928077186,
+      "roc_auc_abs_diff": 1.1102230246251565e-16,
+      "pr_auc": 0.22562405554569587,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.22562405554569587,
+      "average_precision_abs_diff": 0.0,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.10881095371887436,
+          0.4203653247597423
+        ],
+        "mean": 0.24897519176761054
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R4_soft_hubness_control",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.7188058343891108,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.7188058343891108,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.30453509733238965,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.30453509733238965,
+      "average_precision_abs_diff": 0.0,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.14563106796116504,
+        "recall": 0.4838709677419355,
+        "positive_count": 31,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.17344137334522614,
+          0.4769801082616624
+        ],
+        "mean": 0.3125861361776056
+      }
+    },
+    {
+      "seed": 4321,
+      "method": "R5_bidirectional",
+      "rows": 1024,
+      "pid_count": 75,
+      "event_count": 31,
+      "roc_auc": 0.6852808368255205,
+      "roc_auc_metric": "tie_correct_mann_whitney",
+      "roc_auc_sklearn": 0.6852808368255205,
+      "roc_auc_abs_diff": 0.0,
+      "pr_auc": 0.20258557295555515,
+      "pr_auc_metric": "average_precision",
+      "average_precision_sklearn": 0.20258557295555513,
+      "average_precision_abs_diff": 2.7755575615628914e-17,
+      "invalid_score_count": 0,
+      "top10": {
+        "top_fraction": 0.1,
+        "top_count": 103,
+        "precision": 0.10679611650485436,
+        "recall": 0.3548387096774194,
+        "positive_count": 31,
+        "invalid_score_count": 0
+      },
+      "pid_bootstrap_ap": {
+        "pid_count": 75,
+        "rounds": 500,
+        "ci95": [
+          0.0936474720356737,
+          0.349675242436971
+        ],
+        "mean": 0.20724329133646474
+      }
+    }
+  ]
+}

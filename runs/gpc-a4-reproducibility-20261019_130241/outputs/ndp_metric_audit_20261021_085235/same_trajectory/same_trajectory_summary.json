@@ -1,0 +1,100 @@
+{
+  "status": "PASS",
+  "scope": "固定64组；同一Bio+GPC continuation；PPU eval/no_grad阶段3产物",
+  "optimizer_step_executed_by_this_script": false,
+  "official_query_gallery_used": false,
+  "future_leakage_control": "特征只取 target_update 之前节点；target 节点仅生成评价标签",
+  "coverage_warning": "不是9576张训练图像的全库预测评估，不能外推为全局在线风险模型",
+  "rows": [
+    {
+      "seed": 1234,
+      "rows": 320,
+      "anchor_count": 64,
+      "feature_updates": [
+        0,
+        20,
+        50,
+        100,
+        200
+      ],
+      "target_updates": [
+        20,
+        50,
+        100,
+        200,
+        400
+      ],
+      "target_active_count": 114,
+      "target_active_rate": 0.35625,
+      "metrics": [
+        {
+          "method": "prev_drop",
+          "rows": 320,
+          "positive_count": 114,
+          "roc_auc": 0.7262817237267927,
+          "average_precision": 0.6696950523138695
+        },
+        {
+          "method": "max_prior_drop",
+          "rows": 320,
+          "positive_count": 114,
+          "roc_auc": 0.7553866462272185,
+          "average_precision": 0.6461143255460767
+        },
+        {
+          "method": "prev_drop_slope",
+          "rows": 320,
+          "positive_count": 114,
+          "roc_auc": 0.6451200817577926,
+          "average_precision": 0.5915270924086449
+        }
+      ],
+      "state_source": "/home/DIFFER/outputs/ndp_overnight_recovery_20261021_024248/trajectory_seed1234/activation_audit/activation_rows.csv"
+    },
+    {
+      "seed": 4321,
+      "rows": 320,
+      "anchor_count": 64,
+      "feature_updates": [
+        0,
+        20,
+        50,
+        100,
+        200
+      ],
+      "target_updates": [
+        20,
+        50,
+        100,
+        200,
+        400
+      ],
+      "target_active_count": 91,
+      "target_active_rate": 0.284375,
+      "metrics": [
+        {
+          "method": "prev_drop",
+          "rows": 320,
+          "positive_count": 91,
+          "roc_auc": 0.7880176591966985,
+          "average_precision": 0.6596431012977869
+        },
+        {
+          "method": "max_prior_drop",
+          "rows": 320,
+          "positive_count": 91,
+          "roc_auc": 0.7679831085944623,
+          "average_precision": 0.631846519182515
+        },
+        {
+          "method": "prev_drop_slope",
+          "rows": 320,
+          "positive_count": 91,
+          "roc_auc": 0.6676663947406305,
+          "average_precision": 0.4839763019519741
+        }
+      ],
+      "state_source": "/home/DIFFER/outputs/ndp_overnight_recovery_20261021_024248/trajectory_seed4321/activation_audit/activation_rows.csv"
+    }
+  ]
+}

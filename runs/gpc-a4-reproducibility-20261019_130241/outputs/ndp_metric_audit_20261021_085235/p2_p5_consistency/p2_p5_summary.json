@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "tau": 0.07,
+  "p2_definition": "mean_c sigmoid((sim(anchor,negative_c)-Q25(sim(anchor,positive)))/tau), fixed reference negative representatives",
+  "p5_definition": "sigmoid(logmeanexp(negative/tau)-logmeanexp(positive/tau))",
+  "edge_definition": "reference min positive - max negative > 0 and current <= 0",
+  "rows": [
+    {
+      "seed": 1234,
+      "rows": 1024,
+      "edge_flip_count": 47,
+      "p2_missed_flip_count": 34,
+      "p5_missed_flip_count": 35,
+      "p2_mass_up_but_edge_flip_count": 13,
+      "edge_flip_positive_threshold_up_count": 12,
+      "mean_p2_delta": -0.022696498128539133,
+      "mean_p5_delta": -0.021564679964774312,
+      "spearman_p2_p5_delta": 0.9128695752270938,
+      "dangerous_negative_count_total_on_flips": 75,
+      "positive_mass_up_but_edge_flip_examples": [
+        10,
+        57,
+        587,
+        944,
+        1182,
+        1915,
+        2260,
+        4265,
+        4832,
+        5135,
+        6011,
+        7849
+      ],
+      "reference_feature_sha256": "b5b8be8b41c4ba107d8c756617af47bf9857d35de6de555269bce537e1389e1a",
+      "current_feature_sha256": "f0a6ad34d5f07914c290427385c72ffea0f2a2f66b5373cadae64a842f6baa20"
+    },
+    {
+      "seed": 4321,
+      "rows": 1024,
+      "edge_flip_count": 31,
+      "p2_missed_flip_count": 9,
+      "p5_missed_flip_count": 10,
+      "p2_mass_up_but_edge_flip_count": 22,
+      "edge_flip_positive_threshold_up_count": 3,
+      "mean_p2_delta": -0.001390625148815161,
+      "mean_p5_delta": -0.0024613110303028187,
+      "spearman_p2_p5_delta": 0.8465760116407982,
+      "dangerous_negative_count_total_on_flips": 42,
+      "positive_mass_up_but_edge_flip_examples": [
+        6216,
+        7704,
+        8813
+      ],
+      "reference_feature_sha256": "b7439b6ad7b8707223b23884dafc39d2cded5bc14b6bfc1adc56063ba5ab3516",
+      "current_feature_sha256": "841f049ac23eceb88fcf6efaea7906e3eb034acdfae8c0c85654a9cdf9fa9de3"
+    }
+  ],
+  "official_query_gallery_used": false
+}

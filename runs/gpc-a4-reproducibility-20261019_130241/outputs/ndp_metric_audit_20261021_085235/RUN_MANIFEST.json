@@ -1,0 +1,44 @@
+{
+  "run_time": "20261021_085235",
+  "status": "COMPLETED_OFFLINE_WITH_AA_BLOCK",
+  "remote_main": "6782a0a482fc14aa7da10fdc996e18809967a916",
+  "server_code_root": "/home/DIFFER/scripts",
+  "python": "/usr/local/bin/python3.10",
+  "torch": "2.6.0 (from prior verified environment)",
+  "ppu_model_compute_this_run": false,
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "baseline_unchanged": "Bio+GPC-v1; no GPC selector/lambda/loss change",
+  "source_sha256": {
+    "ndp_intrusion_loss.py": "5f5528cd590a65806a64b3f63f4d7c37c0e2b1d1953a6d9263816abbfee5950c",
+    "ndp_p2_p5_consistency.py": "2bdfda4e8405b785dd3f8f6c4298202c5fc1fc31c62fd87295321748bccff085",
+    "ndp_r3_r4_r5_correction.py": "720bdcd5ad1c2433b52fb37a145ec985500174fa77b45b84c53ff479c3c52836",
+    "ndp_risk_benchmark.py": "a984731072b59f077a292ecc31b2ec83bfb793beb9eafe1444ca4aa73546c39e",
+    "ndp_risk_common.py": "aff346f07d51840ab48dc62ce7b04c96baaf9252f95a18c3eb724ecaeb1c3448",
+    "ndp_same_trajectory_risk_validation.py": "9fb9294a38cb90063380d4a7353134af4c94dbda873d53440dc638770c65891f",
+    "test_ndp_risk_modules.py": "c672b41fc48040e80e7bc0b55856e1320b2f98594dc5916fd3bb0fffcce38c85"
+  },
+  "input_summary": {
+    "p2_rows": [
+      "/home/DIFFER/outputs/ndp_second_innovation_20261021_082715/p2_seed1234/seed1234_intrusion_rows.csv",
+      "/home/DIFFER/outputs/ndp_second_innovation_20261021_082715/p2_seed4321/seed4321_intrusion_rows.csv"
+    ],
+    "feature_banks": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/feature_banks/seed{1234,4321}/{bio,gpc}_feature_bank.npz",
+    "trajectory_rows": "/home/DIFFER/outputs/ndp_overnight_recovery_20261021_024248/trajectory_seed{1234,4321}/activation_audit/activation_rows.csv"
+  },
+  "tests": [
+    "/usr/local/bin/python3.10 /home/DIFFER/scripts/tests/test_ndp_risk_modules.py"
+  ],
+  "outputs": {
+    "p3_corrected": "/home/DIFFER/outputs/ndp_metric_audit_20261021_085235/p3_corrected",
+    "p2_p5_consistency": "/home/DIFFER/outputs/ndp_metric_audit_20261021_085235/p2_p5_consistency",
+    "r3_r4_r5": "/home/DIFFER/outputs/ndp_metric_audit_20261021_085235/r3_r4_r5",
+    "same_trajectory": "/home/DIFFER/outputs/ndp_metric_audit_20261021_085235/same_trajectory"
+  },
+  "decision": {
+    "A/A_REPRODUCIBILITY": "FAIL",
+    "NDP_MECHANISM": "INCONCLUSIVE",
+    "CONTROLLED_SHORT_PILOT": "NO_GO"
+  },
+  "github_push": "NOT_PERFORMED_BY_INSTRUCTION"
+}

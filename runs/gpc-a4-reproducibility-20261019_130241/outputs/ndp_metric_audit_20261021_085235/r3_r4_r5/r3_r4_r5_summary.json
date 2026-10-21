@@ -1,0 +1,43 @@
+{
+  "status": "PASS_WITH_LIMITATIONS",
+  "R3": {
+    "status": "NOT_ONLINE_VALID",
+    "reason": "history Jaccard is between independent Bio/GPC endpoints"
+  },
+  "R4": {
+    "status": "SEED_ISOLATED_SAMPLE_HUBNESS",
+    "warning": "sampled-anchor hubness, not full-train hubness"
+  },
+  "R5": {
+    "status": "EXPLICIT_REVERSE_IMAGE_DIRECTION_WHEN_AVAILABLE",
+    "deduplication": "identity-pair key is reported; multiple image directions retained for audit"
+  },
+  "rows": [
+    {
+      "seed": 1234,
+      "rows": 1024,
+      "sampled_anchor_hubness_max": 118,
+      "sampled_anchor_hubness_nonzero": 3793,
+      "sampled_anchor_hubness_top10_sum": 787,
+      "edge_flip_count": 47,
+      "explicit_bidirectional_image_pairs": 2193,
+      "one_side_improve_other_worsen_count": 265,
+      "history_source_rows": 1024,
+      "history_temporal_valid": false,
+      "history_warning": "Bio E60/GPC E60 independent endpoints; not same-trajectory history"
+    },
+    {
+      "seed": 4321,
+      "rows": 1024,
+      "sampled_anchor_hubness_max": 177,
+      "sampled_anchor_hubness_nonzero": 3539,
+      "sampled_anchor_hubness_top10_sum": 1056,
+      "edge_flip_count": 31,
+      "explicit_bidirectional_image_pairs": 2405,
+      "one_side_improve_other_worsen_count": 1100,
+      "history_source_rows": 1024,
+      "history_temporal_valid": false,
+      "history_warning": "Bio E60/GPC E60 independent endpoints; not same-trajectory history"
+    }
+  ]
+}

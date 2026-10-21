@@ -1,0 +1,12 @@
+阶段：逐节点特征导出首轮
+命令：/usr/local/bin/python3.10 -u /home/DIFFER/scripts/ndp_trajectory_feature_export.py --seed 1234 ...
+结果：在 PPU eval/no_grad 编码及 NPZ 写入之后，旧 advantage 复算阶段退出码 1。
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_trajectory_feature_export.py", line 239, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_trajectory_feature_export.py", line 204, in main
+    reproduction = compare_reference_advantages(
+  File "/home/DIFFER/scripts/ndp_trajectory_feature_export.py", line 74, in compare_reference_advantages
+    recomputed = advantage(group_by_anchor[anchor], feature_maps[update_to_pos[update]])
+NameError: name 'advantage' is not defined
+修复：改为显式调用 ndp_real_trajectory_activation.advantage；随后仅重跑同一 seed 导出。

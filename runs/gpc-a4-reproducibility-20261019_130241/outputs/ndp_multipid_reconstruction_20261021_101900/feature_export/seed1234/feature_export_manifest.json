@@ -1,0 +1,79 @@
+{
+  "advantage_reproduction": {
+    "comparison_csv": "/home/DIFFER/outputs/ndp_multipid_reconstruction_20261021_101900/feature_export/seed1234/advantage_reproduction_rows.csv",
+    "formula": "logmeanexp(pos_similarity/0.07)-logmeanexp(neg_similarity/0.07)",
+    "max_abs_error": 0.0,
+    "mean_abs_error": 0.0,
+    "p95_abs_error": 0.0,
+    "reference_rows": "/home/DIFFER/outputs/ndp_future_boundary_20261021_094250/coverage_expansion/seed1234_retry1/expanded_activation_rows.csv",
+    "rows_matched": 954,
+    "rows_total": 954,
+    "rows_unmatched": 0
+  },
+  "checkpoint_source": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed1234",
+  "cpu_model_fallback": false,
+  "elapsed_seconds": 46.849448680877686,
+  "feature_definition": "PPU EVA02 feat[0] -> FP32 L2 normalize -> detached CPU export",
+  "groups": 159,
+  "groups_sha256": "596fdf83830b41488403ebb6581b631984890f4291bd0ea9f1e7dfd28fafc64c",
+  "image_count": 382,
+  "image_index_sha256": "0fde31b644b524d49580350a4ac9ca5d4e31559a44c030e56f058e3899413aee",
+  "nodes": [
+    {
+      "state_path": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed1234/rank0_state_epoch060.pt",
+      "state_sha256": "e11c90b63d7252f0fde99439bb1d5a6f1d72e757d43143fe9ac92061e2411177",
+      "update": 0
+    },
+    {
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed1234/node_update0020/model.pth",
+      "state_sha256": "d1d2e0ec12dd9f7d396fd66950d5bc0a61aed56bcdcef95812cb1736c7c8ce46",
+      "update": 20
+    },
+    {
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed1234/node_update0050/model.pth",
+      "state_sha256": "1cb51263fe9082d29239f0abb0c3cdeadeb6836b98779d262962bc97ad9978d2",
+      "update": 50
+    },
+    {
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed1234/node_update0100/model.pth",
+      "state_sha256": "13235afab315dd3da0b0de654d453d6cbf503b5142d48f3d55fab6c97cbbfa50",
+      "update": 100
+    },
+    {
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed1234/node_update0200/model.pth",
+      "state_sha256": "b5bf6fd623571ac4f8becc6cbdae2ef1e3046710f5f380dc891e6a645167de0b",
+      "update": 200
+    },
+    {
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed1234/node_update0400/model.pth",
+      "state_sha256": "9d896ed8c0b4eed1f0a5d776564c0d3492a1ca29765b4804b568c635ad27b68d",
+      "update": 400
+    }
+  ],
+  "npz": "/home/DIFFER/outputs/ndp_multipid_reconstruction_20261021_101900/feature_export/seed1234/trajectory_features_seed1234.npz",
+  "npz_sha256": "a79fdc423efc90295e2190a313caf34d9642b79d0dea09bf19fb82e400f409cd",
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "preprocess": "same build_img_transforms test transform at every node",
+  "reference_rows": "/home/DIFFER/outputs/ndp_future_boundary_20261021_094250/coverage_expansion/seed1234_retry1/expanded_activation_rows.csv",
+  "repeat_encode_error_update0": {
+    "max_abs": 0.0,
+    "mean_abs": 0.0,
+    "p95_abs": 0.0
+  },
+  "seed": 1234,
+  "source_hashes": {
+    "activation_helper": "36317d62f27a3d9042fbd7e9d52a99928d324b437d421ccc9fde2210caee598a",
+    "engine": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+    "feature_export_script": "f9eb73a76e860e2f30ec7f627d77f3ad3452eaf11602a8533686cefa53b525db"
+  },
+  "status": "PASS_PPU_EVAL_NO_GRAD",
+  "updates": [
+    0,
+    20,
+    50,
+    100,
+    200,
+    400
+  ]
+}

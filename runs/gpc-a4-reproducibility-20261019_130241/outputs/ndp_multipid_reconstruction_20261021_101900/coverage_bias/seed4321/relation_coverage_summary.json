@@ -1,0 +1,21 @@
+{
+  "status": "PASS_FIXED_COVERAGE_BIAS_AUDIT",
+  "groups": "/home/DIFFER/outputs/ndp_future_boundary_20261021_094250/coverage_expansion/seed4321/fixed_diagnostic_groups.json",
+  "anchor_count": 137,
+  "pid_count": 31,
+  "image_count": 340,
+  "negative_pid_total": 138,
+  "negative_pid_mean_per_anchor": 1.0072992700729928,
+  "negative_pid_max_per_anchor": 2,
+  "multi_negative_pid_anchor_count": 1,
+  "cross_clothes_positive_anchor_count": 137,
+  "cross_camera_positive_anchor_count": 101,
+  "cross_camera_negative_anchor_count": 101,
+  "representative_stratum_available": false,
+  "difficulty_stratum_available": true,
+  "bias_warning": "当前 groups 是历史困难/固定关系集合；没有独立按 PID×衣服×相机预注册的代表性集合，不能外推全量 LTCC。",
+  "groups_sha256": "5f49d0fc8b899c299265582ba455ac88835f520f5fe351834690ed39fc18ef75",
+  "features": "/home/DIFFER/outputs/ndp_multipid_reconstruction_20261021_101900/feature_export/seed4321/trajectory_features_seed4321.npz",
+  "features_sha256": "b1aa25918766078b22999b14962722bb8fa1db0a3a4c25f2c65ae48a618d971b",
+  "official_query_gallery_used": false
+}

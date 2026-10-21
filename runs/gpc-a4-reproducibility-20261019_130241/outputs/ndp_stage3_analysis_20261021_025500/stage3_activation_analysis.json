@@ -1,0 +1,38 @@
+{
+  "run_time": "20261021_024248",
+  "analysis_time": "20261021_025500",
+  "stage3_status": "COMPLETED",
+  "optimizer_step_executed_by_stage3": false,
+  "source_run": "20261020_201841",
+  "source_fixed_b0_run": "20261015_155822",
+  "selection_rule": "固定 groups.json；宽松激活为 advantage_drop>0.02；可靠激活 additionally reference_advantage>0.05",
+  "seed1234": {
+    "groups": 64,
+    "reliable_groups": 38,
+    "all_delta_active": {"0": 0, "20": 22, "50": 22, "100": 20, "200": 13, "400": 37},
+    "reliable_active": {"0": 0, "20": 15, "50": 13, "100": 10, "200": 3, "400": 26},
+    "stage2_effective_updates": 400,
+    "stage2_amp_skips": 0,
+    "stage2_optimizer_steps": 400
+  },
+  "seed4321": {
+    "groups": 64,
+    "reliable_groups": 36,
+    "all_delta_active": {"0": 0, "20": 11, "50": 9, "100": 18, "200": 27, "400": 26},
+    "reliable_active": {"0": 0, "20": 9, "50": 6, "100": 9, "200": 16, "400": 17},
+    "stage2_effective_updates": 400,
+    "stage2_amp_skips": 0,
+    "stage2_optimizer_steps": 400
+  },
+  "source_script_sha256": {
+    "stage3_supervisor": "3a68a1542b25a296ed3d3f38bbbcb574c63993ef4e8c617f078bed868d28f488",
+    "activation": "36317d62f27a3d9042fbd7e9d52a99928d324b437d421ccc9fde2210caee598a",
+    "real_gradient_probe": "a03f1c8ed5ac39769e92d0b12e8ccca5857f0b4e68e581f7e0b5891abf3634f4",
+    "gpc_engine": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5"
+  },
+  "notes": [
+    "stage3 uses eval-mode no-grad feature extraction and therefore proves natural state activation, not a parameter update",
+    "reliable activation counts are a post-hoc audit of the pre-registered reference reliability threshold, not a new training selection rule",
+    "the continuation nodes are from a fixed Bio+GPC-v1 B0 continuation and all recorded optimizer steps were effective"
+  ]
+}

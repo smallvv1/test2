@@ -1,0 +1,17 @@
+{
+  "status": "PASS_IDENTITY_AND_IMAGE_BIDIRECTIONAL_CORRECTION",
+  "input_transition_rows": 12800,
+  "identity_directed_rows": 3950,
+  "image_level_reciprocal_pairs": 80,
+  "identity_pair_interval_count": 2590,
+  "quadrants_image_level": {
+    "A改善_B恶化": 19,
+    "A恶化_B改善": 11,
+    "双改善": 27,
+    "双恶化": 23
+  },
+  "last_write_wins_used": false,
+  "image_pair_definition": "same interval, A anchor image is exactly B negative image and vice versa, same PID pair",
+  "missing_reverse_not_false": true,
+  "future_information_used": false
+}

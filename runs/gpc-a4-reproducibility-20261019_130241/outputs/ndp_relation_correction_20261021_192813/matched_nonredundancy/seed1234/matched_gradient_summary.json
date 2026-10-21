@@ -1,0 +1,204 @@
+{
+  "B0_reconstructed_batch_hard": {
+    "not_run": true,
+    "reason": "no direct relation selected in reconstructed miner"
+  },
+  "B1_fixed_margin_proxy": {
+    "fixed_margin_update0": {
+      "loss": 0.24465329945087433,
+      "active_relation_count": 2508,
+      "selected_relation_count": 2560,
+      "gradient_finite": true,
+      "gradient_norm": 0.05391370505094528,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 2560,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B2_reference_margin_proxy": {
+    "fixed_margin_update0": {
+      "loss": 0.25064826011657715,
+      "active_relation_count": 2508,
+      "selected_relation_count": 2498,
+      "gradient_finite": true,
+      "gradient_norm": 0.05510120466351509,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 2498,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B3_random_count_matched_to_B5": {
+    "fixed_margin_update0": {
+      "loss": 0.24232153594493866,
+      "active_relation_count": 2508,
+      "selected_relation_count": 310,
+      "gradient_finite": true,
+      "gradient_norm": 0.08605722337961197,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 310,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B3_random_count_matched_to_B6": {
+    "fixed_margin_update0": {
+      "loss": 0.240422785282135,
+      "active_relation_count": 2508,
+      "selected_relation_count": 32,
+      "gradient_finite": true,
+      "gradient_norm": 0.22605466842651367,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 32,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B3_random_count_matched_to_B7": {
+    "fixed_margin_update0": {
+      "loss": 0.19834977388381958,
+      "active_relation_count": 2508,
+      "selected_relation_count": 4,
+      "gradient_finite": true,
+      "gradient_norm": 0.6991272568702698,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 4,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B4_current_hard_margin_proxy": {
+    "fixed_margin_update0": {
+      "loss": 0.30125465989112854,
+      "active_relation_count": 2508,
+      "selected_relation_count": 1896,
+      "gradient_finite": true,
+      "gradient_norm": 0.0635775551199913,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 1896,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B5_reliability_vulnerability": {
+    "fixed_margin_update0": {
+      "loss": 0.17178602516651154,
+      "active_relation_count": 2508,
+      "selected_relation_count": 310,
+      "gradient_finite": true,
+      "gradient_norm": 0.09283410012722015,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 310,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B6_bidirectional_image_relation": {
+    "fixed_margin_update0": {
+      "loss": 0.3478586971759796,
+      "active_relation_count": 2508,
+      "selected_relation_count": 32,
+      "gradient_finite": true,
+      "gradient_norm": 0.2952873408794403,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 32,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  },
+  "B7_reliability_plus_bidirectional": {
+    "fixed_margin_update0": {
+      "loss": 0.1716926097869873,
+      "active_relation_count": 2508,
+      "selected_relation_count": 4,
+      "gradient_finite": true,
+      "gradient_norm": 0.6072490811347961,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    },
+    "reactive_margin_update0": {
+      "loss": 0.0,
+      "active_relation_count": 0,
+      "selected_relation_count": 4,
+      "gradient_finite": true,
+      "gradient_norm": 0.0,
+      "network_parameter_gradient": false,
+      "feature_space_only": true,
+      "reference_detached": true
+    }
+  }
+}

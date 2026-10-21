@@ -1,0 +1,53 @@
+{
+  "run_time": "20261021_192813",
+  "status": "COMPLETE_OFFLINE_AUDIT_WITH_AA_FAIL",
+  "remote_main_commit": "21ac0feb7f921834f59c4989c78a5507c6aa6108",
+  "server_worktree_commit": "573b0502a231568d509fe3a463664c1a3c42e258",
+  "python": "/usr/local/bin/python3.10",
+  "python_version": "3.10.13 (main, Sep  2 2025, 17:44:18) [GCC 11.4.0]",
+  "torch": "2.6.0",
+  "platform": "Linux-5.10.134-17.2.al8.x86_64-x86_64-with-glibc2.35",
+  "model_computation": "PPU probe only; no optimizer.step",
+  "official_query_gallery_used": false,
+  "gpc_modified": false,
+  "optimizer_step_executed": false,
+  "reports": [
+    "NDP_BIDIRECTIONAL_RELATION_CORRECTION.md",
+    "NDP_FINAL_RESEARCH_DECISION.md",
+    "NDP_LAYER_NORM_PROBE_CORRECTION.md",
+    "NDP_MATCHED_NONREDUNDANCY_AUDIT.md",
+    "NDP_MINIMAL_REACTIVE_CANDIDATE_DECISION.md",
+    "NDP_REAL_TRIPLET_MINER_COVERAGE.md",
+    "NDP_RECIPROCAL_KNN_VALIDATION.md",
+    "NDP_RELIABILITY_VULNERABILITY_INFORMATION_AUDIT.md",
+    "NDP_SAME_INPUT_SAME_UPSTREAM_AA.md"
+  ],
+  "source_hashes": {
+    "source_snapshot/generate_ndp_relation_correction_reports.py": "c081e6d6dff8da11015ef59a5972a08aa7fc6f4daee2af4b270600bc8e62aa64",
+    "source_snapshot/ndp_bidirectional_relation_correction.py": "310ae5eee79c59da4d585eda7f301ac2537c264469351a43c099afcd139f4366",
+    "source_snapshot/ndp_matched_nonredundancy_audit.py": "de919bb2f825f9dd67595b6fcf1a4ebbba475d11850b2fdef5aafabcb8895655",
+    "source_snapshot/ndp_multi_pid_reference_graph.py": "d1d56bb690001f992bb1889d28769234633f888f362a9a74977e1c48659b34ec",
+    "source_snapshot/ndp_multi_pid_trajectory_eval.py": "13c185ef98963e9abdce5af9ca75310c99a57e98ae24d622175be7000a5e92fd",
+    "source_snapshot/ndp_ppu_same_precision_kernel_probe.py": "cde27be76d28097a699ed8b1edba085a1a78c2fe4f0df36d3fbf60ba1203ce22",
+    "source_snapshot/ndp_real_triplet_miner_coverage.py": "f0814e323e75762191763c158af6ee3fde4ce179e1fcdad993294405f0a4640a",
+    "source_snapshot/ndp_reliability_vulnerability_information_audit.py": "f8ea0edad3cfd3b07aa721eac48b01c788b7a7db29d4429511ecf8cc4b43540a"
+  },
+  "test_hashes": {
+    "tests_snapshot/test_ndp_relation_correction.py": "068af7edeffa79a09ad20d8b9150f5e61e5ed709e71fff5998ecd7d54d4ffa7e"
+  },
+  "commands": [
+    "pytest -q tests/test_ndp_*.py",
+    "ndp_ppu_same_precision_kernel_probe.py --repeats 3 --include-eva-norm",
+    "ndp_multi_pid_reference_graph.py for seed1234/4321",
+    "ndp_multi_pid_trajectory_eval.py for seed1234/4321",
+    "ndp_bidirectional_relation_correction.py for seed1234/4321",
+    "ndp_reliability_vulnerability_information_audit.py for seed1234/4321",
+    "ndp_real_triplet_miner_coverage.py for seed1234/4321 epochs 60 61",
+    "ndp_matched_nonredundancy_audit.py for seed1234/4321"
+  ],
+  "gpc_baseline_hashes": {
+    "/data/DIFFER/scripts/gpc_v2_train.py": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+    "/data/DIFFER/loss/make_loss.py": "9be543c08b50553a95839351929fa9341edf900947593fbd675c0e4847889043",
+    "/data/DIFFER/configs/ltcc/eva02_l_bio.yml": "c0589950b23885c334c64c85bd6db9803935765d0647e02c1bb74b5b5ae00b97"
+  }
+}

@@ -1,0 +1,526 @@
+{
+  "status": "PASS_FIXED_INPUT_UPSTREAM_PROBE",
+  "device": "cuda:0",
+  "torch": "2.6.0",
+  "python": "/usr/local/bin/python3.10",
+  "platform": "Linux-5.10.134-17.2.al8.x86_64-x86_64-with-glibc2.35",
+  "repeats": 3,
+  "cpu_reference": {
+    "input_hash": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+    "upstream_hash": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+    "repeat_stats": [
+      {
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 0.9999999999999665,
+        "finite_a": true,
+        "finite_b": true
+      },
+      {
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 0.9999999999999613,
+        "finite_a": true,
+        "finite_b": true
+      },
+      {
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 1.0000000000000002,
+        "finite_a": true,
+        "finite_b": true
+      },
+      {
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 0.9999999999999665,
+        "finite_a": true,
+        "finite_b": true
+      },
+      {
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 0.9999999999999613,
+        "finite_a": true,
+        "finite_b": true
+      },
+      {
+        "max_abs": 0.0,
+        "relative_l2": 0.0,
+        "cosine": 1.0000000000000002,
+        "finite_a": true,
+        "finite_b": true
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "independent_layernorm",
+      "shape": [
+        2,
+        64,
+        1024
+      ],
+      "amp": false,
+      "dtype": "float32 inputs",
+      "input_hash": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+      "upstream_hash": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+      "parameter_initial_hash": "d972d589a6a2143d86b2c89a3af7dd66ab7ce839ac8eafcda0724cc5fb922a60",
+      "input_strides": [
+        65536,
+        1024,
+        1
+      ],
+      "upstream_strides": [
+        65536,
+        1024,
+        1
+      ],
+      "repeat_hashes": [
+        {
+          "input": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+          "upstream": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+          "output": "40befc1549079b11d1e189a337784bd9321f043ef96943a4fdc7a1db5430b269"
+        },
+        {
+          "input": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+          "upstream": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+          "output": "40befc1549079b11d1e189a337784bd9321f043ef96943a4fdc7a1db5430b269"
+        },
+        {
+          "input": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+          "upstream": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+          "output": "40befc1549079b11d1e189a337784bd9321f043ef96943a4fdc7a1db5430b269"
+        }
+      ],
+      "comparisons": [
+        {
+          "repeat": 1,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999611,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.999999999999967,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999611,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.999999999999967,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        }
+      ],
+      "parameter_unchanged": true
+    },
+    {
+      "name": "independent_layernorm",
+      "shape": [
+        2,
+        64,
+        1024
+      ],
+      "amp": true,
+      "dtype": "float32 inputs",
+      "input_hash": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+      "upstream_hash": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+      "parameter_initial_hash": "d972d589a6a2143d86b2c89a3af7dd66ab7ce839ac8eafcda0724cc5fb922a60",
+      "input_strides": [
+        65536,
+        1024,
+        1
+      ],
+      "upstream_strides": [
+        65536,
+        1024,
+        1
+      ],
+      "repeat_hashes": [
+        {
+          "input": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+          "upstream": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+          "output": "40befc1549079b11d1e189a337784bd9321f043ef96943a4fdc7a1db5430b269"
+        },
+        {
+          "input": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+          "upstream": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+          "output": "40befc1549079b11d1e189a337784bd9321f043ef96943a4fdc7a1db5430b269"
+        },
+        {
+          "input": "354241d4a64f962bd0d38ed6c668ce8d31ad1260db9862116c6e152cc13408f3",
+          "upstream": "1dc565eba8efaf3a876c0dcda11099ee3985f96e3817986d827a5c350cbe3fb5",
+          "output": "40befc1549079b11d1e189a337784bd9321f043ef96943a4fdc7a1db5430b269"
+        }
+      ],
+      "comparisons": [
+        {
+          "repeat": 1,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999611,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.999999999999967,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999611,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.999999999999967,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        }
+      ],
+      "parameter_unchanged": true
+    },
+    {
+      "name": "eva02_block22_norm1",
+      "shape": [
+        2,
+        257,
+        1024
+      ],
+      "amp": false,
+      "dtype": "float32 inputs",
+      "input_hash": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+      "upstream_hash": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+      "parameter_initial_hash": "c1de5cc098f05e1a5c564e1efdcdd3187a84f10facff18e77dfbe8f7b6b2cc81",
+      "input_strides": [
+        263168,
+        1024,
+        1
+      ],
+      "upstream_strides": [
+        263168,
+        1024,
+        1
+      ],
+      "repeat_hashes": [
+        {
+          "input": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+          "upstream": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+          "output": "1a1bafd1c7d1fc2b6fb4315ebdeb1a7712fda169ed722950322eee2cc313aeed"
+        },
+        {
+          "input": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+          "upstream": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+          "output": "1a1bafd1c7d1fc2b6fb4315ebdeb1a7712fda169ed722950322eee2cc313aeed"
+        },
+        {
+          "input": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+          "upstream": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+          "output": "1a1bafd1c7d1fc2b6fb4315ebdeb1a7712fda169ed722950322eee2cc313aeed"
+        }
+      ],
+      "comparisons": [
+        {
+          "repeat": 1,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999253,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999187,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999253,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999187,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        }
+      ],
+      "parameter_unchanged": true
+    },
+    {
+      "name": "eva02_block22_norm1",
+      "shape": [
+        2,
+        257,
+        1024
+      ],
+      "amp": true,
+      "dtype": "float32 inputs",
+      "input_hash": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+      "upstream_hash": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+      "parameter_initial_hash": "c1de5cc098f05e1a5c564e1efdcdd3187a84f10facff18e77dfbe8f7b6b2cc81",
+      "input_strides": [
+        263168,
+        1024,
+        1
+      ],
+      "upstream_strides": [
+        263168,
+        1024,
+        1
+      ],
+      "repeat_hashes": [
+        {
+          "input": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+          "upstream": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+          "output": "1a1bafd1c7d1fc2b6fb4315ebdeb1a7712fda169ed722950322eee2cc313aeed"
+        },
+        {
+          "input": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+          "upstream": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+          "output": "1a1bafd1c7d1fc2b6fb4315ebdeb1a7712fda169ed722950322eee2cc313aeed"
+        },
+        {
+          "input": "3dc719d1f3c5dcbaa79acac2855b1e25b0bf9c0570aee4ea9c3d5bce6de9347e",
+          "upstream": "143c4271e808462588aa1c8dd1627368e4f0479438a42d5b3278c2335da92af1",
+          "output": "1a1bafd1c7d1fc2b6fb4315ebdeb1a7712fda169ed722950322eee2cc313aeed"
+        }
+      ],
+      "comparisons": [
+        {
+          "repeat": 1,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999253,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999187,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        },
+        {
+          "repeat": 2,
+          "same_input": true,
+          "same_upstream": true,
+          "status": "VALID_COMPARISON",
+          "output": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999253,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "input_grad": {
+            "max_abs": 0.0,
+            "relative_l2": 0.0,
+            "cosine": 0.9999999999999187,
+            "finite_a": true,
+            "finite_b": true
+          },
+          "parameter_grads": {
+            "weight": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0,
+              "finite_a": true,
+              "finite_b": true
+            },
+            "bias": {
+              "max_abs": 0.0,
+              "relative_l2": 0.0,
+              "cosine": 1.0000000000000002,
+              "finite_a": true,
+              "finite_b": true
+            }
+          }
+        }
+      ],
+      "parameter_unchanged": true
+    }
+  ],
+  "checkpoint": {
+    "path": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/rank0_state_epoch060.pt",
+    "sha256": "d69859975ae386f82bebd05d944633e962cc377f73f55599eb685128a09637a7"
+  },
+  "old_layernorm_result_status": "INVALID_UPSTREAM_CONTROL",
+  "optimizer_step_executed": false,
+  "scope_limit": "EVA02 direct norm1 is isolated; this is not a full block22 fused backward reproduction",
+  "elapsed_seconds": 9.426295518875122
+}

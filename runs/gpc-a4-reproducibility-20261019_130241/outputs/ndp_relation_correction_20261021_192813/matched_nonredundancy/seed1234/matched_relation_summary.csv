@@ -1,0 +1,11 @@
+method,relation_count,event_count_200_400,event_rate_within_method,pid_count,direct_triplet_relation_overlap
+B0_reconstructed_batch_hard,0,0,,0,
+B1_fixed_margin_proxy,2560,31,0.012109375,77,0.0
+B2_reference_margin_proxy,2498,31,0.012409927942353884,77,0.0
+B3_random_count_matched_to_B5,310,7,0.02258064516129032,77,0.0
+B3_random_count_matched_to_B6,32,0,0.0,25,0.0
+B3_random_count_matched_to_B7,4,0,0.0,4,0.0
+B4_current_hard_margin_proxy,1896,31,0.016350210970464137,74,0.0
+B5_reliability_vulnerability,310,8,0.025806451612903226,59,0.0
+B6_bidirectional_image_relation,32,0,0.0,21,0.0
+B7_reliability_plus_bidirectional,4,0,0.0,4,0.0

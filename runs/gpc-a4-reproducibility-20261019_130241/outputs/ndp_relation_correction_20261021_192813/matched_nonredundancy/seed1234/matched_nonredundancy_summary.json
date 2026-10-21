@@ -1,0 +1,101 @@
+{
+  "status": "PASS_BUDGET_MATCHED_OFFLINE_AUDIT",
+  "seed": 1234,
+  "features_sha256": "cc317eb5be22a1377a216732cffbef8bc65ebf4226132d0746a1b24ceddaa930",
+  "graph_sha256": "7396448bfb8e012e08ba1ec8cd8cd3efcbaec33969b84a4da8fe1feb7a828447",
+  "transition_sha256": "9d93c58a8df70225f4c704275df4793a1dc08933372a5391ec931cf49178c203",
+  "reliability_sha256": "2c2d9c7e9c321946d8a6bf9ee0171dc9de0c8298a40bcb7475d21d68d6b26fc9",
+  "miner_sha256": "4798d84caf9f9396a85eaf95cc5fe79147f45bbde4e60504c411bae96e48bd97",
+  "bidirectional_sha256": "e310c781abdf379a33a1a93e7afaa275c6243b753958d675ec292dc328cd6fe5",
+  "relation_count": 2560,
+  "update0_reference_vs_update200_max_abs_delta": 0.08362583816051483,
+  "masks": [
+    {
+      "method": "B0_reconstructed_batch_hard",
+      "relation_count": 0,
+      "event_count_200_400": 0,
+      "event_rate_within_method": null,
+      "pid_count": 0,
+      "direct_triplet_relation_overlap": null
+    },
+    {
+      "method": "B1_fixed_margin_proxy",
+      "relation_count": 2560,
+      "event_count_200_400": 31,
+      "event_rate_within_method": 0.012109375,
+      "pid_count": 77,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B2_reference_margin_proxy",
+      "relation_count": 2498,
+      "event_count_200_400": 31,
+      "event_rate_within_method": 0.012409927942353884,
+      "pid_count": 77,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B3_random_count_matched_to_B5",
+      "relation_count": 310,
+      "event_count_200_400": 7,
+      "event_rate_within_method": 0.02258064516129032,
+      "pid_count": 77,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B3_random_count_matched_to_B6",
+      "relation_count": 32,
+      "event_count_200_400": 0,
+      "event_rate_within_method": 0.0,
+      "pid_count": 25,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B3_random_count_matched_to_B7",
+      "relation_count": 4,
+      "event_count_200_400": 0,
+      "event_rate_within_method": 0.0,
+      "pid_count": 4,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B4_current_hard_margin_proxy",
+      "relation_count": 1896,
+      "event_count_200_400": 31,
+      "event_rate_within_method": 0.016350210970464137,
+      "pid_count": 74,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B5_reliability_vulnerability",
+      "relation_count": 310,
+      "event_count_200_400": 8,
+      "event_rate_within_method": 0.025806451612903226,
+      "pid_count": 59,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B6_bidirectional_image_relation",
+      "relation_count": 32,
+      "event_count_200_400": 0,
+      "event_rate_within_method": 0.0,
+      "pid_count": 21,
+      "direct_triplet_relation_overlap": 0.0
+    },
+    {
+      "method": "B7_reliability_plus_bidirectional",
+      "relation_count": 4,
+      "event_count_200_400": 0,
+      "event_rate_within_method": 0.0,
+      "pid_count": 4,
+      "direct_triplet_relation_overlap": 0.0
+    }
+  ],
+  "gradient_probe": "update0 frozen-feature autograd only; no network parameter gradient",
+  "real_batch_hard_history_available": false,
+  "reconstructed_sampler_only": true,
+  "future_event_used_for_mask_definition": false,
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "interpretation": "B0 is actual-code semantic reconstruction; B1-B7 are budget/mask diagnostics, not training efficacy evidence"
+}

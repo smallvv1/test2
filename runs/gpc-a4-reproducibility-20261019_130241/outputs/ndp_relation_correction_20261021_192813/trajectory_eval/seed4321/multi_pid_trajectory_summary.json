@@ -1,0 +1,31 @@
+{
+  "anchor_count": 512,
+  "cpu_model_fallback": false,
+  "elapsed_seconds": 91.08715534210205,
+  "feature_update0": "/home/DIFFER/outputs/ndp_true_multipid_20261021_103952/full_features/seed4321/update0_full_features_seed4321.npz",
+  "feature_update0_sha256": "999e0a8b0f9c4530c93f3458456432006889aecee85b5bdb1e27ea4af80c75dd",
+  "future_nodes_used_for_selection": false,
+  "graph": "/home/DIFFER/outputs/ndp_relation_correction_20261021_192813/reference_graph/seed4321/multi_pid_reference_graph.json",
+  "graph_sha256": "802760ff9730be04be011d100d60467cb2f903a54832413dd087e0818c236aba",
+  "graph_type": "difficult",
+  "image_count": 2046,
+  "k_pid": 5,
+  "new_negative_pid_count": 48,
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "recovered_pid_count": 59,
+  "relation_count": 2560,
+  "script_sha256": "13c185ef98963e9abdce5af9ca75310c99a57e98ae24d622175be7000a5e92fd",
+  "seed": 4321,
+  "status": "PASS_FIXED_UPDATE0_GRAPH_TRAJECTORY_EVAL",
+  "strict_flip_count": 48,
+  "transition_count": 12800,
+  "updates": [
+    0,
+    20,
+    50,
+    100,
+    200,
+    400
+  ]
+}

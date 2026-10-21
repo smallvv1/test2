@@ -1,0 +1,317 @@
+{
+  "status": "PASS_ISOLATION_PROBE_COMPLETED",
+  "device": "cuda:0",
+  "torch": "2.6.0",
+  "python": "/usr/local/bin/python3.10",
+  "platform": "Linux-5.10.134-17.2.al8.x86_64-x86_64-with-glibc2.35",
+  "repeats": 3,
+  "results": [
+    {
+      "op": "layernorm",
+      "status": "PASS_EXECUTED",
+      "input_protocol": "fixed CPU generator, float32, fixed upstream gradient, no optimizer.step",
+      "comparisons": [
+        {
+          "tensor_index": 0,
+          "repeat": 1,
+          "max_abs": 6.710420608520508,
+          "relative_l2": 1.412946608292294,
+          "cosine": 0.00022005487078258047,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 1,
+          "max_abs": 52.762393951416016,
+          "relative_l2": 1.3370826083873268,
+          "cosine": 0.050443608694407296,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 0,
+          "repeat": 2,
+          "max_abs": 6.377805233001709,
+          "relative_l2": 1.4132518096428797,
+          "cosine": 0.0034168290220205413,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 2,
+          "max_abs": 70.94966125488281,
+          "relative_l2": 1.3853707795201247,
+          "cosine": 0.03198711725053313,
+          "finite_a": true,
+          "finite_b": true
+        }
+      ],
+      "output_hashes": [
+        [
+          "1e87b0a541b3cf200fda2d738404e096c67f9f28b310aa932d59b17aaf6579e5",
+          "044f564bc6223ddfb90737ca231a9d217ce4b6c69206c35b060f8b891f99abdd"
+        ],
+        [
+          "50ece8868ed6859575a6f097977680ee3c52672a99e0004f4fb097cb1d267541",
+          "7dc1418d62251c0412a36262ecf978929b78b3bfffb4810ac9820f4be7952c30"
+        ],
+        [
+          "528b47c40de90a23085588563f4f6c26978be3b519c3145cec1e2d78e35904dc",
+          "147c19adf719225955c3a4504f9f19058a74d1e7cd6a1dbc38b5fe95dc33221f"
+        ]
+      ]
+    },
+    {
+      "op": "q_projection",
+      "status": "PASS_EXECUTED",
+      "input_protocol": "fixed CPU generator, float32, fixed upstream gradient, no optimizer.step",
+      "comparisons": [
+        {
+          "tensor_index": 0,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999706,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999998728,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 0,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999706,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999998728,
+          "finite_a": true,
+          "finite_b": true
+        }
+      ],
+      "output_hashes": [
+        [
+          "a703ecc36badfca6c77bd6f68c95d84412f95d29ec16a31e2f56a9c3bce4b90c",
+          "309a6b198624e95e12df806961ed330f71a2788b0b3d91ab1958b2762a2cceab"
+        ],
+        [
+          "a703ecc36badfca6c77bd6f68c95d84412f95d29ec16a31e2f56a9c3bce4b90c",
+          "309a6b198624e95e12df806961ed330f71a2788b0b3d91ab1958b2762a2cceab"
+        ],
+        [
+          "a703ecc36badfca6c77bd6f68c95d84412f95d29ec16a31e2f56a9c3bce4b90c",
+          "309a6b198624e95e12df806961ed330f71a2788b0b3d91ab1958b2762a2cceab"
+        ]
+      ]
+    },
+    {
+      "op": "attention",
+      "status": "PASS_EXECUTED",
+      "input_protocol": "fixed CPU generator, float32, fixed upstream gradient, no optimizer.step",
+      "comparisons": [
+        {
+          "tensor_index": 0,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999917,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999928,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 2,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999873,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 0,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999917,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999928,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 2,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999873,
+          "finite_a": true,
+          "finite_b": true
+        }
+      ],
+      "output_hashes": [
+        [
+          "78a0ee9a3acc26459413f30f157472b492f2566d711faef673c074ed6d4f6b9b",
+          "ba04a0c8aa395efcdadb635e715ec3b578d953d447957193bf399657e77f4105",
+          "086a461aaa2c4894a98ea9a2a2e0597a858dd844f833f832494dd22f3039d6a9"
+        ],
+        [
+          "78a0ee9a3acc26459413f30f157472b492f2566d711faef673c074ed6d4f6b9b",
+          "ba04a0c8aa395efcdadb635e715ec3b578d953d447957193bf399657e77f4105",
+          "086a461aaa2c4894a98ea9a2a2e0597a858dd844f833f832494dd22f3039d6a9"
+        ],
+        [
+          "78a0ee9a3acc26459413f30f157472b492f2566d711faef673c074ed6d4f6b9b",
+          "ba04a0c8aa395efcdadb635e715ec3b578d953d447957193bf399657e77f4105",
+          "086a461aaa2c4894a98ea9a2a2e0597a858dd844f833f832494dd22f3039d6a9"
+        ]
+      ]
+    },
+    {
+      "op": "softmax",
+      "status": "PASS_EXECUTED",
+      "input_protocol": "fixed CPU generator, float32, fixed upstream gradient, no optimizer.step",
+      "comparisons": [
+        {
+          "tensor_index": 0,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999962,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999967,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 0,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999962,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999967,
+          "finite_a": true,
+          "finite_b": true
+        }
+      ],
+      "output_hashes": [
+        [
+          "a022b17a0f02050531764a119de397ce0c3d74c6da40cebb31c3967e28877232",
+          "b465f25c5a640951c6503f91ed4e01594468068540fe396da8f80d959918b3c0"
+        ],
+        [
+          "a022b17a0f02050531764a119de397ce0c3d74c6da40cebb31c3967e28877232",
+          "b465f25c5a640951c6503f91ed4e01594468068540fe396da8f80d959918b3c0"
+        ],
+        [
+          "a022b17a0f02050531764a119de397ce0c3d74c6da40cebb31c3967e28877232",
+          "b465f25c5a640951c6503f91ed4e01594468068540fe396da8f80d959918b3c0"
+        ]
+      ]
+    },
+    {
+      "op": "output_projection",
+      "status": "PASS_EXECUTED",
+      "input_protocol": "fixed CPU generator, float32, fixed upstream gradient, no optimizer.step",
+      "comparisons": [
+        {
+          "tensor_index": 0,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999691,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 1,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999998728,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 0,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999999691,
+          "finite_a": true,
+          "finite_b": true
+        },
+        {
+          "tensor_index": 1,
+          "repeat": 2,
+          "max_abs": 0.0,
+          "relative_l2": 0.0,
+          "cosine": 0.9999999999998728,
+          "finite_a": true,
+          "finite_b": true
+        }
+      ],
+      "output_hashes": [
+        [
+          "e2caf1b76ff44faf8c0d976b5c31549685d14ae9665d44f149f67bfa4ef7fa77",
+          "309a6b198624e95e12df806961ed330f71a2788b0b3d91ab1958b2762a2cceab"
+        ],
+        [
+          "e2caf1b76ff44faf8c0d976b5c31549685d14ae9665d44f149f67bfa4ef7fa77",
+          "309a6b198624e95e12df806961ed330f71a2788b0b3d91ab1958b2762a2cceab"
+        ],
+        [
+          "e2caf1b76ff44faf8c0d976b5c31549685d14ae9665d44f149f67bfa4ef7fa77",
+          "309a6b198624e95e12df806961ed330f71a2788b0b3d91ab1958b2762a2cceab"
+        ]
+      ]
+    }
+  ],
+  "scope_limit": "not the fused EVA02 block22 backward; stable isolated ops do not resolve full-model A/A"
+}

@@ -1,0 +1,8 @@
+method,loss,active,mask_count,gradient_norm,relation_count,pid_count,relation_set_definition,gradient_cosine_vs_T0
+T0_fixed_hard_triplet,0.24312464099624784,2497,2560,0.0195195277322639,2560,77,same 200->400 fixed difficult K_pid=5 graph; masks are the only difference,1.0000000000000073
+T1_fixed_margin_hinge,0.24312464099624784,2497,2560,0.0195195277322639,2560,77,same 200->400 fixed difficult K_pid=5 graph; masks are the only difference,1.0000000000000073
+T2_reference_margin_hinge,0.00430437130125938,1242,2560,0.013766414208364088,2560,77,same 200->400 fixed difficult K_pid=5 graph; masks are the only difference,0.6950424797697761
+T3_reliable_reactive,0.0036898832117997155,370,974,0.01974885427276318,2560,75,same 200->400 fixed difficult K_pid=5 graph; masks are the only difference,0.3662119655537352
+T4_bidirectional,0.00316870426211287,237,544,0.028299272644008545,2560,77,same 200->400 fixed difficult K_pid=5 graph; masks are the only difference,0.30158139149434154
+T5_multi_pid,0.00430437130125938,1242,2560,0.013766414208364088,2560,77,same 200->400 fixed difficult K_pid=5 graph; masks are the only difference,0.6950424797697761
+T6_reliable_bidirectional_multi_pid,0.0028268052669970884,72,184,0.04611565964260093,2560,70,same 200->400 fixed difficult K_pid=5 graph; masks are the only difference,0.1580153521361203

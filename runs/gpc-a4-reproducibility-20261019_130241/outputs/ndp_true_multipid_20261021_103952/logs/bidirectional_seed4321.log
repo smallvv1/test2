@@ -1,0 +1,1 @@
+{"status": "PASS_EXPLICIT_DIRECTED_BIDIRECTIONAL", "directed_transition_rows": 12800, "bidirectional_identity_pair_intervals": 1350, "counts": {"A改善_B恶化": 332, "A恶化_B改善": 324, "双改善": 401, "双恶化": 293, "A侧翻转": 3, "B侧翻转": 1}, "identity_pair_dedup": "one unordered PID pair per interval, retain both directed margins", "future_information_used_for_pairing": false}

@@ -1,0 +1,24 @@
+{
+  "checkpoint": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed1234/rank0_state_epoch060.pt",
+  "checkpoint_sha256": "e11c90b63d7252f0fde99439bb1d5a6f1d72e757d43143fe9ac92061e2411177",
+  "count": 9576,
+  "cpu_model_fallback": false,
+  "device": "cuda:0",
+  "dim": 1024,
+  "elapsed_seconds": 105.27760124206543,
+  "feature_definition": "PPU EVA02 feat[0] -> FP32 L2 normalize -> detached CPU export",
+  "npz": "/home/DIFFER/outputs/ndp_true_multipid_20261021_103952/full_features/seed1234/update0_full_features_seed1234.npz",
+  "npz_sha256": "cc317eb5be22a1377a216732cffbef8bc65ebf4226132d0746a1b24ceddaa930",
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "seed": 1234,
+  "source_hashes": {
+    "activation_helper": "36317d62f27a3d9042fbd7e9d52a99928d324b437d421ccc9fde2210caee598a",
+    "engine": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+    "script": "0101905c5c0ee97cf4ffaebbf8b4ca1f9a6335e2f938e12788bc2a94ae15a2d5"
+  },
+  "split": "LTCC train only",
+  "status": "PASS_PPU_UPDATE0_EVAL_NO_GRAD",
+  "update": 0,
+  "world_size": 2
+}

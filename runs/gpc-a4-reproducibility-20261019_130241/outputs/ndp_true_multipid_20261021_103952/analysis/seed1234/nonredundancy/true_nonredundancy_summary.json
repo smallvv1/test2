@@ -1,0 +1,88 @@
+{
+  "status": "PASS_FROZEN_FEATURE_NONREDUNDANCY_ONLY",
+  "interval": "200->400",
+  "relation_count": 2560,
+  "methods": [
+    {
+      "method": "T0_fixed_hard_triplet",
+      "loss": 0.24312464099624784,
+      "active": 2497,
+      "mask_count": 2560,
+      "gradient_norm": 0.0195195277322639,
+      "relation_count": 2560,
+      "pid_count": 77,
+      "relation_set_definition": "same 200->400 fixed difficult K_pid=5 graph; masks are the only difference",
+      "gradient_cosine_vs_T0": 1.0000000000000073
+    },
+    {
+      "method": "T1_fixed_margin_hinge",
+      "loss": 0.24312464099624784,
+      "active": 2497,
+      "mask_count": 2560,
+      "gradient_norm": 0.0195195277322639,
+      "relation_count": 2560,
+      "pid_count": 77,
+      "relation_set_definition": "same 200->400 fixed difficult K_pid=5 graph; masks are the only difference",
+      "gradient_cosine_vs_T0": 1.0000000000000073
+    },
+    {
+      "method": "T2_reference_margin_hinge",
+      "loss": 0.00430437130125938,
+      "active": 1242,
+      "mask_count": 2560,
+      "gradient_norm": 0.013766414208364088,
+      "relation_count": 2560,
+      "pid_count": 77,
+      "relation_set_definition": "same 200->400 fixed difficult K_pid=5 graph; masks are the only difference",
+      "gradient_cosine_vs_T0": 0.6950424797697761
+    },
+    {
+      "method": "T3_reliable_reactive",
+      "loss": 0.0036898832117997155,
+      "active": 370,
+      "mask_count": 974,
+      "gradient_norm": 0.01974885427276318,
+      "relation_count": 2560,
+      "pid_count": 75,
+      "relation_set_definition": "same 200->400 fixed difficult K_pid=5 graph; masks are the only difference",
+      "gradient_cosine_vs_T0": 0.3662119655537352
+    },
+    {
+      "method": "T4_bidirectional",
+      "loss": 0.00316870426211287,
+      "active": 237,
+      "mask_count": 544,
+      "gradient_norm": 0.028299272644008545,
+      "relation_count": 2560,
+      "pid_count": 77,
+      "relation_set_definition": "same 200->400 fixed difficult K_pid=5 graph; masks are the only difference",
+      "gradient_cosine_vs_T0": 0.30158139149434154
+    },
+    {
+      "method": "T5_multi_pid",
+      "loss": 0.00430437130125938,
+      "active": 1242,
+      "mask_count": 2560,
+      "gradient_norm": 0.013766414208364088,
+      "relation_count": 2560,
+      "pid_count": 77,
+      "relation_set_definition": "same 200->400 fixed difficult K_pid=5 graph; masks are the only difference",
+      "gradient_cosine_vs_T0": 0.6950424797697761
+    },
+    {
+      "method": "T6_reliable_bidirectional_multi_pid",
+      "loss": 0.0028268052669970884,
+      "active": 72,
+      "mask_count": 184,
+      "gradient_norm": 0.04611565964260093,
+      "relation_count": 2560,
+      "pid_count": 70,
+      "relation_set_definition": "same 200->400 fixed difficult K_pid=5 graph; masks are the only difference",
+      "gradient_cosine_vs_T0": 0.1580153521361203
+    }
+  ],
+  "optimizer_step_executed": false,
+  "network_parameter_gradient": false,
+  "batch_hard_miner_log_available": false,
+  "interpretation": "T0=T1 and T2=T5 are intentionally identical when their relation set/mask is identical; different gradients alone are not claimed as innovation"
+}

@@ -1,0 +1,51 @@
+{
+  "status": "PASS_REACTIVE_PROTECTION_SAFETY_PROBE",
+  "cases": [
+    {
+      "case": "improved",
+      "loss": 0.0,
+      "finite": true,
+      "gradient": [
+        -0.0,
+        -0.0
+      ]
+    },
+    {
+      "case": "unchanged",
+      "loss": 0.0,
+      "finite": true,
+      "gradient": [
+        -0.0,
+        -0.0
+      ]
+    },
+    {
+      "case": "degraded",
+      "loss": 0.2,
+      "finite": true,
+      "gradient": [
+        -0.5,
+        -0.5
+      ]
+    },
+    {
+      "case": "mixed_nan",
+      "loss": 0.25,
+      "finite": true,
+      "gradient": [
+        -0.0,
+        -1.0
+      ]
+    },
+    {
+      "case": "all_nonfinite_safe_zero",
+      "loss": 0.0,
+      "finite": true
+    }
+  ],
+  "optimizer_step_executed": false,
+  "reference_detached": true,
+  "improvement_zero_penalty": true,
+  "degradation_positive_penalty": true,
+  "nan_safe_without_sum_zero": true
+}

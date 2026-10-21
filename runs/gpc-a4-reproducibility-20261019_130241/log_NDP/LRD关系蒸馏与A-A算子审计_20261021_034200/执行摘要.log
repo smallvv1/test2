@@ -1,0 +1,12 @@
+运行标识：20261021_034200
+参考远端提交：5cdb8bdc2af703fd42e9c9105e0a2107d3464cf4
+
+本轮未执行NDP参数更新、30 epoch或60 epoch训练。
+
+A/A单卡算子探针：seed1234、4321均完成AMP0/AMP1，found_inf=0，optimizer step仅用于诊断，未保存checkpoint；首个批次GPC关系数为0。第1步forward和loss相同，反向在block22内部出现可测差异。
+
+双PPU DDP归约探针：完成。DDP梯度与显式平均余弦约0.999998至1；rank-local梯度哈希不一致，故A/A仍FAIL。
+
+LRD-A/B/C离线审计：完成。使用LTCC train-only固定4正/20负候选。完整KL中大量差异来自组内关系形状，存在过约束证据。LRD-A/B/C单元测试PASS；这不等于算法效果PASS。
+
+结论：A/A_REPRODUCIBILITY=FAIL；NDP_LRD_MECHANISM=INCONCLUSIVE；NDP_SHORT_PILOT=NO_GO。

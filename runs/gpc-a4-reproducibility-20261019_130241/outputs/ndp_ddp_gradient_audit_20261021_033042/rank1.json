@@ -1,0 +1,27 @@
+{
+  "rank": 1,
+  "local_rank": 1,
+  "seed": 1234,
+  "world_size": 2,
+  "checkpoint_sha256": "e11c90b63d7252f0fde99439bb1d5a6f1d72e757d43143fe9ac92061e2411177",
+  "batch_hash": "334c7d144d156fabb96e281cacbd7df5da0e88392d89e24b1f4c8433b54e63a2",
+  "selected_relation_count": 0,
+  "local_loss": 6.565601348876953,
+  "ddp_loss": 6.565601348876953,
+  "local_grads": {
+    "patch_embed.proj.weight": "f309c13f064e47c55ab826f87a4815a4bad6901d81965e532d9ddd9c99730b3b",
+    "blocks.0.attn.q_proj.weight": "5dd59043207bfafb1f3394a8f9b05957fb90ac33b398e79fc2a8b6eb6cf13eaa",
+    "blocks.11.attn.q_proj.weight": "c3d5f425c0e84b6365bde60c858e1d615e82ac190097133101cbe621dace39ab",
+    "blocks.22.attn.q_proj.weight": "f385f12dd5ca42ffaa231ef9fab3afb50d6f522896bad3ff6592aa675427178d",
+    "head.weight": "b85aa82d8b84b8b094a63bd71a7a72ade0b8c41f7bc9d52208d7e9bd73473f5c"
+  },
+  "ddp_grads": {
+    "patch_embed.proj.weight": "1395ae2cc10502ea2f02773d48badf93af6d99387e1b5e03a882222def55be57",
+    "blocks.0.attn.q_proj.weight": "90bfe6b8b7bf595df0f3ee1ccab035c8a96656241891dac561a29476136df60d",
+    "blocks.11.attn.q_proj.weight": "906504019e54d36d83dba5725ed033a11a5eb7a934d44648cefb445dbc52351c",
+    "blocks.22.attn.q_proj.weight": "bae75fcf2557b0c61c3551eb65c3ff5eaf7beac57676699ff82568b6d202e1f4",
+    "head.weight": "8894da3936d12b8c39d8285d6f5af63b344cf8efeafbef776ee312f53af32a65"
+  },
+  "comparisons_rank0": null,
+  "gathered_rank0": null
+}

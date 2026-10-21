@@ -1,0 +1,198 @@
+{
+  "status": "PASS_WITH_LIMITED_FEATURES",
+  "rows": [
+    {
+      "seed": 1234,
+      "rows": 211,
+      "all_transition_rows": 320,
+      "pid_count": 18,
+      "event": "next-transition true boundary flip; previous margin > 0",
+      "available_methods": {
+        "B0_current_hard_margin": {
+          "rows": 211,
+          "positive_count": 6,
+          "event_rate": 0.02843601895734597,
+          "roc_auc": 0.9682926829268292,
+          "average_precision": 0.423313492063492,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 22,
+            "precision": 0.2727272727272727,
+            "recall": 1.0,
+            "positive_count": 6,
+            "invalid_score_count": 0
+          }
+        },
+        "B2_previous_margin_drop": {
+          "rows": 211,
+          "positive_count": 6,
+          "event_rate": 0.02843601895734597,
+          "roc_auc": 0.359349593495935,
+          "average_precision": 0.026132663778707314,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 22,
+            "precision": 0.0,
+            "recall": 0.0,
+            "positive_count": 6,
+            "invalid_score_count": 0
+          }
+        },
+        "B3_history_drop_slope": {
+          "rows": 211,
+          "positive_count": 6,
+          "event_rate": 0.02843601895734597,
+          "roc_auc": 0.6308943089430894,
+          "average_precision": 0.05754250693126736,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 22,
+            "precision": 0.045454545454545456,
+            "recall": 0.16666666666666666,
+            "positive_count": 6,
+            "invalid_score_count": 0
+          }
+        },
+        "B7_static_sampled_hubness": {
+          "rows": 211,
+          "positive_count": 6,
+          "event_rate": 0.02843601895734597,
+          "roc_auc": 0.515040650406504,
+          "average_precision": 0.029443808901236584,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 22,
+            "precision": 0.0,
+            "recall": 0.0,
+            "positive_count": 6,
+            "invalid_score_count": 0
+          }
+        }
+      },
+      "not_run": {
+        "B1_nearest_negative_similarity": "缺少每个 continuation 节点的完整特征/负样本相似度",
+        "B4_temporal_history_stability": "已有历史 Jaccard 来自独立终点，不具在线时间有效性",
+        "B5_high_impostor_tail": "缺少每个 continuation 节点的全局负 PID 尾部特征",
+        "B6_bidirectional": "见独立 identity-pair 结果，不与单向 anchor 行直接混合"
+      }
+    },
+    {
+      "seed": 4321,
+      "rows": 201,
+      "all_transition_rows": 320,
+      "pid_count": 21,
+      "event": "next-transition true boundary flip; previous margin > 0",
+      "available_methods": {
+        "B0_current_hard_margin": {
+          "rows": 201,
+          "positive_count": 2,
+          "event_rate": 0.009950248756218905,
+          "roc_auc": 1.0,
+          "average_precision": 1.0,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 21,
+            "precision": 0.09523809523809523,
+            "recall": 1.0,
+            "positive_count": 2,
+            "invalid_score_count": 0
+          }
+        },
+        "B2_previous_margin_drop": {
+          "rows": 201,
+          "positive_count": 2,
+          "event_rate": 0.009950248756218905,
+          "roc_auc": 0.3844221105527638,
+          "average_precision": 0.015613422250449878,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 21,
+            "precision": 0.0,
+            "recall": 0.0,
+            "positive_count": 2,
+            "invalid_score_count": 0
+          }
+        },
+        "B3_history_drop_slope": {
+          "rows": 201,
+          "positive_count": 2,
+          "event_rate": 0.009950248756218905,
+          "roc_auc": 0.39949748743718594,
+          "average_precision": 0.01665303260488489,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 21,
+            "precision": 0.0,
+            "recall": 0.0,
+            "positive_count": 2,
+            "invalid_score_count": 0
+          }
+        },
+        "B7_static_sampled_hubness": {
+          "rows": 201,
+          "positive_count": 2,
+          "event_rate": 0.009950248756218905,
+          "roc_auc": 0.3492462311557789,
+          "average_precision": 0.009950248756218905,
+          "top10": {
+            "top_fraction": 0.1,
+            "top_count": 21,
+            "precision": 0.0,
+            "recall": 0.0,
+            "positive_count": 2,
+            "invalid_score_count": 0
+          }
+        }
+      },
+      "not_run": {
+        "B1_nearest_negative_similarity": "缺少每个 continuation 节点的完整特征/负样本相似度",
+        "B4_temporal_history_stability": "已有历史 Jaccard 来自独立终点，不具在线时间有效性",
+        "B5_high_impostor_tail": "缺少每个 continuation 节点的全局负 PID 尾部特征",
+        "B6_bidirectional": "见独立 identity-pair 结果，不与单向 anchor 行直接混合"
+      }
+    }
+  ],
+  "B6": [
+    {
+      "seed": 1234,
+      "rows": 28,
+      "identity_pair_count": 6,
+      "B6_bidirectional_boundary_margin": {
+        "positive_count": 3,
+        "event_rate": 0.10714285714285714,
+        "roc_auc": 0.76,
+        "average_precision": 0.2452380952380952,
+        "top10": {
+          "top_fraction": 0.1,
+          "top_count": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "positive_count": 3,
+          "invalid_score_count": 0
+        }
+      }
+    },
+    {
+      "seed": 4321,
+      "rows": 28,
+      "identity_pair_count": 6,
+      "B6_bidirectional_boundary_margin": {
+        "positive_count": 0,
+        "event_rate": 0.0,
+        "roc_auc": null,
+        "average_precision": null,
+        "top10": {
+          "top_fraction": 0.1,
+          "top_count": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "positive_count": 0,
+          "invalid_score_count": 0
+        }
+      }
+    }
+  ],
+  "future_leakage_control": "all scores use previous node/fixed relation; target only labels",
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false
+}

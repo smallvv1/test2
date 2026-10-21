@@ -1,0 +1,34 @@
+{
+  "run_time": "20261021_094250",
+  "project": "/home/DIFFER",
+  "remote_main_audited": "7007f434f725cd20111bc9f8894ca6e2c59bc471",
+  "data_checkout_observed": "/data/DIFFER HEAD=573b050 (dirty; not used for this offline analysis)",
+  "execution_python": "/usr/local/bin/python3.10",
+  "model_compute_executed": false,
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "gpc_v1_modified": false,
+  "input_trajectory": "/home/DIFFER/outputs/ndp_overnight_recovery_20261021_024248/trajectory_seed{1234,4321}/activation_audit/activation_rows.csv",
+  "fixed_groups": "/home/DIFFER/outputs/ndp_overnight_recovery_20261021_024248/trajectory_seed{1234,4321}/activation_audit/fixed_diagnostic_groups.json",
+  "metadata": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/feature_banks/seed{1234,4321}/gpc_feature_bank.npz",
+  "nodes": [0, 20, 50, 100, 200, 400],
+  "relation_scope": "每个 seed 固定 64 组关系，5 个转移区间，共 320 条转移",
+  "thresholds": {
+    "persistent_and_onset": 0.02,
+    "increment": 0.02,
+    "flip": "M_prev > 0 and M_target <= 0"
+  },
+  "commands": [
+    "/usr/local/bin/python3.10 -u scripts/ndp_future_boundary_risk.py ...",
+    "/usr/local/bin/python3.10 -u scripts/ndp_bidirectional_boundary_audit.py ...",
+    "/usr/local/bin/python3.10 -u scripts/ndp_risk_predictor_comparison.py ...",
+    "/usr/local/bin/python3.10 -u scripts/ndp_future_boundary_cluster_bootstrap.py ...",
+    "/usr/local/bin/python3.10 -u tests/test_ndp_future_boundary.py",
+    "/usr/local/bin/python3.10 -u scripts/tests/test_ndp_risk_modules.py"
+  ],
+  "tests": {
+    "future_boundary": "PASS",
+    "existing_ndp_risk_modules": "PASS"
+  },
+  "status": "OFFLINE_ANALYSIS_COMPLETE_WITH_LIMITED_COVERAGE"
+}

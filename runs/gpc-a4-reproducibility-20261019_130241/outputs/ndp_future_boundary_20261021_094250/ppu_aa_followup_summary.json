@@ -1,0 +1,21 @@
+{
+  "status": "UNRESOLVED",
+  "aa_reproducibility": "FAIL",
+  "new_ppu_operator_run": false,
+  "reason": "本轮禁止新增 optimizer-step；已有算子级证据足以保留门禁 FAIL，本轮只做只读复核与离线预测分析",
+  "evidence": {
+    "forward_loss_step1": "一致",
+    "first_observable_backward_difference": "EVA02 blocks.22.norm1 / blocks.22.attn.q_proj 反向路径",
+    "found_inf": 0,
+    "amp_skip": 0,
+    "seed1234_selected_parameter_relative_l2": 0.00383,
+    "seed4321_selected_parameter_relative_l2": 0.00453,
+    "ddp_local_before_allreduce": "已观察到差异",
+    "single_kernel_root_cause": "未定位"
+  },
+  "source_reports": [
+    "/home/DIFFER/reports/NDP_AA_OPERATOR_LEVEL_AUDIT_20261021_034200.md",
+    "/home/DIFFER/reports/NDP_AA_OPERATOR_RECHECK_20261021_041500.md"
+  ],
+  "allowed_conclusion": "不得用本轮离线结果宣称新增 NDP 的 optimizer-step 因果收益"
+}

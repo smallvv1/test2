@@ -1,0 +1,13 @@
+运行标识：20261021_041500
+远端参考提交：7dcac40f556ef389c4cca7736d1f66396a66353f
+
+完成：LRD-C float64 数学单测、逐Anchor危险关系复核、NDP-DBP离线原型、DBP单测、两个Seed的float64候选梯度矩阵、seed4321 block22内部A/A探针。
+
+关键结果：55/41个可靠参考边界翻转准确复现；其中Q+提升25/14个。LRD-A在这些样本上漏检部分边界翻转，LRD-C全部产生非零KL但对Q+提升样本施加反向拉回；DBP捕获52/38个。
+
+最终状态：A/A_REPRODUCIBILITY=FAIL；LRD_C_EQUIVALENCE=CONFIRMED；NDP_DBP_MECHANISM=INCONCLUSIVE；CONTROLLED_SHORT_PILOT=NO_GO。
+
+未启动NDP参数更新或长程训练。原始GPC-v1未修改。
+
+复核补充：余弦审计改为显式float64点积与L2范数，未使用clamp；最大超界为5.35e-14（seed1234）和3.64e-14（seed4321），属于舍入量级。重新生成了两个Seed的候选梯度JSON。
+新增/复核脚本：ndp_lrd_gradient_mechanism_audit.py SHA256=ca1bb7d96b7e92a2b8f1f44b606acbc0c9c6fd156df1291e75044ba3fdbf8ada。

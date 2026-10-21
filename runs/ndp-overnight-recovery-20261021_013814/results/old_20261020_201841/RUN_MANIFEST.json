@@ -1,0 +1,21 @@
+{
+  "continuation_source": "/home/DIFFER/scripts/ndp_continuation_trajectory.py",
+  "cpu_model_fallback": false,
+  "git_reference": "b7464735c3cd85b71a60b6a195aaf644d5c4a5b2",
+  "gpc_v1_modified": false,
+  "max_seconds": 28800,
+  "ndp_optimizer_step_allowed_only_after_gates": true,
+  "official_query_gallery_used": false,
+  "probe_source": "/home/DIFFER/scripts/ndp_live_ppu_gradient_probe.py",
+  "project": "/home/DIFFER",
+  "run_time": "20261020_201841",
+  "stages": [
+    "stage0_probe_audit",
+    "stage1_state_audit",
+    "stage2_base_continuation",
+    "stage3_activation_audit",
+    "stage4_gradient_probe",
+    "stage5_short_intervention"
+  ],
+  "started_utc": "2026-10-20T12:18:41Z"
+}

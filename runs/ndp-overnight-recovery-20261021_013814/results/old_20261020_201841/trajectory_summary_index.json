@@ -1,0 +1,44 @@
+{
+  "generated_utc": "2026-10-20T12:31:45.639319+00:00",
+  "run_time": "20261020_201841",
+  "seed_stats": [
+    {
+      "active_gpc_batches": 46,
+      "active_gpc_rate": 0.115,
+      "all_parameters_finite": true,
+      "batch_rows": 400,
+      "effective_updates": 400,
+      "found_inf_steps": 0,
+      "lr_values": [
+        "2e-07"
+      ],
+      "nonzero_gpc_loss_batches": 46,
+      "path": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed1234/trajectory_steps.csv",
+      "scale_values": [
+        "128.0"
+      ],
+      "seed": 1234,
+      "selected_relation_sum_rank0_log": 50,
+      "sha256": "96f4d4f0ec6017ce02045d454b0fc7361bef86b71e3c42a0681a3f0b1857d88a"
+    },
+    {
+      "active_gpc_batches": 47,
+      "active_gpc_rate": 0.1175,
+      "all_parameters_finite": true,
+      "batch_rows": 400,
+      "effective_updates": 400,
+      "found_inf_steps": 0,
+      "lr_values": [
+        "2e-07"
+      ],
+      "nonzero_gpc_loss_batches": 47,
+      "path": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed4321/trajectory_steps.csv",
+      "scale_values": [
+        "256.0"
+      ],
+      "seed": 4321,
+      "selected_relation_sum_rank0_log": 48,
+      "sha256": "d185ad0220216bed2daf355f7331570f4ec98ca1ca6eebf4e7246b9c662703fc"
+    }
+  ]
+}

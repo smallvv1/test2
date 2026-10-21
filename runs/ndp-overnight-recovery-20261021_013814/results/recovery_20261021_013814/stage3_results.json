@@ -1,0 +1,10 @@
+[
+  {
+    "child_log": "/home/DIFFER/outputs/ndp_overnight_recovery_20261021_013814/logs/NDP真实轨迹激活_seed1234_20261021_013814.log",
+    "returncode": 1,
+    "seed": 1234,
+    "status": "FAILED",
+    "summary": "/home/DIFFER/outputs/ndp_overnight_recovery_20261021_013814/trajectory_seed1234/activation_audit/activation_summary.json",
+    "summary_exists": false
+  }
+]

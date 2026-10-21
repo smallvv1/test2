@@ -1,0 +1,8 @@
+{
+  "next_stage": "NO_GO",
+  "reason": "seed1234 阶段3失败，停止后续 seed；returncode=1",
+  "run_time": "20261021_013814",
+  "stage3": "FAILED",
+  "stage4": "NOT_RUN",
+  "stage5": "NOT_RUN"
+}

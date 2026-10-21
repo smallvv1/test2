@@ -1,0 +1,1 @@
+rank,batch_index,epoch_tag,iteration,global_step,effective_updates,scale_before,scale_after,found_inf,step_executed

@@ -1,0 +1,18 @@
+{
+  "effective_updates": {
+    "1234": 400,
+    "4321": 400
+  },
+  "finished_utc": "2026-10-20T12:31:45.638705+00:00",
+  "latest_artifact": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/failure_events.json",
+  "reason": "激活审计 harness 的双重 install_protocol/loader_v2 remap 缺陷未修复；按止损规则不再重试。",
+  "run_time": "20261020_201841",
+  "stage": "stage3_activation_audit",
+  "stage0": "PASS",
+  "stage1": "PASS",
+  "stage2": "PASS_BASE_CONTINUATION",
+  "stage3": "BLOCKED",
+  "stage4": "NOT_RUN",
+  "stage5": "NOT_RUN",
+  "status": "BLOCKED_TECHNICAL_AFTER_TWO_RECOVERIES"
+}

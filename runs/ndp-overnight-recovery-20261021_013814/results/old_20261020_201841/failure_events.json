@@ -1,0 +1,26 @@
+{
+  "events": [
+    {
+      "cause": "训练脚本使用错误的 common_init 模块路径；phase5b_id_damage_ds 没有 load_common_init，随后改用 v2.b6.load_common_init。",
+      "log": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/logs/NDP基础轨迹_seed1234_201841.log",
+      "returncode": 1,
+      "stage": "stage2_seed1234_initial",
+      "status": "RECOVERED"
+    },
+    {
+      "cause": "固定采样组构造触发 /data/DIFFER/scripts/gpc_v2_train.py:218 的 KeyError: 9，未进入 EVA02 前向。",
+      "log": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/logs/NDP真实轨迹激活_seed1234_20261020_201841.log",
+      "returncode": 1,
+      "stage": "stage3_seed1234_initial",
+      "status": "FAILED"
+    },
+    {
+      "cause": "active_state 修复后仍触发 KeyError: 9；根因为 choose_groups 再次调用 install_protocol，导致 loader_v2 嵌套并对 covered_pids 二次 remap。达到两次恢复上限，停止阶段3。",
+      "log": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/logs/NDP真实轨迹激活_seed1234_20261020_201841_恢复1.log",
+      "returncode": 1,
+      "stage": "stage3_seed1234_recovery1",
+      "status": "FAILED"
+    }
+  ],
+  "run_time": "20261020_201841"
+}

@@ -1,0 +1,16 @@
+{
+  "decisions": {
+    "GRADIENT_INCREMENTALITY": "GRADIENT_INCREMENTALITY_UNRESOLVED",
+    "LIVE_PPU_BACKWARD": "LIVE_PPU_BACKWARD_PASS",
+    "LIVE_PPU_FORWARD": "LIVE_PPU_FORWARD_PASS",
+    "NDP_TENSOR_ACTIVATION": "NDP_TENSOR_ACTIVATION_PASS",
+    "NEIGHBOR_GRAPH_AUDIT": "NEIGHBOR_GRAPH_AUDIT_PASS",
+    "PYTHON_ENV": "PYTHON_ENV_PASS",
+    "REAL_TRAJECTORY_ACTIVATION": "REAL_TRAJECTORY_ACTIVATION_UNVERIFIED",
+    "SHORT_PILOT": "SHORT_PILOT_NOT_READY"
+  },
+  "manifest": "/home/DIFFER/outputs/ndp_live_ppu_gradient_probe_20261020_191922/manifest.json",
+  "passed": true,
+  "source_sha256": "a621b521d555d0cbf8a263c5fe43cee9efc996baff81f06075cb476f55287636",
+  "summary": "/home/DIFFER/outputs/ndp_live_ppu_gradient_probe_20261020_191922/ndp_live_ppu_gradient_probe.json"
+}

@@ -1,0 +1,16 @@
+{
+  "cpu_model_fallback": false,
+  "model_computation": "PPU-ZW810E only",
+  "official_query_gallery_used": false,
+  "old_stage0": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/stage0_probe_audit.json",
+  "old_stage1": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/stage1_state_audit.json",
+  "optimizer_step_executed": false,
+  "python": "/usr/local/bin/python3.10",
+  "python_unbuffered": true,
+  "run_time": "20261021_013814",
+  "source_run": "/home/DIFFER/outputs/ndp_overnight_20261020_201841",
+  "source_script": "/home/DIFFER/scripts/ndp_real_trajectory_activation.py",
+  "source_script_sha256": "8c43e4e32e651fd71fb11a970d504957f707989cdf610ac4f39198399af6a500",
+  "stage": "stage3_activation_audit_only",
+  "started_utc": "2026-10-21T01:38:29Z"
+}

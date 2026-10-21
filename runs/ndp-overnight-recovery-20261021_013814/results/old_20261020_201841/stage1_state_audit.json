@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "seeds": {
+    "1234": {
+      "arm_manifest_sha256": "0e9149a1157b612e18d8fd3999941a78bad8f18fa464def2601408005de2b42d",
+      "complete_state": true,
+      "epoch": 60,
+      "global_step": 35760,
+      "manifest_sha256": "1b3f7bff0c356be5e82a5f8d97ccebfe90119ece1829806ff46b8f9111133541",
+      "rank_state_sha256": {
+        "rank0": "e11c90b63d7252f0fde99439bb1d5a6f1d72e757d43143fe9ac92061e2411177",
+        "rank1": "9d6ff70981a594c0ad41f36c1d06b41926cc0f7f604fd787f5d4a00124651be0"
+      },
+      "run_dir": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed1234"
+    },
+    "4321": {
+      "arm_manifest_sha256": "698d19e24d5874ed2615e850a867e68803dafd425aee984f38fa1fbd5629f594",
+      "complete_state": true,
+      "epoch": 60,
+      "global_step": 35760,
+      "manifest_sha256": "30917f2d1c8df4f00484d94d4e5f722cc21d1e1e600784e1a307a28e41fa05d4",
+      "rank_state_sha256": {
+        "rank0": "d69859975ae386f82bebd05d944633e962cc377f73f55599eb685128a09637a7",
+        "rank1": "56b12b36f2b82aa3c85911f8c43d27ae8c344ac299ec4d432c2379af1ed9b883"
+      },
+      "run_dir": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321"
+    }
+  },
+  "split": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/development_split_manifest.json",
+  "split_sha256": "266786038e96fc87ce0b3ddced692d808064dfecc5228122c58d482158a90594"
+}

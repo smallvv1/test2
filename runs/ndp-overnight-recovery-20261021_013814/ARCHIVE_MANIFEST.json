@@ -1,0 +1,236 @@
+{
+  "run_time": "20261021_013814",
+  "source_run": "20261020_201841",
+  "generated_utc": "2026-10-21T01:39:51.947834+00:00",
+  "excluded": [
+    "checkpoint",
+    "dataset",
+    "caption feature",
+    "full feature bank",
+    "private key",
+    "token",
+    "secret"
+  ],
+  "files": [
+    {
+      "path": "logs/NDP基础轨迹_seed1234_201841.log",
+      "bytes": 3529,
+      "sha256": "f090278941c16c71f4829d3f558e7d33241ef183b7d82cc82a30e3a0953edc68"
+    },
+    {
+      "path": "logs/NDP基础轨迹_seed1234_201841_recovery1.log",
+      "bytes": 31339,
+      "sha256": "d7e3a2ae21b90d98e92015774b6056f176cf12af6aff58ab1a215940195906a1"
+    },
+    {
+      "path": "logs/NDP基础轨迹_seed4321_201841.log",
+      "bytes": 31339,
+      "sha256": "659b98bc30f6bafa6a550f4f68a0bdd44afd2c98ab723ada889b786e31074d4c"
+    },
+    {
+      "path": "logs/NDP夜间恢复阶段3_20261021_013814.log",
+      "bytes": 1218,
+      "sha256": "c0f5ed5c56ebf081b5ead0b21a61b55681d77a803284f28b5a3bb1388f688995"
+    },
+    {
+      "path": "logs/NDP真实轨迹激活_seed1234_20261020_201841.log",
+      "bytes": 814,
+      "sha256": "52cad09d120d6f08eab4358f7b2b199ac8fe183db1e245045ed493b5534f488a"
+    },
+    {
+      "path": "logs/NDP真实轨迹激活_seed1234_20261020_201841_恢复1.log",
+      "bytes": 814,
+      "sha256": "77e59587dfb57c20ddc8607d41922f81e6eb0b0274f16907b8b4ffd8930e1972"
+    },
+    {
+      "path": "logs/NDP真实轨迹激活_seed1234_20261021_013814.log",
+      "bytes": 397,
+      "sha256": "3b5e366012b1b1fad0ffed2c62df4d87d4b434ff8816e655b5e385063ee440d7"
+    },
+    {
+      "path": "reports/NDP_LOGGING_ROOT_CAUSE.md",
+      "bytes": 1291,
+      "sha256": "1bffd9ee66db8ea5e7d50e76765cd578e8cd2b29421e66323e6f2c127386b0c6"
+    },
+    {
+      "path": "reports/NDP_OVERNIGHT_FORENSIC_AUDIT.md",
+      "bytes": 1399,
+      "sha256": "823941800efb619f8a5553c300e4659024c7e6b10123f9bdd9a6224d29b95850"
+    },
+    {
+      "path": "reports/NDP_OVERNIGHT_NEXT_STAGE_DECISION.md",
+      "bytes": 878,
+      "sha256": "64e1012b65c2ce86acd1c7228858338a8facfb8da0a6ea2ca8067fd61b69fcd4"
+    },
+    {
+      "path": "reports/NDP_OVERNIGHT_STAGE_RECOVERY.md",
+      "bytes": 1167,
+      "sha256": "d3551c69148f45df8ce1a771f67e9695bcbdec6d209c95bbf91515184037a560"
+    },
+    {
+      "path": "reports/NDP_REAL_ACTIVATION_AND_GRADIENT.md",
+      "bytes": 678,
+      "sha256": "ecfda25e3ce80c94a5e0ae5904ccd7283cf7a17b7053b19e639164c5c2b227a9"
+    },
+    {
+      "path": "reports/NDP_REAL_TRAJECTORY_RESULTS.md",
+      "bytes": 909,
+      "sha256": "84247024e2b0058d9f534585a1d79e95dd0448a199c88f5025d0d50424e1b185"
+    },
+    {
+      "path": "reports/NDP_SHORT_INTERVENTION_RESULTS.md",
+      "bytes": 385,
+      "sha256": "28f2e642fd87054c1affe1fcfe6f5373edb8f228f228cfff1e07394cccb41f1f"
+    },
+    {
+      "path": "results/old_20261020_201841/FINAL_DECISION.json",
+      "bytes": 540,
+      "sha256": "b994dc45c7a53617c382cf3cd679c5df93c6dd9e92feb37789ae85f324393e3e"
+    },
+    {
+      "path": "results/old_20261020_201841/RUN_MANIFEST.json",
+      "bytes": 695,
+      "sha256": "80a2c02af14c1a19f141270120ed5058c138ce72edf1906bf36763d79ffbc4d1"
+    },
+    {
+      "path": "results/old_20261020_201841/failure_events.json",
+      "bytes": 1242,
+      "sha256": "473f5212f9eb5791ea8c233b50fc054f50b67b2259697db6d5687f8581b27311"
+    },
+    {
+      "path": "results/old_20261020_201841/heartbeat.json",
+      "bytes": 142,
+      "sha256": "7760b4d0f1884e57d28fef48ea0da6dcb5b385ff7390c1f4b4c5fc30c2a6d1db"
+    },
+    {
+      "path": "results/old_20261020_201841/stage0_probe_audit.json",
+      "bytes": 780,
+      "sha256": "245af1c5f9375eab5f5d317317cf00ec00ecfa68d37c7ede82bf7df7c79c679b"
+    },
+    {
+      "path": "results/old_20261020_201841/stage1_state_audit.json",
+      "bytes": 1405,
+      "sha256": "d89b3f464aa0c18f6f170331bfecd6ebc7d9cb7dc022ed053f870fd6e250f644"
+    },
+    {
+      "path": "results/old_20261020_201841/stage3_results.json",
+      "bytes": 331,
+      "sha256": "e69fe12b802498c6a37f98a57f8fdee85428aadf1b3cd9812f5bad84f61c4417"
+    },
+    {
+      "path": "results/old_20261020_201841/stage3_status.json",
+      "bytes": 425,
+      "sha256": "8029354ec251c2a7959bbaff12199cd6611038b105523223d69b11bf867cff24"
+    },
+    {
+      "path": "results/old_20261020_201841/stage_status.json",
+      "bytes": 615,
+      "sha256": "66c80c087d0c87de36cd48231f21eb481360f77a5ee0a46d12c98426a7a1ae03"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed1234/amp_events.csv",
+      "bytes": 117,
+      "sha256": "9723d35df6031d7bfd6cd66b8a4f50fe5b59270af7c6bf04aa293f8caecf4b3e"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed1234/continuation_manifest.json",
+      "bytes": 6754,
+      "sha256": "a733de5a2a66f907fdc9940c459ae06387510f75aaa30f93cb7292913d4d42c1"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed1234/saved_nodes.json",
+      "bytes": 2591,
+      "sha256": "364a9087dd42b0dd764383f2a23d19575b155040b7df7267fc9ec6498db5e942"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed1234/trajectory_steps.csv",
+      "bytes": 59746,
+      "sha256": "96f4d4f0ec6017ce02045d454b0fc7361bef86b71e3c42a0681a3f0b1857d88a"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed1234/trajectory_summary.json",
+      "bytes": 2875,
+      "sha256": "82bd56ad2782a2b22b75013fd584fa36647cbfdfa628d616ad38bd7c5e927a66"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed4321/amp_events.csv",
+      "bytes": 117,
+      "sha256": "9723d35df6031d7bfd6cd66b8a4f50fe5b59270af7c6bf04aa293f8caecf4b3e"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed4321/continuation_manifest.json",
+      "bytes": 6754,
+      "sha256": "56f2d9c012baa2032ea1bce5b42f5330105f64dcee7454f140d1a3624240cb4d"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed4321/saved_nodes.json",
+      "bytes": 2591,
+      "sha256": "87b23fffce0fabd292ea11f7140db29b4d104c2ddb9a661ed39f29393c1a4d93"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed4321/trajectory_steps.csv",
+      "bytes": 59695,
+      "sha256": "d185ad0220216bed2daf355f7331570f4ec98ca1ca6eebf4e7246b9c662703fc"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_seed4321/trajectory_summary.json",
+      "bytes": 2875,
+      "sha256": "280ecdf9c647225ad1400a8246ab8f8b323f778d26ab7039de8fc0f051480eb7"
+    },
+    {
+      "path": "results/old_20261020_201841/trajectory_summary_index.json",
+      "bytes": 1292,
+      "sha256": "2130731ce5f313046e276210ea2dd19e33df4396e79fc4488b94de48e56e1f9c"
+    },
+    {
+      "path": "results/recovery_20261021_013814/FINAL_DECISION.json",
+      "bytes": 202,
+      "sha256": "7eb5a296949e8660a395a33f96a084d46f9db418deb7881b69ab3f3eb9c0bb39"
+    },
+    {
+      "path": "results/recovery_20261021_013814/RUN_MANIFEST.json",
+      "bytes": 768,
+      "sha256": "ed66808af4f26b6c20073924a43826473f75d5dd718c38acb5b232958555fae4"
+    },
+    {
+      "path": "results/recovery_20261021_013814/failure_events.json",
+      "bytes": 697,
+      "sha256": "74b4a60264d7d903d75ff2d7a80ee53553c8044d24d6f4a3bfb9b0225631e681"
+    },
+    {
+      "path": "results/recovery_20261021_013814/heartbeat.json",
+      "bytes": 607,
+      "sha256": "73e8c6b979b4639b655ab7b24d331c827600372990fd5a5a664ce63ca8bf1020"
+    },
+    {
+      "path": "results/recovery_20261021_013814/stage3_results.json",
+      "bytes": 378,
+      "sha256": "1d58f474bad8e8929ca3051a2c760c57e3fbc3a236606f4938e932ad1221e1eb"
+    },
+    {
+      "path": "results/recovery_20261021_013814/stage_status.json",
+      "bytes": 607,
+      "sha256": "73e8c6b979b4639b655ab7b24d331c827600372990fd5a5a664ce63ca8bf1020"
+    },
+    {
+      "path": "src/finalize_ndp_overnight.py",
+      "bytes": 4843,
+      "sha256": "88e724f975a93c3c98f83fd96832791901080e7143405ab23be7a6141fe0b421"
+    },
+    {
+      "path": "src/ndp_overnight_recovery_stage3.py",
+      "bytes": 7018,
+      "sha256": "f2a8e6b4dec042ae788393663defc5381327e3343bcddb78c5b20c53764a29db"
+    },
+    {
+      "path": "src/ndp_overnight_supervisor.py",
+      "bytes": 11666,
+      "sha256": "ef7c33560adc9272d0640caf5f71d7c9aeae60c063342944d9e2f98b44a554fa"
+    },
+    {
+      "path": "src/ndp_real_trajectory_activation.py",
+      "bytes": 10941,
+      "sha256": "8c43e4e32e651fd71fb11a970d504957f707989cdf610ac4f39198399af6a500"
+    }
+  ]
+}

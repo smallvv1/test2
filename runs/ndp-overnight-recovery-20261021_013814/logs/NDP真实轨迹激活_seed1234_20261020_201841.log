@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_real_trajectory_activation.py", line 215, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_real_trajectory_activation.py", line 180, in main
+    groups, _protocol, path_to_index = choose_groups(dataset, split, args.seed, graph_path, run_dir)
+  File "/home/DIFFER/scripts/ndp_real_trajectory_activation.py", line 85, in choose_groups
+    loader, _meta = v2.base.make_epoch_loader(dataset, None, active_state, index_map, epoch, rank)
+  File "/data/DIFFER/scripts/gpc_v2_train.py", line 218, in loader_v2
+    meta["covered_pids"] = [remap[int(pid)] for pid in meta["covered_pids"]]
+  File "/data/DIFFER/scripts/gpc_v2_train.py", line 218, in <listcomp>
+    meta["covered_pids"] = [remap[int(pid)] for pid in meta["covered_pids"]]
+KeyError: 9

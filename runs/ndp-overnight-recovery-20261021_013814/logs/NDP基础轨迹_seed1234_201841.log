@@ -1,0 +1,52 @@
+
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/DIFFER/scripts/ndp_continuation_trajectory.py", line 339, in <module>
+[rank0]:     main()
+[rank0]:   File "/home/DIFFER/scripts/ndp_continuation_trajectory.py", line 185, in main
+[rank0]:     common_state, _init_audit = base.load_common_init()
+[rank0]: AttributeError: module 'phase5b_id_damage_ds' has no attribute 'load_common_init'. Did you mean: 'build_common_init'?
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/DIFFER/scripts/ndp_continuation_trajectory.py", line 339, in <module>
+[rank1]:     main()
+[rank1]:   File "/home/DIFFER/scripts/ndp_continuation_trajectory.py", line 185, in main
+[rank1]:     common_state, _init_audit = base.load_common_init()
+[rank1]: AttributeError: module 'phase5b_id_damage_ds' has no attribute 'load_common_init'. Did you mean: 'build_common_init'?
+[rank0]:[W1020 20:19:02.574187513 ProcessGroupNCCL.cpp:1496] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+W1020 20:19:03.317000 853339 site-packages/torch/distributed/elastic/multiprocessing/api.py:897] Sending process 853414 closing signal SIGTERM
+E1020 20:19:03.432000 853339 site-packages/torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 853413) of binary: /usr/local/bin/python3.10
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/local/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/run.py", line 922, in <module>
+    main()
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/run.py", line 918, in main
+    run(args)
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/run.py", line 909, in run
+    elastic_launch(
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/usr/local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/home/DIFFER/scripts/ndp_continuation_trajectory.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-10-20_20:19:03
+  host      : nb-695386d801a3d04b75-7754bfbc9c-mr986
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 853413)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

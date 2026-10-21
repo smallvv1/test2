@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_real_trajectory_activation.py", line 216, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_real_trajectory_activation.py", line 181, in main
+    groups, _protocol, path_to_index = choose_groups(dataset, split, args.seed, graph_path, run_dir, protocol)
+NameError: name 'protocol' is not defined. Did you mean: '_protocol'?

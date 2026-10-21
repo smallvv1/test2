@@ -1,0 +1,210 @@
+{
+  "status": "PASS_PPU_READONLY_TRIPLET_RAW_FEATURE_ALIGNMENT",
+  "seed": 4321,
+  "epoch": 60,
+  "rank": 0,
+  "device": "cuda:0",
+  "torch": "2.6.0",
+  "checkpoint": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/rank0_state_epoch060.pt",
+  "checkpoint_sha256": "d69859975ae386f82bebd05d944633e962cc377f73f55599eb685128a09637a7",
+  "batch_size": 8,
+  "batch_ids": [
+    8218,
+    8365,
+    8649,
+    8485,
+    6126,
+    6135,
+    3148,
+    3140
+  ],
+  "batch_meta": [
+    {
+      "local": 0,
+      "image_index": 8218,
+      "pid": 69,
+      "clothes": 219,
+      "camid": 2,
+      "image_path": "/home/data/LTCC_ReID/train/136_1_c3_000233.png"
+    },
+    {
+      "local": 1,
+      "image_index": 8365,
+      "pid": 69,
+      "clothes": 222,
+      "camid": 1,
+      "image_path": "/home/data/LTCC_ReID/train/136_4_c2_000380.png"
+    },
+    {
+      "local": 2,
+      "image_index": 8649,
+      "pid": 71,
+      "clothes": 226,
+      "camid": 7,
+      "image_path": "/home/data/LTCC_ReID/train/140_3_c8_002150.png"
+    },
+    {
+      "local": 3,
+      "image_index": 8485,
+      "pid": 71,
+      "clothes": 224,
+      "camid": 2,
+      "image_path": "/home/data/LTCC_ReID/train/140_1_c3_001988.png"
+    },
+    {
+      "local": 4,
+      "image_index": 6126,
+      "pid": 55,
+      "clothes": 160,
+      "camid": 8,
+      "image_path": "/home/data/LTCC_ReID/train/115_4_c9_004218.png"
+    },
+    {
+      "local": 5,
+      "image_index": 6135,
+      "pid": 55,
+      "clothes": 160,
+      "camid": 8,
+      "image_path": "/home/data/LTCC_ReID/train/115_4_c9_004227.png"
+    },
+    {
+      "local": 6,
+      "image_index": 3148,
+      "pid": 24,
+      "clothes": 72,
+      "camid": 0,
+      "image_path": "/home/data/LTCC_ReID/train/050_1_c1_016052.png"
+    },
+    {
+      "local": 7,
+      "image_index": 3140,
+      "pid": 24,
+      "clothes": 72,
+      "camid": 11,
+      "image_path": "/home/data/LTCC_ReID/train/050_1_c12_016044.png"
+    }
+  ],
+  "model_output_dtype": "torch.float32",
+  "raw_feature": {
+    "shape": [
+      8,
+      1024
+    ],
+    "dtype": "torch.float32",
+    "device": "cuda:0",
+    "finite": true
+  },
+  "normalized_feature": {
+    "shape": [
+      8,
+      1024
+    ],
+    "dtype": "torch.float32",
+    "device": "cuda:0",
+    "finite": true
+  },
+  "raw_norm_min": 31.473005294799805,
+  "raw_norm_mean": 31.578384399414062,
+  "raw_norm_max": 31.748300552368164,
+  "raw_feature_sha256": "a4a79ad3e77c9409cc2da08436bb09d879150f1ca5ef17c771eebf2162dec7d9",
+  "normalized_feature_sha256": "66fbf0e6396a3c24e404d81e9a85925c9c04fa40038c68232edb44ed417a3527",
+  "triplet_raw": {
+    "loss": 1.2694972610916011e-05,
+    "dist_ap": [
+      28.64607810974121,
+      28.64607810974121,
+      21.41057777404785,
+      21.41057777404785,
+      18.320520401000977,
+      18.320520401000977,
+      14.098118782043457,
+      14.098118782043457
+    ],
+    "dist_an": [
+      40.80607604980469,
+      37.89472579956055,
+      37.89472579956055,
+      40.04298782348633,
+      39.63497543334961,
+      36.87230682373047,
+      36.87230682373047,
+      37.6981201171875
+    ],
+    "hard_positive_local": [
+      1,
+      0,
+      3,
+      2,
+      5,
+      4,
+      7,
+      6
+    ],
+    "hard_negative_local": [
+      7,
+      2,
+      1,
+      1,
+      6,
+      6,
+      5,
+      5
+    ],
+    "gradient_norm": 2.3079181119101122e-05,
+    "gradient_finite": true,
+    "gradient_sha256": "3bd1edc307c49b35e6e96a779f53bd1523fa8de6c490a1a01018881f1e8d1394"
+  },
+  "triplet_normalized": {
+    "loss": 0.45249342918395996,
+    "dist_ap": [
+      0.9063733816146851,
+      0.9063733816146851,
+      0.6748160123825073,
+      0.6748160123825073,
+      0.582092821598053,
+      0.582092821598053,
+      0.44745975732803345,
+      0.44745975732803345
+    ],
+    "dist_an": [
+      1.2928138971328735,
+      1.1961196660995483,
+      1.1961196660995483,
+      1.263116717338562,
+      1.2585631608963013,
+      1.1708176136016846,
+      1.1708176136016846,
+      1.197209358215332
+    ],
+    "hard_positive_local": [
+      1,
+      0,
+      3,
+      2,
+      5,
+      4,
+      7,
+      6
+    ],
+    "hard_negative_local": [
+      3,
+      2,
+      1,
+      1,
+      6,
+      6,
+      5,
+      5
+    ],
+    "gradient_norm": 0.33303895592689514,
+    "gradient_finite": true,
+    "gradient_sha256": "9b8ea31c6bd75f62d24b7b659cae36adfb7ec77ab49225145d4e25bc94d35442"
+  },
+  "raw_vs_norm_hard_positive_same": true,
+  "raw_vs_norm_hard_negative_same": false,
+  "original_training_input_contract": "make_loss calls TripletLoss(feat[0], target, normalize_feature=False); this probe preserves that raw path",
+  "normalized_bank_contract": "update0 full feature bank is a separate eval/no_grad normalized retrieval export, not assumed identical",
+  "optimizer_step_executed": false,
+  "model_parameters_gradients_requested": false,
+  "official_query_gallery_used": false
+}

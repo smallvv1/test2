@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_real_triplet_miner_coverage.py", line 309, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_real_triplet_miner_coverage.py", line 149, in main
+    anchor_any[anchor] = True; anchor_active[anchor] |= active
+UnboundLocalError: local variable 'active' referenced before assignment

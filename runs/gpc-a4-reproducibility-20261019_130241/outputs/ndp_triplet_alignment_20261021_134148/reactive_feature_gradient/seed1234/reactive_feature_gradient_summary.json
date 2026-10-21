@@ -1,0 +1,130 @@
+{
+  "status": "PASS_UPDATE200_REACTIVE_FEATURE_GRADIENT_AUDIT",
+  "seed": 1234,
+  "group_count": 159,
+  "valid_group_count": 159,
+  "updates": [
+    0,
+    20,
+    50,
+    100,
+    200,
+    400
+  ],
+  "masks": {
+    "G1_fixed_margin": {
+      "selected_relations": 159,
+      "active_relations": 105,
+      "all_candidate_active_relations": 105,
+      "loss": 0.12963125109672546,
+      "gradient_norm": 0.10104978084564209,
+      "gradient_finite": true,
+      "pid_count": 30,
+      "negative_pid_count": 143,
+      "flip_200_400_count": 5
+    },
+    "G2_reference_margin": {
+      "selected_relations": 3,
+      "active_relations": 3,
+      "all_candidate_active_relations": 6,
+      "loss": 0.009832542389631271,
+      "gradient_norm": 0.8526665568351746,
+      "gradient_finite": true,
+      "pid_count": 3,
+      "negative_pid_count": 3,
+      "flip_200_400_count": 0
+    },
+    "G4_current_hard_margin": {
+      "selected_relations": 61,
+      "active_relations": 61,
+      "all_candidate_active_relations": 105,
+      "loss": 0.27444854378700256,
+      "gradient_norm": 0.19255395233631134,
+      "gradient_finite": true,
+      "pid_count": 22,
+      "negative_pid_count": 58,
+      "flip_200_400_count": 5
+    },
+    "G5_reliable_vulnerable": {
+      "selected_relations": 8,
+      "active_relations": 1,
+      "all_candidate_active_relations": 6,
+      "loss": 0.00208861893042922,
+      "gradient_norm": 0.19291645288467407,
+      "gradient_finite": true,
+      "pid_count": 6,
+      "negative_pid_count": 7,
+      "flip_200_400_count": 0
+    },
+    "G6_reciprocal_image_relation": {
+      "selected_relations": 50,
+      "active_relations": 4,
+      "all_candidate_active_relations": 6,
+      "loss": 0.0031391321681439877,
+      "gradient_norm": 0.05958704277873039,
+      "gradient_finite": true,
+      "pid_count": 22,
+      "negative_pid_count": 50,
+      "flip_200_400_count": 2
+    },
+    "G7_reliable_vulnerable_reciprocal": {
+      "selected_relations": 0,
+      "active_relations": 0,
+      "all_candidate_active_relations": 6,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true,
+      "pid_count": 0,
+      "negative_pid_count": 0,
+      "flip_200_400_count": 0
+    },
+    "G3_random_count_matched_G5": {
+      "selected_relations": 8,
+      "active_relations": 6,
+      "all_candidate_active_relations": 105,
+      "loss": 0.2033982127904892,
+      "gradient_norm": 0.4452117085456848,
+      "gradient_finite": true,
+      "pid_count": 7,
+      "negative_pid_count": 8,
+      "flip_200_400_count": 1
+    },
+    "G0_batch_hard_reconstructed_proxy": {
+      "selected_relations": 0,
+      "active_relations": 0,
+      "all_candidate_active_relations": 159,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true,
+      "pid_count": 0,
+      "negative_pid_count": 0,
+      "flip_200_400_count": 0
+    }
+  },
+  "gradient_cosines": {
+    "G1_fixed_margin__G2_reference_margin": 0.19768831133842468,
+    "G1_fixed_margin__G4_current_hard_margin": 0.7772313952445984,
+    "G1_fixed_margin__G5_reliable_vulnerable": 0.0960564911365509,
+    "G1_fixed_margin__G6_reciprocal_image_relation": 0.30297061800956726,
+    "G1_fixed_margin__G3_random_count_matched_G5": 0.24477137625217438,
+    "G2_reference_margin__G4_current_hard_margin": 0.21556484699249268,
+    "G2_reference_margin__G5_reliable_vulnerable": 0.6033353209495544,
+    "G2_reference_margin__G6_reciprocal_image_relation": 0.2930830717086792,
+    "G2_reference_margin__G3_random_count_matched_G5": 0.0,
+    "G4_current_hard_margin__G5_reliable_vulnerable": 0.1313944309949875,
+    "G4_current_hard_margin__G6_reciprocal_image_relation": 0.26002204418182373,
+    "G5_reliable_vulnerable__G6_reciprocal_image_relation": 0.0,
+    "G3_random_count_matched_G5__G4_current_hard_margin": 0.2522294521331787,
+    "G3_random_count_matched_G5__G5_reliable_vulnerable": 0.0,
+    "G3_random_count_matched_G5__G6_reciprocal_image_relation": 0.12453310936689377
+  },
+  "feature_source": "/home/DIFFER/outputs/ndp_multipid_reconstruction_20261021_101900/feature_export/seed1234/trajectory_features_seed1234.npz",
+  "reference_update": 0,
+  "current_update": 200,
+  "validation_update": 400,
+  "network_parameter_gradient": false,
+  "feature_space_first_order_only": true,
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "interpretation": "update200前的信息选择关系；update400只用于验证标签；冻结特征梯度不等于网络训练收益"
+}

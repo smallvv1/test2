@@ -1,0 +1,55 @@
+{
+  "status": "PASS_SOFTMARGIN_FORMULA_CORRECTION",
+  "input": [
+    -20.0,
+    -2.0,
+    0.0,
+    2.0,
+    20.0
+  ],
+  "torch_loss": [
+    20.000000002061153,
+    2.1269280110429727,
+    0.6931471805599453,
+    0.1269280110429725,
+    2.061153620314381e-09
+  ],
+  "manual_loss": [
+    20.000000002061153,
+    2.1269280110429727,
+    0.6931471805599453,
+    0.1269280110429725,
+    2.061153620314381e-09
+  ],
+  "torch_grad": [
+    -0.9999999979388464,
+    -0.8807970779778824,
+    -0.5,
+    -0.11920292202211755,
+    -2.0611536181902033e-09
+  ],
+  "manual_grad": [
+    -0.9999999979388463,
+    -0.8807970779778823,
+    -0.5,
+    -0.11920292202211755,
+    -2.0611536181902037e-09
+  ],
+  "old_wrong_loss": [
+    2.061153620314381e-09,
+    0.1269280110429725,
+    0.6931471805599453,
+    2.1269280110429727,
+    20.000000002061153
+  ],
+  "loss_max_abs_error": 0.0,
+  "gradient_max_abs_error": 1.1102230246251565e-16,
+  "loss_direction_dan_increase": true,
+  "correct_derivative_negative": true,
+  "hard_factor": 0.0,
+  "euclidean_clip_min": 1e-12,
+  "self_positive_mask": "original hard_example_mining includes diagonal; max non-diagonal when batch has another same-PID image",
+  "active_threshold_is_reporting_only": true,
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false
+}

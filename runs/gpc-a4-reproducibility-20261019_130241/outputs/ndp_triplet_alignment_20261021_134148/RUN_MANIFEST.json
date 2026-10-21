@@ -1,0 +1,78 @@
+{
+  "run_time": "20261021_134148",
+  "status": "COMPLETED_OFFLINE_AUDIT_NO_OPTIMIZER_STEP",
+  "remote_main_checked": "0423469770dc90d85d6354667d4931d768c3235b",
+  "server_head": "573b0502a231568d509fe3a463664c1a3c42e258",
+  "python": "/usr/local/bin/python3.10",
+  "torch": "2.6.0",
+  "device_policy": "PPU/CUDA for model probes; CPU only for offline statistics",
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "decisions": {
+    "A/A_REPRODUCIBILITY": "FAIL",
+    "NDP_MECHANISM": "INCONCLUSIVE",
+    "CONTROLLED_SHORT_PILOT": "NO_GO"
+  },
+  "baseline_sha256": {
+    "/data/DIFFER/scripts/gpc_v2_train.py": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+    "/data/DIFFER/loss/make_loss.py": "9be543c08b50553a95839351929fa9341edf900947593fbd675c0e4847889043",
+    "/data/DIFFER/configs/ltcc/eva02_l_bio.yml": "c0589950b23885c334c64c85bd6db9803935765d0647e02c1bb74b5b5ae00b97"
+  },
+  "source_sha256": {
+    "/home/DIFFER/scripts/ndp_real_triplet_miner_coverage.py": "8c46665d0f9c782f99dc5199bd08de31e0d26e59c2e63b0c07355839bae1f9f3",
+    "/home/DIFFER/scripts/ndp_triplet_formula_audit.py": "44cb1d0fa1c654b7ef31e64f3a0ee10f00a83372278a012be6c81fe0cd73bb45",
+    "/home/DIFFER/scripts/ndp_triplet_raw_feature_alignment.py": "3276cca9eeebaa64c2e9af191d7ece0f20e596b244697cd064b21d22e058f6c3",
+    "/home/DIFFER/scripts/ndp_reliability_incremental_audit.py": "825431c2f677e17653ce866265b6e80bc97a4f2ed58cd8b2acb4f060730f015f",
+    "/home/DIFFER/scripts/ndp_bidirectional_additional_audit.py": "df0575512eb607bd594ede5cdcb1304f22d6ae4cc17fcdc494670391989d163b",
+    "/home/DIFFER/scripts/ndp_reactive_feature_gradient_audit.py": "8b7f5c77dc7ebb28923436e97bd2af2e4ab5b96a05bd1f27bc9dbe49814d16c7",
+    "/home/DIFFER/scripts/ndp_ppu_same_precision_kernel_probe.py": "cde27be76d28097a699ed8b1edba085a1a78c2fe4f0df36d3fbf60ba1203ce22",
+    "/home/DIFFER/tests/test_ndp_triplet_formula.py": "80e8803190e11666d551801c2b858e9b2190137cdc9b0d5c6752904ca4673fec",
+    "/home/DIFFER/tests/test_ndp_relation_correction.py": "e448f53942bf6e6e4b0283e0861e5ab1da3a3f11583abe2ff2d801b39ec02a7b",
+    "/home/DIFFER/tests/test_ndp_triplet_alignment_audit.py": "3d9d8d7ad9c034e9906eb9843a65ea0fc1c59c1091c2f22a913977d0b2bec746",
+    "/home/DIFFER/scripts/generate_ndp_triplet_alignment_reports.py": "5900aa4fd31ad0a57a233c832fa71e0436595211d16b0c2e9ff8b5c96dcbdf62",
+    "/data/DIFFER/loss/triplet_loss.py": "86656d44255172866d1e9854880c16e5d9536c6a756a577876312b663512092a"
+  },
+  "checkpoint_sha256": {
+    "1234": "e11c90b63d7252f0fde99439bb1d5a6f1d72e757d43143fe9ac92061e2411177",
+    "4321": "d69859975ae386f82bebd05d944633e962cc377f73f55599eb685128a09637a7"
+  },
+  "commands": [
+    "/usr/local/bin/python3.10 -u scripts/ndp_triplet_formula_audit.py --output outputs/ndp_triplet_alignment_20261021_134148/triplet_formula_audit.json",
+    "/usr/local/bin/python3.10 -u scripts/ndp_triplet_raw_feature_alignment.py --seed 1234 --output-dir outputs/ndp_triplet_alignment_20261021_134148/seed1234 --epoch 60 --rank 0",
+    "/usr/local/bin/python3.10 -u scripts/ndp_triplet_raw_feature_alignment.py --seed 4321 --output-dir outputs/ndp_triplet_alignment_20261021_134148/seed4321 --epoch 60 --rank 0",
+    "/usr/local/bin/python3.10 -u scripts/ndp_real_triplet_miner_coverage.py --seed 1234 --features outputs/ndp_true_multipid_20261021_103952/full_features/seed1234/update0_full_features_seed1234.npz --graph outputs/ndp_true_multipid_20261021_103952/reference_graph/seed1234/multi_pid_reference_graph.json --output-dir outputs/ndp_triplet_alignment_20261021_134148/miner_coverage/seed1234 --epochs 60 61",
+    "/usr/local/bin/python3.10 -u scripts/ndp_real_triplet_miner_coverage.py --seed 4321 --features outputs/ndp_true_multipid_20261021_103952/full_features/seed4321/update0_full_features_seed4321.npz --graph outputs/ndp_true_multipid_20261021_103952/reference_graph/seed4321/multi_pid_reference_graph.json --output-dir outputs/ndp_triplet_alignment_20261021_134148/miner_coverage/seed4321 --epochs 60 61",
+    "/usr/local/bin/python3.10 -u scripts/ndp_reliability_incremental_audit.py --seed 1234 --transition-rows outputs/ndp_true_multipid_20261021_103952/trajectory_eval/seed1234/multi_pid_transition_rows.csv --reliability-rows outputs/ndp_true_multipid_20261021_103952/analysis/seed1234/reliability/reliability_vulnerability_rows.csv --output-dir outputs/ndp_triplet_alignment_20261021_134148/reliability_incremental/seed1234",
+    "/usr/local/bin/python3.10 -u scripts/ndp_reliability_incremental_audit.py --seed 4321 --transition-rows outputs/ndp_true_multipid_20261021_103952/trajectory_eval/seed4321/multi_pid_transition_rows.csv --reliability-rows outputs/ndp_true_multipid_20261021_103952/analysis/seed4321/reliability/reliability_vulnerability_rows.csv --output-dir outputs/ndp_triplet_alignment_20261021_134148/reliability_incremental/seed4321",
+    "/usr/local/bin/python3.10 -u scripts/ndp_bidirectional_additional_audit.py --seed 1234 --pairs outputs/ndp_true_multipid_20261021_103952/analysis/seed1234/bidirectional/bidirectional_pairs.csv --transition-rows outputs/ndp_true_multipid_20261021_103952/trajectory_eval/seed1234/multi_pid_transition_rows.csv --output-dir outputs/ndp_triplet_alignment_20261021_134148/bidirectional_additional/seed1234",
+    "/usr/local/bin/python3.10 -u scripts/ndp_bidirectional_additional_audit.py --seed 4321 --pairs outputs/ndp_true_multipid_20261021_103952/analysis/seed4321/bidirectional/bidirectional_pairs.csv --transition-rows outputs/ndp_true_multipid_20261021_103952/trajectory_eval/seed4321/multi_pid_transition_rows.csv --output-dir outputs/ndp_triplet_alignment_20261021_134148/bidirectional_additional/seed4321",
+    "/usr/local/bin/python3.10 -u scripts/ndp_reactive_feature_gradient_audit.py --seed 1234 --features outputs/ndp_multipid_reconstruction_20261021_101900/feature_export/seed1234/trajectory_features_seed1234.npz --groups outputs/ndp_future_boundary_20261021_094250/coverage_expansion/seed1234_retry1/fixed_diagnostic_groups.json --output-dir outputs/ndp_triplet_alignment_20261021_134148/reactive_feature_gradient/seed1234",
+    "/usr/local/bin/python3.10 -u scripts/ndp_reactive_feature_gradient_audit.py --seed 4321 --features outputs/ndp_multipid_reconstruction_20261021_101900/feature_export/seed4321/trajectory_features_seed4321.npz --groups outputs/ndp_future_boundary_20261021_094250/coverage_expansion/seed4321/fixed_diagnostic_groups.json --output-dir outputs/ndp_triplet_alignment_20261021_134148/reactive_feature_gradient/seed4321",
+    "/usr/local/bin/python3.10 -u scripts/ndp_ppu_same_precision_kernel_probe.py --output outputs/ndp_triplet_alignment_20261021_134148/ppu_same_precision_kernel_probe.json --repeats 3 --include-eva-norm",
+    "PYTHONPATH=/home/DIFFER/scripts:/home/DIFFER /usr/local/bin/python3.10 -m pytest -q tests/test_ndp_*.py"
+  ],
+  "artifacts": {
+    "formula": "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/triplet_formula_audit.json",
+    "raw_alignment": [
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/seed1234/triplet_raw_feature_alignment_seed1234.json",
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/seed4321/triplet_raw_feature_alignment_seed4321.json"
+    ],
+    "coverage": [
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/miner_coverage/seed1234/triplet_miner_coverage_summary.json",
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/miner_coverage/seed4321/triplet_miner_coverage_summary.json"
+    ],
+    "reliability": [
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/reliability_incremental/seed1234/reliability_incremental_summary.json",
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/reliability_incremental/seed4321/reliability_incremental_summary.json"
+    ],
+    "bidirectional": [
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/bidirectional_additional/seed1234/bidirectional_additional_summary.json",
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/bidirectional_additional/seed4321/bidirectional_additional_summary.json"
+    ],
+    "reactive_gradient": [
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/reactive_feature_gradient/seed1234/reactive_feature_gradient_summary.json",
+      "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/reactive_feature_gradient/seed4321/reactive_feature_gradient_summary.json"
+    ],
+    "aa_probe": "/home/DIFFER/outputs/ndp_triplet_alignment_20261021_134148/ppu_same_precision_kernel_probe.json"
+  }
+}

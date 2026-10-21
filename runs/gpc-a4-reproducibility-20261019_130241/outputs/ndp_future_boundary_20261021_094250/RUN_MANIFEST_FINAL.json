@@ -1,0 +1,53 @@
+{
+  "run_time": "20261021_094250",
+  "project": "/home/DIFFER",
+  "remote_main_audited": "6d88791f80c813fdb2426e5461d480c8e483a5a7",
+  "data_checkout_observed": "/data/DIFFER HEAD=573b050 dirty; not used for source edits",
+  "python": "/usr/local/bin/python3.10",
+  "model_compute": "PPU eval/no_grad only for coverage expansion",
+  "safe_ppu_backward_probe": {
+    "status": "PASS_NO_OPTIMIZER_STEP",
+    "seeds": [1234, 4321],
+    "modes": ["amp", "fp32"],
+    "found_inf": 0,
+    "optimizer_step_executed": false,
+    "output": "outputs/ndp_future_boundary_20261021_094250/ppu_aa_no_step"
+  },
+  "optimizer_step_executed_this_run": false,
+  "official_query_gallery_used": false,
+  "gpc_v1_modified": false,
+  "aa_reproducibility": "FAIL",
+  "coverage": {
+    "seed1234": {"groups": 159, "unique_indices": 382, "pids": 30, "status": "PASS_PPU_EVAL_NO_GRAD"},
+    "seed4321": {"groups": 137, "unique_indices": 340, "pids": 31, "status": "PASS_PPU_EVAL_NO_GRAD"}
+  },
+  "bidirectional_fix": {
+    "seed1234": {"directed_pairs": 7, "transition_rows": 35, "a_flip": 2, "b_flip": 1},
+    "seed4321": {"directed_pairs": 7, "transition_rows": 35, "a_flip": 1, "b_flip": 0}
+  },
+  "new_negative_pid": {
+    "seed1234": {"decomposable_groups": 56, "nondecomposable_groups": 8, "identifiable_new_events": 5},
+    "seed4321": {"decomposable_groups": 50, "nondecomposable_groups": 14, "identifiable_new_events": 2},
+    "multi_pid_decomposition": "NOT_AVAILABLE_WITH_CURRENT_STAGE3_CSV"
+  },
+  "reactive_prototype": "unit_test_pass_only",
+  "tests": {"pytest_selected": "8 passed", "py_compile": "PASS"},
+  "reports": [
+    "reports/NDP_BIDIRECTIONAL_TIME_ALIGNMENT_FIX_20261021_094250.md",
+    "reports/NDP_NEW_NEGATIVE_PID_DEFINITION_AUDIT_20261021_094250.md",
+    "reports/NDP_ROBUST_BOUNDARY_FLIP_AUDIT_20261021_094250.md",
+    "reports/NDP_HUBNESS_DEDUP_AUDIT_20261021_094250.md",
+    "reports/NDP_TRAJECTORY_COVERAGE_EXPANSION_20261021_094250.md",
+    "reports/NDP_REACTIVE_MECHANISM_DESIGN_20261021_094250.md",
+    "reports/NDP_PPU_BACKWARD_KERNEL_ISOLATION_20261021_094250.md",
+    "reports/NDP_FINAL_RESEARCH_DECISION_20261021_094250.md"
+  ],
+  "source_snapshot": "outputs/ndp_future_boundary_20261021_094250/source_snapshot_final",
+  "test_snapshot": "outputs/ndp_future_boundary_20261021_094250/tests_snapshot_final",
+  "sha256_manifest": "outputs/ndp_future_boundary_20261021_094250/artifacts/SHA256SUMS_FINAL.txt",
+  "decision": {
+    "NDP_MECHANISM": "INCONCLUSIVE",
+    "A_A_REPRODUCIBILITY": "FAIL",
+    "CONTROLLED_SHORT_PILOT": "NO_GO"
+  }
+}

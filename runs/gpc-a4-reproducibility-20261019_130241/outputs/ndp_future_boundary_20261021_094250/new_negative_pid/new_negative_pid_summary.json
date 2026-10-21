@@ -1,0 +1,40 @@
+{
+  "status": "PASS_WITH_EXPLICIT_NOT_AVAILABLE",
+  "rows": [
+    {
+      "seed": 1234,
+      "groups": 64,
+      "transition_rows": 320,
+      "exact_single_image_pair_groups": 56,
+      "nondecomposable_groups": 8,
+      "exact_transition_rows": 280,
+      "status_counts": {
+        "correct_pid": 197,
+        "new_error_pid": 5,
+        "preexisting_error_pid": 72,
+        "recovered_pid": 6
+      },
+      "multi_pid_aggregate_rows": 0,
+      "interpretation": "仅 exact_single_image_pair 可报告单一负 PID 的状态；其它行不可由 aggregate advantage 拆分"
+    },
+    {
+      "seed": 4321,
+      "groups": 64,
+      "transition_rows": 320,
+      "exact_single_image_pair_groups": 50,
+      "nondecomposable_groups": 14,
+      "exact_transition_rows": 250,
+      "status_counts": {
+        "correct_pid": 149,
+        "preexisting_error_pid": 98,
+        "recovered_pid": 1,
+        "new_error_pid": 2
+      },
+      "multi_pid_aggregate_rows": 5,
+      "interpretation": "仅 exact_single_image_pair 可报告单一负 PID 的状态；其它行不可由 aggregate advantage 拆分"
+    }
+  ],
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "multi_pid_decomposition": "NOT_AVAILABLE_WITH_CURRENT_STAGE3_CSV"
+}

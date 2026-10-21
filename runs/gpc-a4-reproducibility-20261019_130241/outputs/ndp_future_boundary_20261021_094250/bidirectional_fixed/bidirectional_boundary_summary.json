@@ -1,0 +1,36 @@
+{
+  "status": "PASS_WITH_LIMITED_COVERAGE",
+  "rows": [
+    {
+      "seed": 1234,
+      "directed_relation_pairs": 7,
+      "transition_rows": 35,
+      "identity_pair_count": 6,
+      "image_pair_count": 7,
+      "one_side_a_improves_b_worsens": 2,
+      "one_side_a_worsens_b_improves": 5,
+      "both_improve": 17,
+      "both_worsen": 11,
+      "a_flip": 2,
+      "b_flip": 1
+    },
+    {
+      "seed": 4321,
+      "directed_relation_pairs": 7,
+      "transition_rows": 35,
+      "identity_pair_count": 6,
+      "image_pair_count": 7,
+      "one_side_a_improves_b_worsens": 8,
+      "one_side_a_worsens_b_improves": 7,
+      "both_improve": 10,
+      "both_worsen": 10,
+      "a_flip": 1,
+      "b_flip": 0
+    }
+  ],
+  "deduplication": "directed image pair retained; identity_pair and image_pair are grouping keys",
+  "time_alignment": "每一行直接使用同一 transition 的 prev_margin 与 target_margin",
+  "excluded_relations": [],
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false
+}

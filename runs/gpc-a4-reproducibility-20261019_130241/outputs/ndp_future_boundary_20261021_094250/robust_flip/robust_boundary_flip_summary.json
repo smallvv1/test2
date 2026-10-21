@@ -1,0 +1,153 @@
+{
+  "status": "PASS_WITH_PREREGISTERED_SENSITIVITY",
+  "deltas": [
+    0.0001,
+    0.001,
+    0.01
+  ],
+  "results": [
+    {
+      "seed": 1234,
+      "delta": 0.0001,
+      "eligible_rows": 211,
+      "robust_flip_count": 6,
+      "pid_count": 6,
+      "event_rate": 0.02843601895734597,
+      "interval_counts": {
+        "20->50": 1,
+        "200->400": 4,
+        "50->100": 1
+      },
+      "metrics": {
+        "distance_to_zero": {
+          "roc_auc": 0.9682926829268292,
+          "average_precision": 0.423313492063492
+        },
+        "previous_drop": {
+          "roc_auc": 0.359349593495935,
+          "average_precision": 0.026132663778707314
+        }
+      },
+      "strict_flip_count": 6,
+      "strict_not_robust_count": 0
+    },
+    {
+      "seed": 1234,
+      "delta": 0.001,
+      "eligible_rows": 211,
+      "robust_flip_count": 6,
+      "pid_count": 6,
+      "event_rate": 0.02843601895734597,
+      "interval_counts": {
+        "20->50": 1,
+        "200->400": 4,
+        "50->100": 1
+      },
+      "metrics": {
+        "distance_to_zero": {
+          "roc_auc": 0.9682926829268292,
+          "average_precision": 0.423313492063492
+        },
+        "previous_drop": {
+          "roc_auc": 0.359349593495935,
+          "average_precision": 0.026132663778707314
+        }
+      },
+      "strict_flip_count": 6,
+      "strict_not_robust_count": 0
+    },
+    {
+      "seed": 1234,
+      "delta": 0.01,
+      "eligible_rows": 206,
+      "robust_flip_count": 4,
+      "pid_count": 4,
+      "event_rate": 0.019417475728155338,
+      "interval_counts": {
+        "200->400": 4
+      },
+      "metrics": {
+        "distance_to_zero": {
+          "roc_auc": 0.969059405940594,
+          "average_precision": 0.3140151515151515
+        },
+        "previous_drop": {
+          "roc_auc": 0.20544554455445543,
+          "average_precision": 0.014649227919846478
+        }
+      },
+      "strict_flip_count": 6,
+      "strict_not_robust_count": 2
+    },
+    {
+      "seed": 4321,
+      "delta": 0.0001,
+      "eligible_rows": 201,
+      "robust_flip_count": 1,
+      "pid_count": 1,
+      "event_rate": 0.004975124378109453,
+      "interval_counts": {
+        "200->400": 1
+      },
+      "metrics": {
+        "distance_to_zero": {
+          "roc_auc": 1.0,
+          "average_precision": 1.0
+        },
+        "previous_drop": {
+          "roc_auc": 0.0,
+          "average_precision": 0.004975124378109453
+        }
+      },
+      "strict_flip_count": 2,
+      "strict_not_robust_count": 1
+    },
+    {
+      "seed": 4321,
+      "delta": 0.001,
+      "eligible_rows": 201,
+      "robust_flip_count": 1,
+      "pid_count": 1,
+      "event_rate": 0.004975124378109453,
+      "interval_counts": {
+        "200->400": 1
+      },
+      "metrics": {
+        "distance_to_zero": {
+          "roc_auc": 1.0,
+          "average_precision": 1.0
+        },
+        "previous_drop": {
+          "roc_auc": 0.0,
+          "average_precision": 0.004975124378109453
+        }
+      },
+      "strict_flip_count": 2,
+      "strict_not_robust_count": 1
+    },
+    {
+      "seed": 4321,
+      "delta": 0.01,
+      "eligible_rows": 200,
+      "robust_flip_count": 0,
+      "pid_count": 0,
+      "event_rate": 0.0,
+      "interval_counts": {},
+      "metrics": {
+        "distance_to_zero": {
+          "roc_auc": null,
+          "average_precision": null
+        },
+        "previous_drop": {
+          "roc_auc": null,
+          "average_precision": null
+        }
+      },
+      "strict_flip_count": 2,
+      "strict_not_robust_count": 2
+    }
+  ],
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "delta_source": "预注册数值敏感性范围；未根据结果选择主阈值"
+}

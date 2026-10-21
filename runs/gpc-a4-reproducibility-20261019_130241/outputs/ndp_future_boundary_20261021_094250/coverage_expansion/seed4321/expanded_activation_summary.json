@@ -1,0 +1,65 @@
+{
+  "cpu_model_fallback": false,
+  "elapsed_seconds": 40.03549289703369,
+  "graph": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/neighbor_graphs/seed4321_bio_negative_only_top20.npz",
+  "graph_sha256": "e16a94c6fb399a3d26bd63dd6910c63df724e754f74157058e14c612ed7696a7",
+  "groups": 137,
+  "groups_sha256": "5f49d0fc8b899c299265582ba455ac88835f520f5fe351834690ed39fc18ef75",
+  "nodes": [
+    {
+      "activation_rate": 0.0,
+      "active_anchor_count": 0,
+      "anchor_count": 137,
+      "seed": 4321,
+      "state_path": "outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/rank0_state_epoch060.pt",
+      "update": 0
+    },
+    {
+      "activation_rate": 0.16058394160583941,
+      "active_anchor_count": 22,
+      "anchor_count": 137,
+      "seed": 4321,
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0020/model.pth",
+      "update": 20
+    },
+    {
+      "activation_rate": 0.13138686131386862,
+      "active_anchor_count": 18,
+      "anchor_count": 137,
+      "seed": 4321,
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0050/model.pth",
+      "update": 50
+    },
+    {
+      "activation_rate": 0.27007299270072993,
+      "active_anchor_count": 37,
+      "anchor_count": 137,
+      "seed": 4321,
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0100/model.pth",
+      "update": 100
+    },
+    {
+      "activation_rate": 0.36496350364963503,
+      "active_anchor_count": 50,
+      "anchor_count": 137,
+      "seed": 4321,
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0200/model.pth",
+      "update": 200
+    },
+    {
+      "activation_rate": 0.34306569343065696,
+      "active_anchor_count": 47,
+      "anchor_count": 137,
+      "seed": 4321,
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0400/model.pth",
+      "update": 400
+    }
+  ],
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "reference_checkpoint": "outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/rank0_state_epoch060.pt",
+  "reference_checkpoint_sha256": "d69859975ae386f82bebd05d944633e962cc377f73f55599eb685128a09637a7",
+  "seed": 4321,
+  "status": "PASS_PPU_EVAL_NO_GRAD",
+  "unique_indices": 340
+}

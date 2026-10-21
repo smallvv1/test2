@@ -1,0 +1,19 @@
+运行标识：20261021_094250
+项目：/home/DIFFER
+远端 main 核对：6d88791f80c813fdb2426e5461d480c8e483a5a7
+执行 Python：/usr/local/bin/python3.10
+
+本轮执行：
+1. 双侧边界同一 transition 时间对齐修复与回归测试。
+2. 新增错误 PID 可辨识性重算。
+3. 严格翻转与 1e-4、1e-3、1e-2 稳健翻转敏感性分析。
+4. Hubness 唯一图像/唯一 PID 去重及预测指标重算。
+5. 两个 seed 的已有 continuation 节点 PPU eval/no_grad 覆盖扩展。
+6. 反应式 NDP 独立函数与 CPU 数学单元测试。
+7. PPU A/A 历史证据只读复核；未新增 optimizer.step。
+
+门禁：
+模型计算仅使用 PPU；未使用 CPU 模型 fallback；未读取官方 query/gallery/test；未修改 GPC-v1；未执行 NDP optimizer.step、30 epoch 或 60 epoch。
+
+结果：
+双侧修复通过但覆盖有限；PID 多身份分解因阶段3缺少逐负 PID相似度而不可用；PPU eval/no_grad 覆盖通过；反应式原型测试 8/8 通过；A/A_REPRODUCIBILITY=FAIL；NDP_MECHANISM=INCONCLUSIVE；CONTROLLED_SHORT_PILOT=NO_GO。

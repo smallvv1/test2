@@ -1,0 +1,11 @@
+[
+  {
+    "effective_updates": 596,
+    "epoch_tag": 61,
+    "global_step": 36356,
+    "model": "/home/DIFFER/log_NDP/ndp_v2_20261023_061358/epoch1_b0_seed4321/node_update0596/model.pth",
+    "model_sha256": "78bbe39c335591fd75b588c404f3b3464d1a5234ade2c018b6f50c147d45c03c",
+    "optimizer_step_executed": true,
+    "rank_state": "/home/DIFFER/log_NDP/ndp_v2_20261023_061358/epoch1_b0_seed4321/node_update0596/rank0_state.pt"
+  }
+]

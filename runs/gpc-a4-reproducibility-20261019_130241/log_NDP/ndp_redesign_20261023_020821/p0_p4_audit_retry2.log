@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 785, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 756, in main
+    results[seed] = audit_seed(
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 539, in audit_seed
+    write_csv(seed_out / "relation_evidence_seed%d.csv" % seed, csv_rows)
+TypeError: unsupported operand type(s) for %: 'PosixPath' and 'int'

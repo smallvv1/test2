@@ -1,0 +1,24 @@
+{
+  "1234": {
+    "reliable_history": 775,
+    "current_vulnerable": 2422,
+    "reliable_and_vulnerable": 637,
+    "observed_degradation": 132,
+    "reliable_and_observed_degradation": 23,
+    "current_errors": 1368,
+    "future_flips": 28,
+    "old_reliable": 763,
+    "reliable_newly_included_by_decoupling": 12
+  },
+  "4321": {
+    "reliable_history": 761,
+    "current_vulnerable": 2417,
+    "reliable_and_vulnerable": 618,
+    "observed_degradation": 52,
+    "reliable_and_observed_degradation": 4,
+    "current_errors": 1411,
+    "future_flips": 18,
+    "old_reliable": 755,
+    "reliable_newly_included_by_decoupling": 6
+  }
+}

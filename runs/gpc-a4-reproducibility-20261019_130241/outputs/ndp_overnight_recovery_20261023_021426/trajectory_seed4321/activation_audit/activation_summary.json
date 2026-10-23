@@ -1,0 +1,74 @@
+{
+  "epsilon": 0.02,
+  "groups": 64,
+  "groups_sha256": "35c2aff4661d5113043e8863fe5089f3a66e7fba291d4de0860334f379b6f7b5",
+  "nodes": [
+    {
+      "activation_rate": 0.0,
+      "active_anchor_count": 0,
+      "anchor_count": 64,
+      "epsilon": 0.02,
+      "seed": 4321,
+      "state_path": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/rank0_state_epoch060.pt",
+      "tau": 0.2,
+      "update": 0
+    },
+    {
+      "activation_rate": 0.171875,
+      "active_anchor_count": 11,
+      "anchor_count": 64,
+      "epsilon": 0.02,
+      "seed": 4321,
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_recovery_20261023_021426/trajectory_seed4321/node_update0020/model.pth",
+      "tau": 0.2,
+      "update": 20
+    },
+    {
+      "activation_rate": 0.140625,
+      "active_anchor_count": 9,
+      "anchor_count": 64,
+      "epsilon": 0.02,
+      "seed": 4321,
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_recovery_20261023_021426/trajectory_seed4321/node_update0050/model.pth",
+      "tau": 0.2,
+      "update": 50
+    },
+    {
+      "activation_rate": 0.28125,
+      "active_anchor_count": 18,
+      "anchor_count": 64,
+      "epsilon": 0.02,
+      "seed": 4321,
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_recovery_20261023_021426/trajectory_seed4321/node_update0100/model.pth",
+      "tau": 0.2,
+      "update": 100
+    },
+    {
+      "activation_rate": 0.421875,
+      "active_anchor_count": 27,
+      "anchor_count": 64,
+      "epsilon": 0.02,
+      "seed": 4321,
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_recovery_20261023_021426/trajectory_seed4321/node_update0200/model.pth",
+      "tau": 0.2,
+      "update": 200
+    },
+    {
+      "activation_rate": 0.40625,
+      "active_anchor_count": 26,
+      "anchor_count": 64,
+      "epsilon": 0.02,
+      "seed": 4321,
+      "state_path": "/home/DIFFER/outputs/ndp_overnight_recovery_20261023_021426/trajectory_seed4321/node_update0400/model.pth",
+      "tau": 0.2,
+      "update": 400
+    }
+  ],
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "real_trajectory_activation": true,
+  "reference_checkpoint": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/rank0_state_epoch060.pt",
+  "reference_is_same_trajectory_start": true,
+  "seed": 4321,
+  "tau": 0.2
+}

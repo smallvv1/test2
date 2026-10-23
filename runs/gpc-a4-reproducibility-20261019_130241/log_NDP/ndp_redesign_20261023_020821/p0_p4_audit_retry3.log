@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 785, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 756, in main
+    results[seed] = audit_seed(
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 547, in audit_seed
+    "B1_current_hard": np.asarray([float(r["current_margin"]) <= PRE_REGISTERED["vulnerability_margin"] for r in audit_rows]),
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 547, in <listcomp>
+    "B1_current_hard": np.asarray([float(r["current_margin"]) <= PRE_REGISTERED["vulnerability_margin"] for r in audit_rows]),
+KeyError: 'current_margin'

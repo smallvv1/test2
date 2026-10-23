@@ -1,0 +1,1489 @@
+{
+  "count": 64,
+  "graph": "/home/DIFFER/outputs/ndp_local_intrusion_20261020_155558/neighbor_graphs/seed1234_bio_negative_only_top20.npz",
+  "graph_sha256": "485b628d51d0db673838308b342ab03e63c23e56e2f3ac5d7cd6283b6a0bb9ce",
+  "groups": [
+    {
+      "anchor": 3830,
+      "batch_indices": [
+        676,
+        681,
+        791,
+        1043,
+        3580,
+        3830,
+        4597,
+        4629
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        681
+      ],
+      "pid": 29,
+      "positives": [
+        3580
+      ],
+      "rank": 0,
+      "relation_sha256": "622852f228443a133c2b60d3da8a3af9d3f38f73fd7aec651aaa1b960c39dfa8"
+    },
+    {
+      "anchor": 4597,
+      "batch_indices": [
+        676,
+        681,
+        791,
+        1043,
+        3580,
+        3830,
+        4597,
+        4629
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        676
+      ],
+      "pid": 36,
+      "positives": [
+        4629
+      ],
+      "rank": 0,
+      "relation_sha256": "f890c8f9ea9d8d103057d29ecc109546fc86635aeba0d28ed992758cc7507647"
+    },
+    {
+      "anchor": 3927,
+      "batch_indices": [
+        1864,
+        1939,
+        3807,
+        3927,
+        4476,
+        4519,
+        6780,
+        6815
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4519
+      ],
+      "pid": 29,
+      "positives": [
+        3807
+      ],
+      "rank": 0,
+      "relation_sha256": "496ae3323759d2a8eb754563708e2233f89e0153c86730aca953775a8864c51c"
+    },
+    {
+      "anchor": 8934,
+      "batch_indices": [
+        5583,
+        5589,
+        8852,
+        8855,
+        8934,
+        9055,
+        9269,
+        9469
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        8852
+      ],
+      "pid": 74,
+      "positives": [
+        9055
+      ],
+      "rank": 0,
+      "relation_sha256": "ef0969047ea67c5f3083f385ea36059f9e35e644890e2dfbce65731da06c6f42"
+    },
+    {
+      "anchor": 9463,
+      "batch_indices": [
+        418,
+        459,
+        2234,
+        2257,
+        4833,
+        4836,
+        9361,
+        9463
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4833
+      ],
+      "pid": 76,
+      "positives": [
+        9361
+      ],
+      "rank": 0,
+      "relation_sha256": "1279e18a4e03ee35e96f7d90e57f962f5430e0bf510bceb5e2dc6c8484dd688b"
+    },
+    {
+      "anchor": 1131,
+      "batch_indices": [
+        1021,
+        1131,
+        4611,
+        4647,
+        5590,
+        5652,
+        9250,
+        9287
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        5652
+      ],
+      "pid": 6,
+      "positives": [
+        1021
+      ],
+      "rank": 0,
+      "relation_sha256": "88eb0f1b3af7bffcd878d98463ce34eb3728ffd53fa6b8708fe432b3387518ab"
+    },
+    {
+      "anchor": 28,
+      "batch_indices": [
+        28,
+        166,
+        2453,
+        2457,
+        4417,
+        4522,
+        8260,
+        8275
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        8260,
+        8275
+      ],
+      "pid": 0,
+      "positives": [
+        166
+      ],
+      "rank": 0,
+      "relation_sha256": "c75219f554b5d899d5534e08b83915a01dddefb4ab980c0acca65ec85378499e"
+    },
+    {
+      "anchor": 3971,
+      "batch_indices": [
+        1913,
+        1920,
+        2230,
+        2245,
+        3971,
+        4025,
+        9304,
+        9438
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        9438
+      ],
+      "pid": 29,
+      "positives": [
+        4025
+      ],
+      "rank": 0,
+      "relation_sha256": "7c1992e72a187e6d5a1a8a1010ef56cbbb6dde20aea587b3ca638af74b26e499"
+    },
+    {
+      "anchor": 9438,
+      "batch_indices": [
+        1913,
+        1920,
+        2230,
+        2245,
+        3971,
+        4025,
+        9304,
+        9438
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        3971
+      ],
+      "pid": 76,
+      "positives": [
+        9304
+      ],
+      "rank": 0,
+      "relation_sha256": "72c0afb96393bd2774fe257c44d75bef50b6d748a49071fb193090abbff4aedf"
+    },
+    {
+      "anchor": 4532,
+      "batch_indices": [
+        4413,
+        4532,
+        4591,
+        4645,
+        4784,
+        4796,
+        9322,
+        9481
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        9481
+      ],
+      "pid": 35,
+      "positives": [
+        4413
+      ],
+      "rank": 0,
+      "relation_sha256": "716c8c662f20dd25faad7a31fa71e7ea43c3b02172bfe12d9add0594e7a47913"
+    },
+    {
+      "anchor": 9481,
+      "batch_indices": [
+        4413,
+        4532,
+        4591,
+        4645,
+        4784,
+        4796,
+        9322,
+        9481
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4532
+      ],
+      "pid": 76,
+      "positives": [
+        9322
+      ],
+      "rank": 0,
+      "relation_sha256": "d27d31b350556830c71f67a909121b2da95bd4812b10921dd10df558db005a16"
+    },
+    {
+      "anchor": 34,
+      "batch_indices": [
+        34,
+        97,
+        129,
+        170,
+        3760,
+        3885,
+        4996,
+        5041
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4996
+      ],
+      "pid": 0,
+      "positives": [
+        97,
+        129
+      ],
+      "rank": 0,
+      "relation_sha256": "62f48fef978c3ab310b9e56b044b4d7862b9cfa08b67a714ed033a5e5903994a"
+    },
+    {
+      "anchor": 2559,
+      "batch_indices": [
+        628,
+        635,
+        2559,
+        2640,
+        4585,
+        4655,
+        4701,
+        4706
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4585
+      ],
+      "pid": 18,
+      "positives": [
+        2640
+      ],
+      "rank": 0,
+      "relation_sha256": "73ec4c7c9ebfeb6e25d736a3e2fa17e94fee9b9914b9db05ce1d70510c5d1b97"
+    },
+    {
+      "anchor": 2640,
+      "batch_indices": [
+        628,
+        635,
+        2559,
+        2640,
+        4585,
+        4655,
+        4701,
+        4706
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4585
+      ],
+      "pid": 18,
+      "positives": [
+        2559
+      ],
+      "rank": 0,
+      "relation_sha256": "40bfb576805f7ee7ebd1a420640f415d3e112af433fe4efec3732f91342bf3e7"
+    },
+    {
+      "anchor": 4706,
+      "batch_indices": [
+        628,
+        635,
+        2559,
+        2640,
+        4585,
+        4655,
+        4701,
+        4706
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        628
+      ],
+      "pid": 36,
+      "positives": [
+        4585
+      ],
+      "rank": 0,
+      "relation_sha256": "a60edc8a095045b72f3e2f86295db3032a1d82ac32dc88d4de9070ecb1cc6632"
+    },
+    {
+      "anchor": 4666,
+      "batch_indices": [
+        928,
+        989,
+        2601,
+        2655,
+        4666,
+        4804,
+        8975,
+        9089
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        2601
+      ],
+      "pid": 36,
+      "positives": [
+        4804
+      ],
+      "rank": 0,
+      "relation_sha256": "7b3169b3292ff336c890f4bc8739ede3f45836985b85d485ca674089c03658b3"
+    },
+    {
+      "anchor": 4372,
+      "batch_indices": [
+        3576,
+        4007,
+        4327,
+        4372,
+        7659,
+        7669,
+        7752,
+        7865
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        7752
+      ],
+      "pid": 34,
+      "positives": [
+        4327
+      ],
+      "rank": 0,
+      "relation_sha256": "a3ead29238df3a5c863b6d8e0ad518bac53f49a94cbbdf325b5ab46e8cfe1455"
+    },
+    {
+      "anchor": 8866,
+      "batch_indices": [
+        3491,
+        3668,
+        8833,
+        8866,
+        8929,
+        9042,
+        9129,
+        9140
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        8929
+      ],
+      "pid": 72,
+      "positives": [
+        8833
+      ],
+      "rank": 0,
+      "relation_sha256": "f4edb744811a0ee7546e970abb9458e16bead194d7be6a8bfa2392a039653e6d"
+    },
+    {
+      "anchor": 9129,
+      "batch_indices": [
+        3491,
+        3668,
+        8833,
+        8866,
+        8929,
+        9042,
+        9129,
+        9140
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        8833
+      ],
+      "pid": 74,
+      "positives": [
+        8929,
+        9042
+      ],
+      "rank": 0,
+      "relation_sha256": "1ee0ae0b3ad83e9b2be0ef01da2584bf84ec882a64d974443fd1288eba2ebc0a"
+    },
+    {
+      "anchor": 1498,
+      "batch_indices": [
+        1488,
+        1498,
+        8013,
+        8014,
+        8253,
+        8326,
+        9281,
+        9518
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        9518
+      ],
+      "pid": 7,
+      "positives": [
+        1488
+      ],
+      "rank": 0,
+      "relation_sha256": "5ccc22ffefbeec5caec8da5a994503d72a1ac3d791625d9d75f60ea7d6c0f929"
+    },
+    {
+      "anchor": 5873,
+      "batch_indices": [
+        4117,
+        4125,
+        4320,
+        4370,
+        5106,
+        5112,
+        5873,
+        6015
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        5106
+      ],
+      "pid": 54,
+      "positives": [
+        6015
+      ],
+      "rank": 0,
+      "relation_sha256": "d1e9e5b7bf728ea67b56a061299745788d4abd9fcf56316bd2303f16974a0b90"
+    },
+    {
+      "anchor": 1760,
+      "batch_indices": [
+        1401,
+        1412,
+        1598,
+        1760,
+        5063,
+        5066,
+        6254,
+        6295
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        6295
+      ],
+      "pid": 10,
+      "positives": [
+        1598
+      ],
+      "rank": 0,
+      "relation_sha256": "d1de59af932b399df005bce4d4275dfe60fb6e87c71331f612996a827e282023"
+    },
+    {
+      "anchor": 3684,
+      "batch_indices": [
+        3167,
+        3193,
+        3684,
+        3938,
+        4443,
+        4514,
+        8054,
+        8132
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        3167
+      ],
+      "pid": 29,
+      "positives": [
+        3938
+      ],
+      "rank": 0,
+      "relation_sha256": "d07deb95f95f19fe3e98780819869ee0e1ea891ccd25b9623478f036c8ffc99a"
+    },
+    {
+      "anchor": 9039,
+      "batch_indices": [
+        521,
+        587,
+        1310,
+        1322,
+        3654,
+        3791,
+        9039,
+        9165
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        3791
+      ],
+      "pid": 74,
+      "positives": [
+        9165
+      ],
+      "rank": 0,
+      "relation_sha256": "70ba869e4a71300a9aed18f2de0080da7b1785d2658440a84a17138b30fefa93"
+    },
+    {
+      "anchor": 9567,
+      "batch_indices": [
+        1349,
+        1467,
+        8965,
+        9038,
+        9358,
+        9448,
+        9476,
+        9567
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        9038
+      ],
+      "pid": 76,
+      "positives": [
+        9358,
+        9448
+      ],
+      "rank": 0,
+      "relation_sha256": "d923b5ae6092f382c8a9a9a9fff6aca39e5a9ae828b1782d59fcb4fe9769dd66"
+    },
+    {
+      "anchor": 9324,
+      "batch_indices": [
+        477,
+        540,
+        4484,
+        4487,
+        6795,
+        6834,
+        9324,
+        9405
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4484
+      ],
+      "pid": 76,
+      "positives": [
+        9405
+      ],
+      "rank": 0,
+      "relation_sha256": "751c00c34af9af5fa4eb60828b1695004ebb03592d5f83a4265422b57908891a"
+    },
+    {
+      "anchor": 5966,
+      "batch_indices": [
+        786,
+        899,
+        2507,
+        2550,
+        5303,
+        5307,
+        5966,
+        6027
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        5303,
+        5307
+      ],
+      "pid": 54,
+      "positives": [
+        6027
+      ],
+      "rank": 0,
+      "relation_sha256": "e4e36d36f2b0c979bda213f22c18355f7b746863d5bb5264d0c01b7239b95bee"
+    },
+    {
+      "anchor": 530,
+      "batch_indices": [
+        71,
+        147,
+        446,
+        530,
+        1174,
+        1192,
+        4433,
+        4501
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4433
+      ],
+      "pid": 3,
+      "positives": [
+        446
+      ],
+      "rank": 0,
+      "relation_sha256": "882b18bbe9de20f5dfdf291d1169d026ed07ceb1c65b4d9a893a70100c41d860"
+    },
+    {
+      "anchor": 8837,
+      "batch_indices": [
+        563,
+        570,
+        4479,
+        4535,
+        7719,
+        7792,
+        8837,
+        8889
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4535
+      ],
+      "pid": 72,
+      "positives": [
+        8889
+      ],
+      "rank": 0,
+      "relation_sha256": "dfc529dd90c1070312c3dfb017ab2a7161f0654ae430e47a0aabf08dc14d6f72"
+    },
+    {
+      "anchor": 6980,
+      "batch_indices": [
+        4284,
+        4347,
+        4955,
+        4982,
+        6980,
+        7021,
+        7635,
+        7862
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4284
+      ],
+      "pid": 62,
+      "positives": [
+        7021
+      ],
+      "rank": 0,
+      "relation_sha256": "f750ac0b1cbc5e3fbd46c4fac4ef45468737d1c7680b54c78e13ccbf69633e21"
+    },
+    {
+      "anchor": 7021,
+      "batch_indices": [
+        4284,
+        4347,
+        4955,
+        4982,
+        6980,
+        7021,
+        7635,
+        7862
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4284
+      ],
+      "pid": 62,
+      "positives": [
+        6980
+      ],
+      "rank": 0,
+      "relation_sha256": "b95dfb8a0d48c9989b3d32295a65f1b9c32f3b888823f7967f3acd7317d4ee1e"
+    },
+    {
+      "anchor": 1715,
+      "batch_indices": [
+        1642,
+        1715,
+        4211,
+        4224,
+        5055,
+        5081,
+        8288,
+        8365
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4211
+      ],
+      "pid": 10,
+      "positives": [
+        1642
+      ],
+      "rank": 0,
+      "relation_sha256": "30f72ba8046c94e7b9d9789433a1b49faf47ed3ce29e292ca25fbbb458d569e4"
+    },
+    {
+      "anchor": 2485,
+      "batch_indices": [
+        1323,
+        1422,
+        2485,
+        2613,
+        4619,
+        4693,
+        6590,
+        6676
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4619
+      ],
+      "pid": 18,
+      "positives": [
+        2613
+      ],
+      "rank": 0,
+      "relation_sha256": "84f9430f751a053304c43ad1feef1c0fc13a5c4d4a3ed139ae22fefd5bc1d281"
+    },
+    {
+      "anchor": 2613,
+      "batch_indices": [
+        1323,
+        1422,
+        2485,
+        2613,
+        4619,
+        4693,
+        6590,
+        6676
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4693
+      ],
+      "pid": 18,
+      "positives": [
+        2485
+      ],
+      "rank": 0,
+      "relation_sha256": "9aabb9a3b0614ee55ed1b8ebcea17ab26ca2717de415f5411914f0cfd3777df4"
+    },
+    {
+      "anchor": 4619,
+      "batch_indices": [
+        1323,
+        1422,
+        2485,
+        2613,
+        4619,
+        4693,
+        6590,
+        6676
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        2485
+      ],
+      "pid": 36,
+      "positives": [
+        4693
+      ],
+      "rank": 0,
+      "relation_sha256": "60f67c0ce92004aaa6b5e8b72ac354e6629bc048cfd7ff03d73f0c61144afd22"
+    },
+    {
+      "anchor": 4693,
+      "batch_indices": [
+        1323,
+        1422,
+        2485,
+        2613,
+        4619,
+        4693,
+        6590,
+        6676
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        2613
+      ],
+      "pid": 36,
+      "positives": [
+        4619
+      ],
+      "rank": 0,
+      "relation_sha256": "1fa6045c0fe455da67e6f4c1335a2330d606264be51bf778b8cb4d1c64bf64c9"
+    },
+    {
+      "anchor": 4514,
+      "batch_indices": [
+        4416,
+        4443,
+        4473,
+        4514,
+        8800,
+        8880,
+        9410,
+        9520
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        9410
+      ],
+      "pid": 35,
+      "positives": [
+        4416,
+        4443
+      ],
+      "rank": 0,
+      "relation_sha256": "93cad96d781bfce6c80029994880181db6a56c1822798dd3e26e87b8e3a867b8"
+    },
+    {
+      "anchor": 3653,
+      "batch_indices": [
+        3653,
+        3883,
+        8741,
+        8747,
+        8748,
+        8775,
+        8954,
+        9025
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        8954
+      ],
+      "pid": 29,
+      "positives": [
+        3883
+      ],
+      "rank": 0,
+      "relation_sha256": "7e96f65b1f411387c29c34989f02c0df2c5e2032f30dc47b8e6546f1b469e964"
+    },
+    {
+      "anchor": 4441,
+      "batch_indices": [
+        488,
+        502,
+        2465,
+        2623,
+        3514,
+        3901,
+        4441,
+        4474
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        488
+      ],
+      "pid": 35,
+      "positives": [
+        4474
+      ],
+      "rank": 0,
+      "relation_sha256": "9f6e8180c0016b0aa0168e20a9edb625e1fd2b2f38524375730b18a63854dbff"
+    },
+    {
+      "anchor": 3820,
+      "batch_indices": [
+        3518,
+        3820,
+        8454,
+        8470,
+        9272,
+        9284,
+        9502,
+        9568
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        9568
+      ],
+      "pid": 29,
+      "positives": [
+        3518
+      ],
+      "rank": 0,
+      "relation_sha256": "a289ff65bd8c8f4e0e0e51aaaa0a2facf0f724b017bbf3f49916ae34d399c222"
+    },
+    {
+      "anchor": 6007,
+      "batch_indices": [
+        4834,
+        4879,
+        4973,
+        5044,
+        5926,
+        6007,
+        8463,
+        8548
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4973
+      ],
+      "pid": 54,
+      "positives": [
+        5926
+      ],
+      "rank": 1,
+      "relation_sha256": "ce7b8ac2cdbb7f278ab14504dd6755c081f8b5939dbcdd9a2338718d6f65233b"
+    },
+    {
+      "anchor": 9061,
+      "batch_indices": [
+        3633,
+        3855,
+        4415,
+        4468,
+        7779,
+        7808,
+        9061,
+        9098
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        3855
+      ],
+      "pid": 74,
+      "positives": [
+        9098
+      ],
+      "rank": 1,
+      "relation_sha256": "66a46e1b6c7c3844d2c34909c2607a6ddc0dc21fdf5a31b8f9ea40e23327d05c"
+    },
+    {
+      "anchor": 1627,
+      "batch_indices": [
+        1627,
+        1706,
+        5256,
+        5259,
+        7804,
+        7956,
+        8781,
+        8875
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        7956
+      ],
+      "pid": 10,
+      "positives": [
+        1706
+      ],
+      "rank": 1,
+      "relation_sha256": "ca384a47c96142ec0b1079c71654fe77bc15bd59e563d6739c022cfad5e7792b"
+    },
+    {
+      "anchor": 4345,
+      "batch_indices": [
+        799,
+        819,
+        4276,
+        4345,
+        6658,
+        6675,
+        6908,
+        6911
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        799
+      ],
+      "pid": 34,
+      "positives": [
+        4276
+      ],
+      "rank": 1,
+      "relation_sha256": "0fc8fb0552465b411a502f20aaa2ddedbeeb416c8f632f78416077745edf61f0"
+    },
+    {
+      "anchor": 3873,
+      "batch_indices": [
+        3751,
+        3873,
+        5962,
+        5975,
+        8264,
+        8376,
+        9013,
+        9180
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        9013
+      ],
+      "pid": 29,
+      "positives": [
+        3751
+      ],
+      "rank": 1,
+      "relation_sha256": "7c3ce044ecdb98d076d00a323e28043d4c0e6fd170768154ec3c8f1f0355bdce"
+    },
+    {
+      "anchor": 1649,
+      "batch_indices": [
+        1407,
+        1420,
+        1591,
+        1649,
+        1928,
+        1935,
+        8233,
+        8258
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        1928
+      ],
+      "pid": 10,
+      "positives": [
+        1591
+      ],
+      "rank": 1,
+      "relation_sha256": "ce1effdaa27bb1bdbd1992b47def88aa94e15a7096a63306e071ab8924979e04"
+    },
+    {
+      "anchor": 5914,
+      "batch_indices": [
+        5306,
+        5310,
+        5914,
+        6010,
+        6290,
+        6307,
+        8231,
+        8293
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        5306,
+        5310
+      ],
+      "pid": 54,
+      "positives": [
+        6010
+      ],
+      "rank": 1,
+      "relation_sha256": "2e7d697ed762081add98779269570e4ccffe7ebebbda128b347379e9328dc146"
+    },
+    {
+      "anchor": 4098,
+      "batch_indices": [
+        4098,
+        4143,
+        4835,
+        4878,
+        6303,
+        6376,
+        8756,
+        8816
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4878
+      ],
+      "pid": 31,
+      "positives": [
+        4143
+      ],
+      "rank": 1,
+      "relation_sha256": "5e9366b7d5a75436ddbc82c7151bc25e81e683f7075b4e8d7220a437cfdd0a8e"
+    },
+    {
+      "anchor": 4143,
+      "batch_indices": [
+        4098,
+        4143,
+        4835,
+        4878,
+        6303,
+        6376,
+        8756,
+        8816
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4878
+      ],
+      "pid": 31,
+      "positives": [
+        4098
+      ],
+      "rank": 1,
+      "relation_sha256": "ecd4d4a788e7ca0a46c36d9fef2a307a7df3614f5dd060cbf5b1bb2457d0e0fc"
+    },
+    {
+      "anchor": 4878,
+      "batch_indices": [
+        4098,
+        4143,
+        4835,
+        4878,
+        6303,
+        6376,
+        8756,
+        8816
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4143
+      ],
+      "pid": 37,
+      "positives": [
+        4835
+      ],
+      "rank": 1,
+      "relation_sha256": "2b45f515d9f19a3c9b5318db19285cc1d806ad993f7dd30a13e54930fbbf9f9f"
+    },
+    {
+      "anchor": 1030,
+      "batch_indices": [
+        867,
+        1030,
+        4292,
+        4411,
+        8444,
+        8455,
+        9244,
+        9337
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4411
+      ],
+      "pid": 6,
+      "positives": [
+        867
+      ],
+      "rank": 1,
+      "relation_sha256": "149ccef675431502991c70ff05f61d7690440387ce880c3bc8780ee23d198b48"
+    },
+    {
+      "anchor": 896,
+      "batch_indices": [
+        896,
+        967,
+        4975,
+        5003,
+        5010,
+        5015,
+        8985,
+        9009
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        8985
+      ],
+      "pid": 6,
+      "positives": [
+        967
+      ],
+      "rank": 1,
+      "relation_sha256": "0473c035e118abbe8e6c728e369a5811cc2bdc8ca3db24e40fe11ded64aa53eb"
+    },
+    {
+      "anchor": 1231,
+      "batch_indices": [
+        1196,
+        1231,
+        2506,
+        2600,
+        8222,
+        8334,
+        9308,
+        9413
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        8222
+      ],
+      "pid": 6,
+      "positives": [
+        1196
+      ],
+      "rank": 1,
+      "relation_sha256": "4cb4d36b8e156f47ae9342c5de7ebe78f03fd20ec9b9fa87cab31bd85879ec9f"
+    },
+    {
+      "anchor": 45,
+      "batch_indices": [
+        45,
+        133,
+        292,
+        298,
+        4459,
+        4496,
+        7733,
+        7853
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        7733
+      ],
+      "pid": 0,
+      "positives": [
+        133
+      ],
+      "rank": 1,
+      "relation_sha256": "8a76fb4b56a8565c7771947a0bb6a9f5589bf728f24973dfff5e10fb971b50d0"
+    },
+    {
+      "anchor": 7733,
+      "batch_indices": [
+        45,
+        133,
+        292,
+        298,
+        4459,
+        4496,
+        7733,
+        7853
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        45
+      ],
+      "pid": 66,
+      "positives": [
+        7853
+      ],
+      "rank": 1,
+      "relation_sha256": "f5fc6074c26793e58f4ea1d566a589ee0913e5b929b76c29626091686efca676"
+    },
+    {
+      "anchor": 1186,
+      "batch_indices": [
+        84,
+        116,
+        1186,
+        1220,
+        5605,
+        5666,
+        6924,
+        7060
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        116
+      ],
+      "pid": 6,
+      "positives": [
+        1220
+      ],
+      "rank": 1,
+      "relation_sha256": "6b3ff1311fd7d9b17f864611f6071728db0e0d8c67934402ac47f839a75bfe23"
+    },
+    {
+      "anchor": 507,
+      "batch_indices": [
+        383,
+        507,
+        2546,
+        2628,
+        3769,
+        3910,
+        4412,
+        4444
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4444,
+        4412
+      ],
+      "pid": 3,
+      "positives": [
+        383
+      ],
+      "rank": 1,
+      "relation_sha256": "5a8260695cf0b3caac27e3cd7880c94f32315e8bcb3351562c0166228441a62e"
+    },
+    {
+      "anchor": 0,
+      "batch_indices": [
+        0,
+        149,
+        1510,
+        1538,
+        7741,
+        7937,
+        8658,
+        8677
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        7741
+      ],
+      "pid": 0,
+      "positives": [
+        149
+      ],
+      "rank": 1,
+      "relation_sha256": "4a5b7048de6b8ee4587a3da71650735dfc1152988d4250ade1e124f8616c739a"
+    },
+    {
+      "anchor": 7861,
+      "batch_indices": [
+        1,
+        126,
+        329,
+        362,
+        3695,
+        3704,
+        7737,
+        7861
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        126
+      ],
+      "pid": 66,
+      "positives": [
+        7737
+      ],
+      "rank": 1,
+      "relation_sha256": "c801f09f2c1605a8edcd58a85185c5eab413206d812e2e3bf64f126462539f7e"
+    },
+    {
+      "anchor": 9274,
+      "batch_indices": [
+        4419,
+        4462,
+        4488,
+        4539,
+        5804,
+        5807,
+        9274,
+        9530
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4419
+      ],
+      "pid": 76,
+      "positives": [
+        9530
+      ],
+      "rank": 1,
+      "relation_sha256": "8b41a9da0e29983816178f92d5e7b6250f31a637990c7f6ab7c33f495eec12ec"
+    },
+    {
+      "anchor": 307,
+      "batch_indices": [
+        221,
+        307,
+        2474,
+        2652,
+        3564,
+        3972,
+        8830,
+        8869
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        3972
+      ],
+      "pid": 1,
+      "positives": [
+        221
+      ],
+      "rank": 1,
+      "relation_sha256": "9f4be67a3abf17dad8a29fcab826d4a66b5b24fb60a684a356a4ed7b001759b4"
+    },
+    {
+      "anchor": 3972,
+      "batch_indices": [
+        221,
+        307,
+        2474,
+        2652,
+        3564,
+        3972,
+        8830,
+        8869
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        307
+      ],
+      "pid": 29,
+      "positives": [
+        3564
+      ],
+      "rank": 1,
+      "relation_sha256": "b1af1bbc24cf88653b04bf44fa66fb73c11cd722cadfbff2946d086f564b191f"
+    },
+    {
+      "anchor": 410,
+      "batch_indices": [
+        410,
+        498,
+        3166,
+        3180,
+        4821,
+        4865,
+        8631,
+        8685
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        3166
+      ],
+      "pid": 3,
+      "positives": [
+        498
+      ],
+      "rank": 1,
+      "relation_sha256": "66e0af925c65e4b6212bc58b55948ca44621b12d3f37ec21b179c9d2e644f16e"
+    },
+    {
+      "anchor": 1210,
+      "batch_indices": [
+        1100,
+        1210,
+        4284,
+        4347,
+        4599,
+        4607,
+        4970,
+        4984
+      ],
+      "epoch_plan": 60,
+      "negatives": [
+        4347
+      ],
+      "pid": 6,
+      "positives": [
+        1100
+      ],
+      "rank": 1,
+      "relation_sha256": "ccd40ba85993c6921d27544e1befb49ee5f97fc049cdc101240ada6971a42526"
+    }
+  ],
+  "groups_sha256": "cb8c3f80128a570c47ded5882739f469919f99cbce684a979e16195e22a6f7fd",
+  "seed": 1234
+}

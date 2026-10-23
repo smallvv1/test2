@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 782, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 753, in main
+    results[seed] = audit_seed(
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 527, in audit_seed
+    gradient_norms = safe_boundary_gradient_norms(raw_by_update[CURRENT_UPDATE], audit_rows, mask_map)
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 224, in safe_boundary_gradient_norms
+    margins.append(torch_relation_margin(x, row, local))
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 206, in torch_relation_margin
+    neg = x[[local[int(v)] for v in relation_values(row, "negative_indices")]]
+IndexError: index 3040 is out of bounds for dimension 0 with size 2058

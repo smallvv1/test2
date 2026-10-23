@@ -1,0 +1,230 @@
+[
+  {
+    "absolute_error": 2.3514439817517996e-07,
+    "active": true,
+    "actual_delta": 4.2498111724853516e-05,
+    "margin_after": 0.02783334255218506,
+    "margin_before": 0.027790844440460205,
+    "predicted_delta": 4.2733256123028696e-05,
+    "target_relation_index": 1
+  },
+  {
+    "absolute_error": 1.8892751540988684e-07,
+    "active": true,
+    "actual_delta": 4.1484832763671875e-05,
+    "margin_after": 0.02461409568786621,
+    "margin_before": 0.02457261085510254,
+    "predicted_delta": 4.167376027908176e-05,
+    "target_relation_index": 2
+  },
+  {
+    "absolute_error": 1.2138843885622919e-07,
+    "active": true,
+    "actual_delta": 3.820657730102539e-05,
+    "margin_after": 0.02201026678085327,
+    "margin_before": 0.021972060203552246,
+    "predicted_delta": 3.808518886216916e-05,
+    "target_relation_index": 3
+  },
+  {
+    "absolute_error": 1.0776420822367072e-07,
+    "active": true,
+    "actual_delta": 3.999471664428711e-05,
+    "margin_after": 0.02932417392730713,
+    "margin_before": 0.029284179210662842,
+    "predicted_delta": 3.988695243606344e-05,
+    "target_relation_index": 4
+  },
+  {
+    "absolute_error": 7.775088306516409e-08,
+    "active": true,
+    "actual_delta": 3.921985626220703e-05,
+    "margin_after": 0.05263179540634155,
+    "margin_before": 0.052592575550079346,
+    "predicted_delta": 3.9297607145272195e-05,
+    "target_relation_index": 5
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 7
+  },
+  {
+    "absolute_error": 1.400876499246806e-07,
+    "active": true,
+    "actual_delta": 4.00543212890625e-05,
+    "margin_after": 0.07897621393203735,
+    "margin_before": 0.07893615961074829,
+    "predicted_delta": 3.991423363913782e-05,
+    "target_relation_index": 11
+  },
+  {
+    "absolute_error": 8.032293408177793e-08,
+    "active": true,
+    "actual_delta": 3.898143768310547e-05,
+    "margin_after": 0.08179748058319092,
+    "margin_before": 0.08175849914550781,
+    "predicted_delta": 3.890111474902369e-05,
+    "target_relation_index": 12
+  },
+  {
+    "absolute_error": 1.9590515876188874e-08,
+    "active": true,
+    "actual_delta": 3.4928321838378906e-05,
+    "margin_after": 0.023001790046691895,
+    "margin_before": 0.022966861724853516,
+    "predicted_delta": 3.490873132250272e-05,
+    "target_relation_index": 13
+  },
+  {
+    "absolute_error": 3.336026566103101e-08,
+    "active": true,
+    "actual_delta": 3.701448440551758e-05,
+    "margin_after": 0.02999359369277954,
+    "margin_before": 0.029956579208374023,
+    "predicted_delta": 3.704784467117861e-05,
+    "target_relation_index": 23
+  },
+  {
+    "absolute_error": 1.4752004062756896e-08,
+    "active": true,
+    "actual_delta": 4.082918167114258e-05,
+    "margin_after": 0.04012107849121094,
+    "margin_before": 0.040080249309539795,
+    "predicted_delta": 4.081442966707982e-05,
+    "target_relation_index": 36
+  },
+  {
+    "absolute_error": 1.239750417880714e-07,
+    "active": true,
+    "actual_delta": 3.975629806518555e-05,
+    "margin_after": 0.013818085193634033,
+    "margin_before": 0.013778328895568848,
+    "predicted_delta": 3.9632323023397475e-05,
+    "target_relation_index": 39
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 66
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 67
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 68
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 75
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 77
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 79
+  },
+  {
+    "absolute_error": 8.177448762580752e-08,
+    "active": true,
+    "actual_delta": 4.1484832763671875e-05,
+    "margin_after": 0.0964057445526123,
+    "margin_before": 0.09636425971984863,
+    "predicted_delta": 4.140305827604607e-05,
+    "target_relation_index": 80
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 85
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 86
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 87
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 88
+  },
+  {
+    "absolute_error": 5.828042048960924e-09,
+    "active": true,
+    "actual_delta": 4.178285598754883e-05,
+    "margin_after": 0.10641515254974365,
+    "margin_before": 0.1063733696937561,
+    "predicted_delta": 4.177702794549987e-05,
+    "target_relation_index": 90
+  },
+  {
+    "absolute_error": 2.3759639589115977e-08,
+    "active": true,
+    "actual_delta": 3.713369369506836e-05,
+    "margin_after": 0.02830404043197632,
+    "margin_before": 0.02826690673828125,
+    "predicted_delta": 3.7109934055479243e-05,
+    "target_relation_index": 92
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 95
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 97
+  },
+  {
+    "absolute_error": 2.754786692094058e-07,
+    "active": true,
+    "actual_delta": 4.3272972106933594e-05,
+    "margin_after": 0.1065298318862915,
+    "margin_before": 0.10648655891418457,
+    "predicted_delta": 4.3548450776143e-05,
+    "target_relation_index": 101
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 103
+  },
+  {
+    "absolute_error": 1.7633283277973533e-07,
+    "active": true,
+    "actual_delta": 3.921985626220703e-05,
+    "margin_after": 0.07443952560424805,
+    "margin_before": 0.07440030574798584,
+    "predicted_delta": 3.9043523429427296e-05,
+    "target_relation_index": 104
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 106
+  },
+  {
+    "absolute_error": 2.4665132514201105e-07,
+    "active": true,
+    "actual_delta": 4.291534423828125e-05,
+    "margin_after": 0.11195474863052368,
+    "margin_before": 0.1119118332862854,
+    "predicted_delta": 4.316199556342326e-05,
+    "target_relation_index": 108
+  }
+]

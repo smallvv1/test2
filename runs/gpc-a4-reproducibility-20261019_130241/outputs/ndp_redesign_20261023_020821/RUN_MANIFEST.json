@@ -1,0 +1,40 @@
+{
+  "audit_script": "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py",
+  "audit_script_sha256": "f410368ae4a4fb2ed3fe4ce2a891eee4b3516c40ef40c66df8cc96550c55f463",
+  "baseline_hash_manifest": "/home/DIFFER/outputs/ndp_margin_consistency_20261021_220823/RUN_MANIFEST.json",
+  "command": "/usr/local/bin/python3.10 -u /home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py --run-id 20261023_020821 --output-root /home/DIFFER/outputs/ndp_redesign_20261023_020821 --report-dir /home/DIFFER/reports/ndp_redesign_20261023_020821 --remote-main d6e24867a9bf33423d3342682c96d053d37ff190",
+  "gpc_modified": false,
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "pre_registered": {
+    "bootstrap_repeats": 2000,
+    "bootstrap_seed": 20261023,
+    "degradation_epsilon": 0.02,
+    "diagnostic_eta": 0.001,
+    "directional_asymmetry_margin": 0.05,
+    "gradient_budget_norm": 1.0,
+    "history_updates": [
+      0,
+      20,
+      50,
+      100
+    ],
+    "max_history_std": 0.05,
+    "minimum_history_nodes": 4,
+    "random_repeats": 200,
+    "safe_delta_min": 0.05,
+    "safe_epsilon_ref": 0.02,
+    "stable_min_margin": 0.05,
+    "vulnerability_margin": 0.05,
+    "vulnerability_tail_count": 2,
+    "vulnerability_tail_margin": 0.08
+  },
+  "python": "/usr/local/bin/python3.10",
+  "remote_main": "d6e24867a9bf33423d3342682c96d053d37ff190",
+  "run_id": "20261023_020821",
+  "seeds": [
+    1234,
+    4321
+  ],
+  "torch": "2.6.0"
+}

@@ -1,0 +1,10 @@
+{
+  "activation_rate": 0.0,
+  "active_anchor_count": 0,
+  "anchor_count": 64,
+  "epsilon": 0.02,
+  "seed": 1234,
+  "state_path": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed1234/rank0_state_epoch060.pt",
+  "tau": 0.2,
+  "update": 0
+}

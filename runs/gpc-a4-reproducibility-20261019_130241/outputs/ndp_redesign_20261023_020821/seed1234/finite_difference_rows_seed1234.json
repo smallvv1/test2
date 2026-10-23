@@ -1,0 +1,182 @@
+[
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 66
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 69
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 77
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 79
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 80
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 81
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 83
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 84
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 85
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 87
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 89
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 90
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 92
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 95
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 97
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 98
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 103
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 106
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 108
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 109
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 111
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 113
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 116
+  },
+  {
+    "absolute_error": 2.2391759557649493e-07,
+    "active": true,
+    "actual_delta": 4.780292510986328e-05,
+    "margin_after": 0.08549255132675171,
+    "margin_before": 0.08544474840164185,
+    "predicted_delta": 4.7579007514286786e-05,
+    "target_relation_index": 118
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 121
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 123
+  },
+  {
+    "absolute_error": 8.94251570571214e-08,
+    "active": true,
+    "actual_delta": 4.4465065002441406e-05,
+    "margin_after": 0.048579394817352295,
+    "margin_before": 0.048534929752349854,
+    "predicted_delta": 4.4375639845384285e-05,
+    "target_relation_index": 125
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 128
+  },
+  {
+    "active": false,
+    "reason": "zero_gradient",
+    "target_relation_index": 154
+  },
+  {
+    "absolute_error": 2.4673136067576706e-07,
+    "active": true,
+    "actual_delta": 4.2319297790527344e-05,
+    "margin_after": 0.06350076198577881,
+    "margin_before": 0.06345844268798828,
+    "predicted_delta": 4.207256642985158e-05,
+    "target_relation_index": 161
+  },
+  {
+    "absolute_error": 9.487484931014478e-08,
+    "active": true,
+    "actual_delta": 4.1544437408447266e-05,
+    "margin_after": 0.08014708757400513,
+    "margin_before": 0.08010554313659668,
+    "predicted_delta": 4.144956255913712e-05,
+    "target_relation_index": 162
+  },
+  {
+    "absolute_error": 2.178312570322305e-07,
+    "active": true,
+    "actual_delta": 3.4689903259277344e-05,
+    "margin_after": 0.04305863380432129,
+    "margin_before": 0.04302394390106201,
+    "predicted_delta": 3.4907734516309574e-05,
+    "target_relation_index": 163
+  }
+]

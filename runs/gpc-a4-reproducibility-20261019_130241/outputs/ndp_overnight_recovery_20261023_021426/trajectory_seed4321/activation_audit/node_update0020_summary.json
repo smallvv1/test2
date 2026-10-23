@@ -1,0 +1,10 @@
+{
+  "activation_rate": 0.171875,
+  "active_anchor_count": 11,
+  "anchor_count": 64,
+  "epsilon": 0.02,
+  "seed": 4321,
+  "state_path": "/home/DIFFER/outputs/ndp_overnight_recovery_20261023_021426/trajectory_seed4321/node_update0020/model.pth",
+  "tau": 0.2,
+  "update": 20
+}

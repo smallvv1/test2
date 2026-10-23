@@ -1,0 +1,69 @@
+{
+  "anchor_count": 512,
+  "counts": {
+    "current_errors": 1368,
+    "current_vulnerable": 2422,
+    "future_flips": 28,
+    "observed_degradation": 132,
+    "old_reliable": 763,
+    "reliable_and_observed_degradation": 23,
+    "reliable_and_vulnerable": 637,
+    "reliable_history": 775,
+    "reliable_newly_included_by_decoupling": 12
+  },
+  "features": "/home/DIFFER/outputs/ndp_margin_consistency_20261021_220823/feature_export/seed1234/k5_trajectory_features_seed1234.npz",
+  "features_sha256": "0e0f53f4513a7f404dda532abbc7b7647c9cb51301258b020d1a9fe7f34c50ae",
+  "flip_csv": "/home/DIFFER/outputs/ndp_redesign_20261023_021426/seed1234/missed_flip_rows_seed1234.csv",
+  "future_update400_used_only_as_evaluation_label": true,
+  "gradient_norms_safe_boundary": {
+    "B0_random": 0.0018897764384746552,
+    "B1_current_hard": 0.0018897764384746552,
+    "B2_reliability": 0.0033496764954179525,
+    "B3_reliability_vulnerability": 0.003488843562081456,
+    "B4_reliability_degradation": 0.015290817245841026,
+    "B5_safe_boundary_activation": 0.013044972904026508,
+    "B6_reliability_multi_pid": 0.003946266602724791,
+    "B7_reliability_bidirectional": 0.003777110716328025
+  },
+  "graph": "/home/DIFFER/outputs/ndp_true_multipid_20261021_103952/reference_graph/seed1234/multi_pid_reference_graph.json",
+  "graph_sha256": "405d9976ec8cfac69fa2171ee612b22ce405b07c5220875266120296fb778e97",
+  "negative_pid_per_anchor": 5,
+  "neighborhood_summary": "/home/DIFFER/outputs/ndp_redesign_20261023_021426/seed1234/neighborhood_collateral_summary_seed1234.json",
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "pre_registered": {
+    "bootstrap_repeats": 2000,
+    "bootstrap_seed": 20261023,
+    "degradation_epsilon": 0.02,
+    "diagnostic_eta": 0.001,
+    "directional_asymmetry_margin": 0.05,
+    "gradient_budget_norm": 1.0,
+    "history_updates": [
+      0,
+      20,
+      50,
+      100
+    ],
+    "max_history_std": 0.05,
+    "minimum_history_nodes": 4,
+    "random_repeats": 200,
+    "safe_delta_min": 0.05,
+    "safe_epsilon_ref": 0.02,
+    "stable_min_margin": 0.05,
+    "vulnerability_margin": 0.05,
+    "vulnerability_tail_count": 2,
+    "vulnerability_tail_margin": 0.08
+  },
+  "quadrants": {
+    "high_reliable_high_vulnerable": 637,
+    "high_reliable_low_vulnerable": 138,
+    "low_reliable_high_vulnerable": 1785,
+    "low_reliable_low_vulnerable": 0
+  },
+  "relation_count": 2560,
+  "relation_csv": "/home/DIFFER/outputs/ndp_redesign_20261023_021426/seed1234/relation_evidence_seed1234.csv",
+  "seed": 1234,
+  "selection_budget": 16,
+  "selection_summary": "/home/DIFFER/outputs/ndp_redesign_20261023_021426/seed1234/selection_summary_seed1234.json",
+  "status": "PASS_OFFLINE_P0_P4_REDESIGN"
+}

@@ -1,0 +1,21 @@
+{
+  "seed": 1234,
+  "flip_count": 28,
+  "category_counts": {
+    "category_history_unreliable": 28,
+    "category_reliable_current_degraded": 0,
+    "category_reliable_current_not_degraded_then_flip": 0,
+    "category_initial_near_zero_or_unstable": 28,
+    "category_positive_reference_changed_gt_0.02": 0,
+    "category_negative_impostor_rise_gt_0.02": 0
+  },
+  "thresholds_pre_registered": {
+    "positive_reference_delta_abs": 0.02,
+    "negative_impostor_rise": 0.02
+  },
+  "future_update400_used_only_for_event_label": true,
+  "selection_uses_update400": false,
+  "rows_csv": "/home/DIFFER/outputs/ndp_redesign_20261023_021426/seed1234/missed_flip_root_cause_details_seed1234.csv",
+  "current_error_count": 1368,
+  "current_error_rows_csv": "/home/DIFFER/outputs/ndp_redesign_20261023_021426/seed1234/current_error_rows_seed1234.csv"
+}

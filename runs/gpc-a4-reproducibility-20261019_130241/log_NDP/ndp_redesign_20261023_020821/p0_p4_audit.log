@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 775, in <module>
+    main()
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 746, in main
+    results[seed] = audit_seed(
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 520, in audit_seed
+    gradient_norms = safe_boundary_gradient_norms(raw_by_update[CURRENT_UPDATE], audit_rows, mask_map)
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 217, in safe_boundary_gradient_norms
+    margins.append(torch_relation_margin(x, row, local))
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 198, in torch_relation_margin
+    pos = x[[local[int(v)] for v in row["positive_indices"]]]
+  File "/home/DIFFER/scripts/ndp_reliability_safe_boundary_audit.py", line 198, in <listcomp>
+    pos = x[[local[int(v)] for v in row["positive_indices"]]]
+ValueError: invalid literal for int() with base 10: '['

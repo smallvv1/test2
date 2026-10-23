@@ -1,0 +1,28 @@
+{
+  "batch_index": 20,
+  "effective_updates": 20,
+  "elapsed_seconds": 17.06273651123047,
+  "failure": null,
+  "mode": "smoke",
+  "ndp_active_batches_local_rank0": 13,
+  "ndp_active_rate_local_rank0": 0.65,
+  "ndp_active_relations_local_rank0": 63,
+  "ndp_candidate_relations": 2048,
+  "ndp_historical_correct_relations": 1947,
+  "ndp_mean_loss_local_rank0": 0.007459452855982818,
+  "ndp_selected_relations_local_rank0": 189,
+  "optimizer_step_executed": true,
+  "run_id": "ndp_v5_20261023_100048_smoke_s4321",
+  "saved_nodes": [
+    {
+      "effective_updates": 20,
+      "epoch_tag": 61,
+      "global_step": 35780,
+      "model": "/home/DIFFER/log_NDP/ndp_v5_20261023_100048/smoke_n5_seed4321/node_update0020/model.pth",
+      "model_sha256": "b1256a89d65949c32cf2eecfd5e07eeaf4b5b73d2eb902e1a7551485df3d8ae7",
+      "optimizer_step_executed": true,
+      "rank_state": "/home/DIFFER/log_NDP/ndp_v5_20261023_100048/smoke_n5_seed4321/node_update0020/rank0_state.pt"
+    }
+  ],
+  "seed": 4321
+}

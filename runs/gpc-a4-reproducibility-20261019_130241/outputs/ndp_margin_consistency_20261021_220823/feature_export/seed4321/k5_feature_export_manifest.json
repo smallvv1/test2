@@ -1,0 +1,64 @@
+{
+  "anchor_count": 512,
+  "cpu_model_fallback": false,
+  "elapsed_seconds": 142.94038605690002,
+  "feature_definition": "PPU EVA02 feat[0]; raw FP32 and FP32 L2-normalized detached CPU export",
+  "graph": "outputs/ndp_true_multipid_20261021_103952/reference_graph/seed4321/multi_pid_reference_graph.json",
+  "graph_sha256": "3eda9376f3a13e854ae9a991f4e85e0e2b1c77eeb2fc0bbbc63244f647730cb5",
+  "graph_type": "difficult",
+  "image_count": 2046,
+  "image_meta_sha256": "833e27e0699a42ec5d0b50cc067a7b61bcbe8ce118c8451cbb782accebb204ed",
+  "k_pid": 5,
+  "nodes": [
+    {
+      "state_path": "outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/rank0_state_epoch060.pt",
+      "state_sha256": "d69859975ae386f82bebd05d944633e962cc377f73f55599eb685128a09637a7",
+      "update": 0
+    },
+    {
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0020/model.pth",
+      "state_sha256": "15a707f56adabd03cfa3f516e90ff1012b1cfe19bf41c07d1cb4412bc194a97c",
+      "update": 20
+    },
+    {
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0050/model.pth",
+      "state_sha256": "29f18da4ca54da9470f70499e98b661e904cf5fc923d974c44e42ac2b9664872",
+      "update": 50
+    },
+    {
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0100/model.pth",
+      "state_sha256": "b05a0e91fadc7b9f505ccc029933887b92c65d84c0129567e88ec8fda8d9071d",
+      "update": 100
+    },
+    {
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0200/model.pth",
+      "state_sha256": "df012a8e0716eed25f1eee392c3e0a001bf53b40dd9b6d65df11d6a7e8523358",
+      "update": 200
+    },
+    {
+      "state_path": "outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0400/model.pth",
+      "state_sha256": "095882043267dd80a4db2b333bcdf63c83028f1fedb344c87f8d1211fafe7b71",
+      "update": 400
+    }
+  ],
+  "npz": "/home/DIFFER/outputs/ndp_margin_consistency_20261021_220823/feature_export/seed4321/k5_trajectory_features_seed4321.npz",
+  "npz_sha256": "4525c723190b19e7a1f171d1160f642642513255e0d34100befd8457ab6815e1",
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "relation_count": 2560,
+  "seed": 4321,
+  "source_hashes": {
+    "activation_helper": "36317d62f27a3d9042fbd7e9d52a99928d324b437d421ccc9fde2210caee598a",
+    "engine": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+    "script": "0d418230a4f31e5e18007033b9191fb72e60c95f8f0bc7a36321df5cedcf1bd6"
+  },
+  "status": "PASS_PPU_EVAL_NO_GRAD_K5",
+  "updates": [
+    0,
+    20,
+    50,
+    100,
+    200,
+    400
+  ]
+}

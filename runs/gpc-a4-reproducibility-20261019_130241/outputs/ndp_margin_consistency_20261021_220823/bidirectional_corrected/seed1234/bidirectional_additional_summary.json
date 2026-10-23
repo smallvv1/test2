@@ -1,0 +1,51 @@
+{
+  "status": "PASS_BIDIRECTIONAL_ADDITIONAL_INFORMATION_AUDIT",
+  "seed": 1234,
+  "pair_count": 80,
+  "a_only_flip": 0,
+  "b_only_flip": 0,
+  "both_flip": 0,
+  "either_flip": 0,
+  "a_only_fraction": 0.0,
+  "b_only_fraction": 0.0,
+  "average_delta_negative_count": 39,
+  "most_dangerous_direction_negative_count": 53,
+  "identity_pair_count": 15,
+  "image_pair_count": 80,
+  "by_interval": {
+    "0->20": {
+      "n": 16,
+      "a_only_flip": 0,
+      "b_only_flip": 0,
+      "either_flip": 0
+    },
+    "100->200": {
+      "n": 16,
+      "a_only_flip": 0,
+      "b_only_flip": 0,
+      "either_flip": 0
+    },
+    "20->50": {
+      "n": 16,
+      "a_only_flip": 0,
+      "b_only_flip": 0,
+      "either_flip": 0
+    },
+    "200->400": {
+      "n": 16,
+      "a_only_flip": 0,
+      "b_only_flip": 0,
+      "either_flip": 0
+    },
+    "50->100": {
+      "n": 16,
+      "a_only_flip": 0,
+      "b_only_flip": 0,
+      "either_flip": 0
+    }
+  },
+  "future_information_used_for_selection": false,
+  "official_query_gallery_used": false,
+  "optimizer_step_executed": false,
+  "interpretation": "图像级双侧诊断；小样本，不代表双侧损失收益"
+}

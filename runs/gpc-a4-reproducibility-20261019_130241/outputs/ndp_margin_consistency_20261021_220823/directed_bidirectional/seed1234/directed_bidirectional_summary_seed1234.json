@@ -1,0 +1,58 @@
+{
+  "status": "PASS_CORRECTED_DIRECTED_BIDIRECTIONAL_GRADIENT_AUDIT",
+  "seed": 1234,
+  "pair_source": "outputs/ndp_relation_correction_20261021_192813/bidirectional_correction/seed1234/image_level_reciprocal_pairs.csv",
+  "pair_sha256": "e310c781abdf379a33a1a93e7afaa275c6243b753958d675ec292dc328cd6fe5",
+  "graph_sha256": "405d9976ec8cfac69fa2171ee612b22ce405b07c5220875266120296fb778e97",
+  "feature_source": "outputs/ndp_margin_consistency_20261021_220823/feature_export/seed1234/k5_trajectory_features_seed1234.npz",
+  "row_count": 80,
+  "identity_pair_count": 15,
+  "a_only_worsen": 9,
+  "b_only_worsen": 18,
+  "both_worsen": 25,
+  "both_improve": 28,
+  "a_flips": 0,
+  "b_flips": 0,
+  "gradients": {
+    "0->20": {
+      "directions": 32,
+      "active": 1,
+      "loss": 1.612247433513403e-05,
+      "gradient_norm": 0.03453264385461807,
+      "gradient_finite": true
+    },
+    "20->50": {
+      "directions": 32,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "50->100": {
+      "directions": 32,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "100->200": {
+      "directions": 32,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "200->400": {
+      "directions": 32,
+      "active": 4,
+      "loss": 0.0011360212229192257,
+      "gradient_norm": 0.08766879886388779,
+      "gradient_finite": true
+    }
+  },
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "same_cross_images_verified": true,
+  "rows_csv": "outputs/ndp_margin_consistency_20261021_220823/directed_bidirectional/seed1234/directed_bidirectional_rows_seed1234.csv",
+  "script_sha256": "81138b6899222678b273540c5076f45be842ef2c5c78a5ad3960ab00bb26ea17"
+}

@@ -1,0 +1,536 @@
+{
+  "1234": {
+    "loss_equal": true,
+    "found_inf_equal": true,
+    "tensor_comparisons_float64": {
+      "scaled_gradients/patch_embed.proj.weight": {
+        "max_abs": 0.40625,
+        "relative_l2_to_repeat1": 0.0033295109742197226,
+        "cosine_float64": 0.9999946648135349
+      },
+      "scaled_gradients/blocks.0.attn.q_proj.weight": {
+        "max_abs": 0.46875,
+        "relative_l2_to_repeat1": 0.0038333470484208645,
+        "cosine_float64": 0.9999939820120658
+      },
+      "scaled_gradients/blocks.0.attn.proj.weight": {
+        "max_abs": 4.5,
+        "relative_l2_to_repeat1": 0.004118850854772853,
+        "cosine_float64": 0.9999924919865486
+      },
+      "scaled_gradients/blocks.11.attn.q_proj.weight": {
+        "max_abs": 0.046875,
+        "relative_l2_to_repeat1": 0.0008515500604230618,
+        "cosine_float64": 0.9999996374614346
+      },
+      "scaled_gradients/blocks.22.attn.q_proj.weight": {
+        "max_abs": 0.0078125,
+        "relative_l2_to_repeat1": 8.620027163424583e-06,
+        "cosine_float64": 0.9999999999628628
+      },
+      "scaled_gradients/blocks.22.attn.proj.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000113
+      },
+      "scaled_gradients/head.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000016
+      },
+      "unscaled_gradients/patch_embed.proj.weight": {
+        "max_abs": 0.003173828125,
+        "relative_l2_to_repeat1": 0.0033295109742197226,
+        "cosine_float64": 0.9999946648135349
+      },
+      "unscaled_gradients/blocks.0.attn.q_proj.weight": {
+        "max_abs": 0.003662109375,
+        "relative_l2_to_repeat1": 0.0038333470484208645,
+        "cosine_float64": 0.9999939820120658
+      },
+      "unscaled_gradients/blocks.0.attn.proj.weight": {
+        "max_abs": 0.03515625,
+        "relative_l2_to_repeat1": 0.004118850854772853,
+        "cosine_float64": 0.9999924919865486
+      },
+      "unscaled_gradients/blocks.11.attn.q_proj.weight": {
+        "max_abs": 0.0003662109375,
+        "relative_l2_to_repeat1": 0.0008515500604230618,
+        "cosine_float64": 0.9999996374614346
+      },
+      "unscaled_gradients/blocks.22.attn.q_proj.weight": {
+        "max_abs": 6.103515625e-05,
+        "relative_l2_to_repeat1": 8.620027163424583e-06,
+        "cosine_float64": 0.9999999999628628
+      },
+      "unscaled_gradients/blocks.22.attn.proj.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000113
+      },
+      "unscaled_gradients/head.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000016
+      },
+      "module_output_grads/patch_embed/0": {
+        "max_abs": 1.0,
+        "relative_l2_to_repeat1": 0.0020333284388686086,
+        "cosine_float64": 0.9999989694874855
+      },
+      "module_output_grads/blocks.0/0": {
+        "max_abs": 0.24371337890625,
+        "relative_l2_to_repeat1": 0.0018724035142076436,
+        "cosine_float64": 0.9999991121635176
+      },
+      "module_output_grads/blocks.1/0": {
+        "max_abs": 0.10515213012695312,
+        "relative_l2_to_repeat1": 0.0018702385865693655,
+        "cosine_float64": 0.9999991496034546
+      },
+      "module_output_grads/blocks.2/0": {
+        "max_abs": 0.05077171325683594,
+        "relative_l2_to_repeat1": 0.0018589335791403855,
+        "cosine_float64": 0.9999991622499944
+      },
+      "module_output_grads/blocks.3/0": {
+        "max_abs": 0.04286956787109375,
+        "relative_l2_to_repeat1": 0.0018314999295304362,
+        "cosine_float64": 0.9999991892082567
+      },
+      "module_output_grads/blocks.4/0": {
+        "max_abs": 0.019269943237304688,
+        "relative_l2_to_repeat1": 0.0016296673388743717,
+        "cosine_float64": 0.9999991738249734
+      },
+      "module_output_grads/blocks.5/0": {
+        "max_abs": 0.013413429260253906,
+        "relative_l2_to_repeat1": 0.0014238344087295998,
+        "cosine_float64": 0.999999223173558
+      },
+      "module_output_grads/blocks.6/0": {
+        "max_abs": 0.006146907806396484,
+        "relative_l2_to_repeat1": 0.0011736686476889401,
+        "cosine_float64": 0.9999993976898515
+      },
+      "module_output_grads/blocks.7/0": {
+        "max_abs": 0.002728700637817383,
+        "relative_l2_to_repeat1": 0.0009856222152249598,
+        "cosine_float64": 0.9999995290780308
+      },
+      "module_output_grads/blocks.8/0": {
+        "max_abs": 0.0018788576126098633,
+        "relative_l2_to_repeat1": 0.0009233526053442684,
+        "cosine_float64": 0.9999995788174817
+      },
+      "module_output_grads/blocks.9/0": {
+        "max_abs": 0.001322031021118164,
+        "relative_l2_to_repeat1": 0.0008656193152189787,
+        "cosine_float64": 0.9999996275446879
+      },
+      "module_output_grads/blocks.10/0": {
+        "max_abs": 0.0013119876384735107,
+        "relative_l2_to_repeat1": 0.0008423616438828572,
+        "cosine_float64": 0.9999996461329504
+      },
+      "module_output_grads/blocks.11/0": {
+        "max_abs": 0.0012575089931488037,
+        "relative_l2_to_repeat1": 0.0008110798376661571,
+        "cosine_float64": 0.9999996716102237
+      },
+      "module_output_grads/blocks.12/0": {
+        "max_abs": 0.0013746023178100586,
+        "relative_l2_to_repeat1": 0.0008064830337366185,
+        "cosine_float64": 0.9999996750114984
+      },
+      "module_output_grads/blocks.13/0": {
+        "max_abs": 0.0014569759368896484,
+        "relative_l2_to_repeat1": 0.000839469347498788,
+        "cosine_float64": 0.9999996478656473
+      },
+      "module_output_grads/blocks.14/0": {
+        "max_abs": 0.0014369487762451172,
+        "relative_l2_to_repeat1": 0.0008879405830128877,
+        "cosine_float64": 0.9999996060955337
+      },
+      "module_output_grads/blocks.15/0": {
+        "max_abs": 0.0018412768840789795,
+        "relative_l2_to_repeat1": 0.000956650365895625,
+        "cosine_float64": 0.999999542927638
+      },
+      "module_output_grads/blocks.16/0": {
+        "max_abs": 0.0023950934410095215,
+        "relative_l2_to_repeat1": 0.0009697757420046627,
+        "cosine_float64": 0.9999995299184541
+      },
+      "module_output_grads/blocks.17/0": {
+        "max_abs": 0.0026946067810058594,
+        "relative_l2_to_repeat1": 0.0008451798327067622,
+        "cosine_float64": 0.9999996448287364
+      },
+      "module_output_grads/blocks.18/0": {
+        "max_abs": 0.0029418766498565674,
+        "relative_l2_to_repeat1": 0.0006501647271037858,
+        "cosine_float64": 0.9999997905380337
+      },
+      "module_output_grads/blocks.19/0": {
+        "max_abs": 0.0025625228881835938,
+        "relative_l2_to_repeat1": 0.0004068059717313175,
+        "cosine_float64": 0.9999999195637221
+      },
+      "module_output_grads/blocks.20/0": {
+        "max_abs": 0.0006477832794189453,
+        "relative_l2_to_repeat1": 4.029466165640606e-05,
+        "cosine_float64": 0.999999999188228
+      },
+      "module_output_grads/blocks.21/0": {
+        "max_abs": 1.576356589794159e-05,
+        "relative_l2_to_repeat1": 5.934972400713158e-07,
+        "cosine_float64": 0.9999999999998328
+      },
+      "module_output_grads/blocks.22.norm1/0": {
+        "max_abs": 7.62939453125e-06,
+        "relative_l2_to_repeat1": 1.205397256004211e-06,
+        "cosine_float64": 1.0000000000049423
+      },
+      "module_output_grads/blocks.22.attn.q_proj/0": {
+        "max_abs": 1.52587890625e-05,
+        "relative_l2_to_repeat1": 5.677912986248464e-07,
+        "cosine_float64": 1.000000000000612
+      },
+      "module_output_grads/blocks.22.attn.k_proj/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000036409
+      },
+      "module_output_grads/blocks.22.attn.v_proj/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.000000000004396
+      },
+      "module_output_grads/blocks.22.attn.norm/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.000000000000779
+      },
+      "module_output_grads/blocks.22.attn.proj/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000004508
+      },
+      "module_output_grads/blocks.22.attn/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000004508
+      },
+      "module_output_grads/blocks.22.norm2/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000995
+      },
+      "module_output_grads/blocks.22.mlp.fc1_g/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000007312
+      },
+      "module_output_grads/blocks.22.mlp.fc1_x/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000003733
+      },
+      "module_output_grads/blocks.22.mlp.norm/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000035558
+      },
+      "module_output_grads/blocks.22.mlp.fc2/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000007587
+      },
+      "module_output_grads/blocks.22.mlp/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000007587
+      },
+      "module_output_grads/blocks.22/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000278
+      },
+      "module_output_grads/head/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000002
+      }
+    },
+    "selected_relation_count": 0
+  },
+  "4321": {
+    "loss_equal": true,
+    "found_inf_equal": true,
+    "tensor_comparisons_float64": {
+      "scaled_gradients/patch_embed.proj.weight": {
+        "max_abs": 0.140625,
+        "relative_l2_to_repeat1": 0.0031451440303170313,
+        "cosine_float64": 0.99999507111761
+      },
+      "scaled_gradients/blocks.0.attn.q_proj.weight": {
+        "max_abs": 0.09375,
+        "relative_l2_to_repeat1": 0.003511444727739325,
+        "cosine_float64": 0.999993849434053
+      },
+      "scaled_gradients/blocks.0.attn.proj.weight": {
+        "max_abs": 1.84375,
+        "relative_l2_to_repeat1": 0.004125209908312336,
+        "cosine_float64": 0.9999914967416127
+      },
+      "scaled_gradients/blocks.11.attn.q_proj.weight": {
+        "max_abs": 0.015625,
+        "relative_l2_to_repeat1": 0.0008545849876306738,
+        "cosine_float64": 0.9999996384397573
+      },
+      "scaled_gradients/blocks.22.attn.q_proj.weight": {
+        "max_abs": 0.00390625,
+        "relative_l2_to_repeat1": 8.824255281864343e-06,
+        "cosine_float64": 0.9999999999610761
+      },
+      "scaled_gradients/blocks.22.attn.proj.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.000000000000011
+      },
+      "scaled_gradients/head.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000029
+      },
+      "unscaled_gradients/patch_embed.proj.weight": {
+        "max_abs": 0.00054931640625,
+        "relative_l2_to_repeat1": 0.0031451440303170313,
+        "cosine_float64": 0.99999507111761
+      },
+      "unscaled_gradients/blocks.0.attn.q_proj.weight": {
+        "max_abs": 0.0003662109375,
+        "relative_l2_to_repeat1": 0.003511444727739325,
+        "cosine_float64": 0.999993849434053
+      },
+      "unscaled_gradients/blocks.0.attn.proj.weight": {
+        "max_abs": 0.0072021484375,
+        "relative_l2_to_repeat1": 0.004125209908312336,
+        "cosine_float64": 0.9999914967416127
+      },
+      "unscaled_gradients/blocks.11.attn.q_proj.weight": {
+        "max_abs": 6.103515625e-05,
+        "relative_l2_to_repeat1": 0.0008545849876306738,
+        "cosine_float64": 0.9999996384397573
+      },
+      "unscaled_gradients/blocks.22.attn.q_proj.weight": {
+        "max_abs": 1.52587890625e-05,
+        "relative_l2_to_repeat1": 8.824255281864343e-06,
+        "cosine_float64": 0.9999999999610761
+      },
+      "unscaled_gradients/blocks.22.attn.proj.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.000000000000011
+      },
+      "unscaled_gradients/head.weight": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000029
+      },
+      "module_output_grads/patch_embed/0": {
+        "max_abs": 0.15625,
+        "relative_l2_to_repeat1": 0.002027336623882205,
+        "cosine_float64": 0.9999983313815345
+      },
+      "module_output_grads/blocks.0/0": {
+        "max_abs": 0.05225849151611328,
+        "relative_l2_to_repeat1": 0.0018835907097750817,
+        "cosine_float64": 0.9999985259314874
+      },
+      "module_output_grads/blocks.1/0": {
+        "max_abs": 0.026685714721679688,
+        "relative_l2_to_repeat1": 0.0019155310916273431,
+        "cosine_float64": 0.9999984742648327
+      },
+      "module_output_grads/blocks.2/0": {
+        "max_abs": 0.009087324142456055,
+        "relative_l2_to_repeat1": 0.0018601233212573484,
+        "cosine_float64": 0.9999985163441123
+      },
+      "module_output_grads/blocks.3/0": {
+        "max_abs": 0.005877256393432617,
+        "relative_l2_to_repeat1": 0.001775647521788387,
+        "cosine_float64": 0.9999985948878255
+      },
+      "module_output_grads/blocks.4/0": {
+        "max_abs": 0.002744019031524658,
+        "relative_l2_to_repeat1": 0.001561941383060622,
+        "cosine_float64": 0.9999988159937747
+      },
+      "module_output_grads/blocks.5/0": {
+        "max_abs": 0.0014092624187469482,
+        "relative_l2_to_repeat1": 0.00136421151850642,
+        "cosine_float64": 0.9999990787453238
+      },
+      "module_output_grads/blocks.6/0": {
+        "max_abs": 0.001008346676826477,
+        "relative_l2_to_repeat1": 0.0012443172559501532,
+        "cosine_float64": 0.9999992299920315
+      },
+      "module_output_grads/blocks.7/0": {
+        "max_abs": 0.0008299052715301514,
+        "relative_l2_to_repeat1": 0.001121514828152071,
+        "cosine_float64": 0.9999993731818222
+      },
+      "module_output_grads/blocks.8/0": {
+        "max_abs": 0.0007543563842773438,
+        "relative_l2_to_repeat1": 0.0010468087481992246,
+        "cosine_float64": 0.9999994539303259
+      },
+      "module_output_grads/blocks.9/0": {
+        "max_abs": 0.0006031990051269531,
+        "relative_l2_to_repeat1": 0.0009599690493573951,
+        "cosine_float64": 0.9999995405146297
+      },
+      "module_output_grads/blocks.10/0": {
+        "max_abs": 0.0005003027617931366,
+        "relative_l2_to_repeat1": 0.000895394451224262,
+        "cosine_float64": 0.9999996003593409
+      },
+      "module_output_grads/blocks.11/0": {
+        "max_abs": 0.00047616660594940186,
+        "relative_l2_to_repeat1": 0.0008797715663110621,
+        "cosine_float64": 0.9999996141664137
+      },
+      "module_output_grads/blocks.12/0": {
+        "max_abs": 0.00043267011642456055,
+        "relative_l2_to_repeat1": 0.000897316716732079,
+        "cosine_float64": 0.9999995980501881
+      },
+      "module_output_grads/blocks.13/0": {
+        "max_abs": 0.0004755854606628418,
+        "relative_l2_to_repeat1": 0.0009376068102655346,
+        "cosine_float64": 0.9999995610429891
+      },
+      "module_output_grads/blocks.14/0": {
+        "max_abs": 0.0005558207631111145,
+        "relative_l2_to_repeat1": 0.0010016968125089608,
+        "cosine_float64": 0.9999994984084928
+      },
+      "module_output_grads/blocks.15/0": {
+        "max_abs": 0.0006278306245803833,
+        "relative_l2_to_repeat1": 0.0010393684225235907,
+        "cosine_float64": 0.9999994598687679
+      },
+      "module_output_grads/blocks.16/0": {
+        "max_abs": 0.0008439179509878159,
+        "relative_l2_to_repeat1": 0.0009917400440063423,
+        "cosine_float64": 0.9999995082593213
+      },
+      "module_output_grads/blocks.17/0": {
+        "max_abs": 0.0012534260749816895,
+        "relative_l2_to_repeat1": 0.0008531246915244182,
+        "cosine_float64": 0.9999996360976132
+      },
+      "module_output_grads/blocks.18/0": {
+        "max_abs": 0.0011652186512947083,
+        "relative_l2_to_repeat1": 0.0006374379978109838,
+        "cosine_float64": 0.999999796862901
+      },
+      "module_output_grads/blocks.19/0": {
+        "max_abs": 0.0009642839431762695,
+        "relative_l2_to_repeat1": 0.0003623333296375687,
+        "cosine_float64": 0.9999999344022559
+      },
+      "module_output_grads/blocks.20/0": {
+        "max_abs": 0.00039130449295043945,
+        "relative_l2_to_repeat1": 0.00012772169230902903,
+        "cosine_float64": 0.9999999918445659
+      },
+      "module_output_grads/blocks.21/0": {
+        "max_abs": 0.00026473402976989746,
+        "relative_l2_to_repeat1": 2.5825162891568172e-05,
+        "cosine_float64": 0.9999999996665985
+      },
+      "module_output_grads/blocks.22.norm1/0": {
+        "max_abs": 0.0001220703125,
+        "relative_l2_to_repeat1": 2.3621813571433946e-05,
+        "cosine_float64": 0.999999999725597
+      },
+      "module_output_grads/blocks.22.attn.q_proj/0": {
+        "max_abs": 0.0001220703125,
+        "relative_l2_to_repeat1": 6.210366797414655e-06,
+        "cosine_float64": 0.9999999999858702
+      },
+      "module_output_grads/blocks.22.attn.k_proj/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000028106
+      },
+      "module_output_grads/blocks.22.attn.v_proj/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 0.9999999999999997
+      },
+      "module_output_grads/blocks.22.attn.norm/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000072204
+      },
+      "module_output_grads/blocks.22.attn.proj/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.000000000005626
+      },
+      "module_output_grads/blocks.22.attn/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.000000000005626
+      },
+      "module_output_grads/blocks.22.norm2/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.00000000000092
+      },
+      "module_output_grads/blocks.22.mlp.fc1_g/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 0.9999999999991112
+      },
+      "module_output_grads/blocks.22.mlp.fc1_x/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 0.9999999999996937
+      },
+      "module_output_grads/blocks.22.mlp.norm/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000155913
+      },
+      "module_output_grads/blocks.22.mlp.fc2/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000086007
+      },
+      "module_output_grads/blocks.22.mlp/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000086007
+      },
+      "module_output_grads/blocks.22/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 1.0000000000000056
+      },
+      "module_output_grads/head/0": {
+        "max_abs": 0.0,
+        "relative_l2_to_repeat1": 0.0,
+        "cosine_float64": 0.9999999999999999
+      }
+    },
+    "selected_relation_count": 0
+  }
+}

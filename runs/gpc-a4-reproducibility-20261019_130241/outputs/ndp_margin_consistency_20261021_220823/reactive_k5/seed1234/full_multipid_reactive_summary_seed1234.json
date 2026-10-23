@@ -1,0 +1,90 @@
+{
+  "status": "PASS_K5_MULTIPID_REACTIVE_AUDIT",
+  "seed": 1234,
+  "graph": "outputs/ndp_true_multipid_20261021_103952/reference_graph/seed1234/multi_pid_reference_graph.json",
+  "features": "/home/DIFFER/outputs/ndp_margin_consistency_20261021_220823/feature_export/seed1234/k5_trajectory_features_seed1234.npz",
+  "relation_count": 2560,
+  "anchor_count": 512,
+  "distinct_anchor_pid_count": 77,
+  "negative_pid_per_anchor": 5,
+  "modes": {
+    "q25": {
+      "rows": 2560,
+      "reliable_A": 630,
+      "vulnerable": 1896,
+      "observed_degradation": 207,
+      "active": 33,
+      "validation_flips": 31,
+      "negative_pid_count": 77
+    },
+    "mean": {
+      "rows": 2560,
+      "reliable_A": 763,
+      "vulnerable": 1760,
+      "observed_degradation": 183,
+      "active": 33,
+      "validation_flips": 28,
+      "negative_pid_count": 77
+    },
+    "single": {
+      "rows": 2560,
+      "reliable_A": 852,
+      "vulnerable": 1669,
+      "observed_degradation": 214,
+      "active": 59,
+      "validation_flips": 29,
+      "negative_pid_count": 77
+    }
+  },
+  "mask_gradient_summary_mean": {
+    "reliability": {
+      "selected": 763,
+      "active": 33,
+      "loss": 0.00042183854384347796,
+      "gradient_norm": 0.010667821392416954,
+      "gradient_finite": true
+    },
+    "vulnerability": {
+      "selected": 1760,
+      "active": 150,
+      "loss": 0.0013155621709302068,
+      "gradient_norm": 0.015198157168924809,
+      "gradient_finite": true
+    },
+    "observed_degradation": {
+      "selected": 183,
+      "active": 183,
+      "loss": 0.01441121380776167,
+      "gradient_norm": 0.156267449259758,
+      "gradient_finite": true
+    },
+    "reliability_vulnerability": {
+      "selected": 0,
+      "active": 0,
+      "loss": -0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "reliability_observed_degradation": {
+      "selected": 33,
+      "active": 33,
+      "loss": 0.00975341908633709,
+      "gradient_norm": 0.24665288627147675,
+      "gradient_finite": true
+    },
+    "reliability_vulnerability_observed_degradation": {
+      "selected": 0,
+      "active": 0,
+      "loss": -0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    }
+  },
+  "epsilon": 0.02,
+  "vulnerability_margin": 0.05,
+  "selection_uses_future_update400": false,
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "script_sha256": "958e9666e5dbf657194b481ff25bde30857f9915192ddbd8e532c6e0d6b83d91",
+  "rows_csv": "/home/DIFFER/outputs/ndp_margin_consistency_20261021_220823/reactive_k5/seed1234/full_multipid_reactive_rows_seed1234.csv"
+}

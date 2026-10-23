@@ -1,0 +1,46 @@
+{
+  "run_time": "20261021_220823",
+  "status": "COMPLETED_OFFLINE_AND_NO_STEP_PROBES",
+  "git_remote_main_checked": "77364d349820296760da857e43fd540ecdd7dfbc",
+  "server_engine_head_at_audit": "573b0502a231568d509fe3a463664c1a3c42e258",
+  "python": "/usr/local/bin/python3.10",
+  "torch": "2.6.0",
+  "ppu_environment": "source /usr/local/PPU_SDK/envsetup.sh ppu",
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "gpc_modified": false,
+  "statuses": {
+    "NDP_MARGIN_DEFINITION": "PASS",
+    "K5_MULTIPID_FEATURE_EXPORT": "PASS_PPU_EVAL_NO_GRAD",
+    "K5_REACTIVE_GRADIENT": "PASS_FROZEN_FEATURE_ONLY",
+    "DIRECTED_BIDIRECTIONAL": "PASS_RECOMPUTED_UNIFIED_MARGIN",
+    "FULL_EVA02_AA": "FAIL",
+    "NDP_MECHANISM": "INCONCLUSIVE",
+    "A/A_REPRODUCIBILITY": "FAIL",
+    "CONTROLLED_SHORT_PILOT": "NO_GO"
+  },
+  "source_sha256": {
+    "scripts/ndp_margin_consistency.py": "3cb00c7e571e5ecefc939f44a034305d9977c248b096d28f9b4e09c834e9c353",
+    "scripts/ndp_k5_trajectory_feature_export.py": "0d418230a4f31e5e18007033b9191fb72e60c95f8f0bc7a36321df5cedcf1bd6",
+    "scripts/ndp_full_multipid_reactive_audit.py": "958e9666e5dbf657194b481ff25bde30857f9915192ddbd8e532c6e0d6b83d91",
+    "scripts/ndp_reactive_feature_gradient_audit.py": "7b3d9cf9da4efe07f37faefac8ffe8ccc13d2cda528b2e4102597acabfb607c0",
+    "scripts/ndp_directed_bidirectional_gradient_audit.py": "81138b6899222678b273540c5076f45be842ef2c5c78a5ad3960ab00bb26ea17",
+    "scripts/ndp_matched_relation_selection_value.py": "2591439cd149fe9c65a4ea61b49142cb38c09bcf7210135e0395eefe453386a5",
+    "scripts/ndp_triplet_complementarity_audit.py": "e1f1370d6057b3aa05929dcd9982333a2e5cc23d37ea1d151cb91722c8fb120b",
+    "tests/test_ndp_margin_consistency_current.py": "e401c1bec50d7ae263ce837dfcdb7fd9c7aa9ec644b14b6a2728db4324503b49",
+    "scripts/ndp_aa_operator_probe.py": "7e4496cfbea93468094c13b91896bd1eb14c8748f79c573da2cc2d92f023183d"
+  },
+  "fixed_baseline_sha256": {
+    "/data/DIFFER/scripts/gpc_v2_train.py": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+    "/data/DIFFER/loss/make_loss.py": "9be543c08b50553a95839351929fa9341edf900947593fbd675c0e4847889043",
+    "/data/DIFFER/configs/ltcc/eva02_l_bio.yml": "c0589950b23885c334c64c85bd6db9803935765d0647e02c1bb74b5b5ae00b97",
+    "/data/DIFFER/loss/triplet_loss.py": "86656d44255172866d1e9854880c16e5d9536c6a756a577876312b663512092a"
+  },
+  "checkpoint_sha256": {
+    "seed1234_update0": "e11c90b63d7252f0fde99439bb1d5a6f1d72e757d43143fe9ac92061e2411177",
+    "seed4321_update0": "d69859975ae386f82bebd05d944633e962cc377f73f55599eb685128a09637a7"
+  },
+  "logs": "/home/DIFFER/log_NDP/ndp_margin_consistency_20261021_220823",
+  "reports": "/home/DIFFER/reports/ndp_margin_consistency_20261021_220823",
+  "outputs": "/home/DIFFER/outputs/ndp_margin_consistency_20261021_220823"
+}

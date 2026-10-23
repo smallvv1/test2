@@ -1,0 +1,58 @@
+{
+  "status": "PASS_CORRECTED_DIRECTED_BIDIRECTIONAL_GRADIENT_AUDIT",
+  "seed": 4321,
+  "pair_source": "outputs/ndp_relation_correction_20261021_192813/bidirectional_correction/seed4321/image_level_reciprocal_pairs.csv",
+  "pair_sha256": "c13adaa9df3e7caa1a19f0ac9295a44543e6e1b885da246ec0e670f381a4babc",
+  "graph_sha256": "3eda9376f3a13e854ae9a991f4e85e0e2b1c77eeb2fc0bbbc63244f647730cb5",
+  "feature_source": "outputs/ndp_margin_consistency_20261021_220823/feature_export/seed4321/k5_trajectory_features_seed4321.npz",
+  "row_count": 70,
+  "identity_pair_count": 13,
+  "a_only_worsen": 13,
+  "b_only_worsen": 16,
+  "both_worsen": 18,
+  "both_improve": 23,
+  "a_flips": 0,
+  "b_flips": 2,
+  "gradients": {
+    "0->20": {
+      "directions": 28,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "20->50": {
+      "directions": 28,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "50->100": {
+      "directions": 28,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "100->200": {
+      "directions": 28,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    },
+    "200->400": {
+      "directions": 28,
+      "active": 0,
+      "loss": 0.0,
+      "gradient_norm": 0.0,
+      "gradient_finite": true
+    }
+  },
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "same_cross_images_verified": true,
+  "rows_csv": "outputs/ndp_margin_consistency_20261021_220823/directed_bidirectional/seed4321/directed_bidirectional_rows_seed4321.csv",
+  "script_sha256": "81138b6899222678b273540c5076f45be842ef2c5c78a5ad3960ab00bb26ea17"
+}

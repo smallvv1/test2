@@ -1,0 +1,74 @@
+{
+  "status": "PASS_FROZEN_FEATURE_TRIPLET_NDP_COMPLEMENTARITY",
+  "seed": 1234,
+  "relation_count": 2560,
+  "raw_feature_shape": [
+    2058,
+    1024
+  ],
+  "raw_feature_contract": "feat[0] unnormalized; original Triplet euclidean distance",
+  "ndp_feature_contract": "same raw tensor through FP32 cosine normalization; mean positive minus max negative",
+  "methods": {
+    "T0_triplet_all": {
+      "selected": 2560,
+      "active": 2560,
+      "loss": 3.7473411560058594,
+      "gradient_norm": 0.06478340923786163,
+      "gradient_finite": true,
+      "pid_count": 77,
+      "negative_pid_count": 77
+    },
+    "T1_margin_all": {
+      "selected": 2560,
+      "active": 2473,
+      "loss": 0.2251177579164505,
+      "gradient_norm": 0.0014366580871865153,
+      "gradient_finite": true,
+      "pid_count": 77,
+      "negative_pid_count": 77
+    },
+    "T2_reactive_reliable": {
+      "selected": 763,
+      "active": 33,
+      "loss": 0.00042183950426988304,
+      "gradient_norm": 0.00033828060259111226,
+      "gradient_finite": true,
+      "pid_count": 58,
+      "negative_pid_count": 73
+    },
+    "T3_reactive_reliable_observed": {
+      "selected": 33,
+      "active": 33,
+      "loss": 0.009753440506756306,
+      "gradient_norm": 0.007821453735232353,
+      "gradient_finite": true,
+      "pid_count": 16,
+      "negative_pid_count": 21
+    },
+    "T4_reactive_observed": {
+      "selected": 183,
+      "active": 183,
+      "loss": 0.014411208219826221,
+      "gradient_norm": 0.004958559293299913,
+      "gradient_finite": true,
+      "pid_count": 36,
+      "negative_pid_count": 53
+    }
+  },
+  "gradient_cosines_float64": {
+    "T0_triplet_all__T1_margin_all": 0.6322370279961673,
+    "T0_triplet_all__T2_reactive_reliable": 0.048608900450613945,
+    "T0_triplet_all__T3_reactive_reliable_observed": 0.04860890012420466,
+    "T0_triplet_all__T4_reactive_observed": 0.25893891102440236,
+    "T1_margin_all__T2_reactive_reliable": 0.16568384443768813,
+    "T1_margin_all__T3_reactive_reliable_observed": 0.1656838443839458,
+    "T1_margin_all__T4_reactive_observed": 0.38651542663066596,
+    "T2_reactive_reliable__T3_reactive_reliable_observed": 0.9999999999999696,
+    "T2_reactive_reliable__T4_reactive_observed": 0.361979348867285,
+    "T3_reactive_reliable_observed__T4_reactive_observed": 0.36197934866430714
+  },
+  "network_parameter_gradient": false,
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "interpretation": "关系级 SoftMargin 是固定候选关系代理，不是历史真实 Batch-Hard 记录"
+}

@@ -1,0 +1,45 @@
+{
+  "status": "PASS_NDP_V5_TRAIN_ONLY_LOCAL_METRICS",
+  "seed": 4321,
+  "features": "/home/DIFFER/log_NDP/ndp_v5_10epoch_20261023_111046/local_features/seed4321_B0_update2980.npz",
+  "features_sha256": "5b0eac6b7b03b30a07b2fada4e77d8a8e5df1c3b00332d057858eefbbaa080ba",
+  "graph": "/home/DIFFER/outputs/ndp_v2_20261023_061358/reference_graph/seed4321/multi_pid_reference_graph_v2.json",
+  "graph_sha256": "2b2556ea941fa0c19afa91b2bf3f0a3742d616faab5ad8580e1df455ad170355",
+  "output_csv": "/home/DIFFER/log_NDP/ndp_v5_10epoch_20261023_111046/local_metrics/seed4321_B0_update2980.csv",
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "rows": [
+    {
+      "seed": 4321,
+      "update": 0,
+      "relation_count": 2048,
+      "correct_relation_count": 1660,
+      "correct_relation_rate": 0.810546875,
+      "mean_margin": 0.05351828421407845,
+      "median_margin": 0.06625404953956604,
+      "q25_margin": 0.01806703209877014,
+      "min_margin": -0.4475669860839844,
+      "current_error_pid_count": 943,
+      "new_error_pid_count_vs_update0": 0,
+      "recovered_pid_count_vs_update0": 0,
+      "purity_at_10_train_bank": 0.9673828125,
+      "purity_at_10_q25": 1.0
+    },
+    {
+      "seed": 4321,
+      "update": 2980,
+      "relation_count": 2048,
+      "correct_relation_count": 1679,
+      "correct_relation_rate": 0.81982421875,
+      "mean_margin": 0.05776493268785998,
+      "median_margin": 0.06737366318702698,
+      "q25_margin": 0.017997339367866516,
+      "min_margin": -0.4195176959037781,
+      "current_error_pid_count": 859,
+      "new_error_pid_count_vs_update0": 96,
+      "recovered_pid_count_vs_update0": 180,
+      "purity_at_10_train_bank": 0.9705078125,
+      "purity_at_10_q25": 1.0
+    }
+  ]
+}

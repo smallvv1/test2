@@ -1,0 +1,15 @@
+{
+  "fields": [
+    "epoch",
+    "global_step",
+    "model",
+    "optimizer",
+    "phase",
+    "rng",
+    "scaler",
+    "scheduler"
+  ],
+  "path": "/home/DIFFER/log_NDP/ndp_v5_10epoch_20261023_111046/n5_seed1234/node_update5960/rank1_state.pt",
+  "sha256": "cf95a414d85c94801705a07a954465906d2b814e677def5815b02f23bd0d0346",
+  "status": "PASS"
+}

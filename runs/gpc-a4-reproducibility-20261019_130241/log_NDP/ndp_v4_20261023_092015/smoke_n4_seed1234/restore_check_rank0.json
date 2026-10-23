@@ -1,0 +1,15 @@
+{
+  "fields": [
+    "epoch",
+    "global_step",
+    "model",
+    "optimizer",
+    "phase",
+    "rng",
+    "scaler",
+    "scheduler"
+  ],
+  "path": "/home/DIFFER/log_NDP/ndp_v4_20261023_092015/smoke_n4_seed1234/node_update0020/rank0_state.pt",
+  "sha256": "ef0d3242852a6c7ff2a7147605aa608203416e7769d5c028023a569f8a205632",
+  "status": "PASS"
+}

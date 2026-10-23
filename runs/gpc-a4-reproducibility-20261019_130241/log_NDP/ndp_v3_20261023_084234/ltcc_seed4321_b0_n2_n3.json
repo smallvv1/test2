@@ -1,0 +1,128 @@
+{
+  "config": "/data/DIFFER/diagnostics/reconstructed_ltcc_eval_config.yml",
+  "config_sha256": "c7c9e967a5ae824d9bfad9fb27ea77bd1af645e4de009c18111609523d8d33e6",
+  "counts": {
+    "gallery": 7050,
+    "num_camera": 12,
+    "num_train_pids": 77,
+    "query": 493,
+    "train": 9576
+  },
+  "dataset": "ltcc",
+  "eval_contract": "released evaluator clothes-changing filter; normalized feat[0]; euclidean distance; no reranking",
+  "eval_only_reverse_adapters": 0,
+  "hyperparameter_selection": false,
+  "optimizer_step_executed": false,
+  "results": [
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31478320236885365,
+        "mINP": 0.08644027305206972,
+        "query_count": 493,
+        "rank1": 0.5331632494926453,
+        "rank10": 0.7244898080825806,
+        "rank5": 0.6632652878761292,
+        "valid_query_count": 392
+      },
+      "update": 1192,
+      "weight": "/home/DIFFER/log_NDP/ndp_v2_20261023_070201/epoch3_b0_seed4321/node_update1192/model.pth",
+      "weight_sha256": "18e307fd87cd80d92aaee0feaaa031600c4d1434b8627030c6475d8173d293b2"
+    },
+    {
+      "arm": "N2",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31397429638197827,
+        "mINP": 0.08592914191206942,
+        "query_count": 493,
+        "rank1": 0.5153061151504517,
+        "rank10": 0.7321428656578064,
+        "rank5": 0.6760203838348389,
+        "valid_query_count": 392
+      },
+      "update": 1192,
+      "weight": "/home/DIFFER/log_NDP/ndp_v2_20261023_070201/epoch3_n2_seed4321/node_update1192/model.pth",
+      "weight_sha256": "6e932c23d6d153a7b4ccf23671e91cecdc694bf8b624c673f547085e78705abf"
+    },
+    {
+      "arm": "N3",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31263859536079075,
+        "mINP": 0.08605725067671648,
+        "query_count": 493,
+        "rank1": 0.5127550959587097,
+        "rank10": 0.7346938848495483,
+        "rank5": 0.6760203838348389,
+        "valid_query_count": 392
+      },
+      "update": 1192,
+      "weight": "/home/DIFFER/log_NDP/ndp_v3_20261023_084234/n3_seed4321/node_update1192/model.pth",
+      "weight_sha256": "c70614b8b2f3a7387fac71784efd4bad95f6da65c5fff46a02c678a071f78c38"
+    },
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.3073949539085924,
+        "mINP": 0.08550900041310873,
+        "query_count": 493,
+        "rank1": 0.5076530575752258,
+        "rank10": 0.7142857313156128,
+        "rank5": 0.670918345451355,
+        "valid_query_count": 392
+      },
+      "update": 1788,
+      "weight": "/home/DIFFER/log_NDP/ndp_v2_20261023_070201/epoch3_b0_seed4321/node_update1788/model.pth",
+      "weight_sha256": "9d6fa84ee5c58a65d1b614f5c691e969c0d0daec820495472a622a143ebee5c9"
+    },
+    {
+      "arm": "N2",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.3106497447474452,
+        "mINP": 0.08710668081598592,
+        "query_count": 493,
+        "rank1": 0.5153061151504517,
+        "rank10": 0.7244898080825806,
+        "rank5": 0.6811224222183228,
+        "valid_query_count": 392
+      },
+      "update": 1788,
+      "weight": "/home/DIFFER/log_NDP/ndp_v2_20261023_070201/epoch3_n2_seed4321/node_update1788/model.pth",
+      "weight_sha256": "b2d18b40df3983d533aa835dbbcd84d158da43684936456e2bd5a5e2b2189ced"
+    },
+    {
+      "arm": "N3",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.30740327618512403,
+        "mINP": 0.08743747307071233,
+        "query_count": 493,
+        "rank1": 0.49744898080825806,
+        "rank10": 0.7168367505073547,
+        "rank5": 0.6581632494926453,
+        "valid_query_count": 392
+      },
+      "update": 1788,
+      "weight": "/home/DIFFER/log_NDP/ndp_v3_20261023_084234/n3_seed4321/node_update1788/model.pth",
+      "weight_sha256": "94036f9e8e36c7c3d34a40f1c36bffb8cf774c4f797bdc5ab5d310a517da953d"
+    }
+  ],
+  "seed": 4321,
+  "status": "PASS_OFFICIAL_LTCC_EVAL_WITH_MINP"
+}

@@ -1,0 +1,15 @@
+{
+  "fields": [
+    "epoch",
+    "global_step",
+    "model",
+    "optimizer",
+    "phase",
+    "rng",
+    "scaler",
+    "scheduler"
+  ],
+  "path": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0400/rank0_state.pt",
+  "sha256": "b874fd168e3a445b209a1ab43c972008f2dd198595eb9b5f33364f61d40d15d6",
+  "status": "PASS"
+}

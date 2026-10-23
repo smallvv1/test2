@@ -1,0 +1,11 @@
+[
+  {
+    "effective_updates": 20,
+    "epoch_tag": 61,
+    "global_step": 35780,
+    "model": "/home/DIFFER/outputs/ndp_training_20261023_032455/smoke_seed4321/node_update0020/model.pth",
+    "model_sha256": "91515d964bc32d9a0ed301b8958c117b8215a4d0645e85310bf819dd0ed38b8d",
+    "optimizer_step_executed": true,
+    "rank_state": "/home/DIFFER/outputs/ndp_training_20261023_032455/smoke_seed4321/node_update0020/rank0_state.pt"
+  }
+]

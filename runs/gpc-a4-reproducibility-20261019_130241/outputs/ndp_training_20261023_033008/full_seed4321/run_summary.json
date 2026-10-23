@@ -1,0 +1,64 @@
+{
+  "batch_index": 400,
+  "effective_updates": 400,
+  "elapsed_seconds": 159.8685610294342,
+  "failure": null,
+  "mode": "full",
+  "ndp_active_batches_local_rank0": 42,
+  "ndp_active_rate_local_rank0": 0.105,
+  "ndp_active_relations_local_rank0": 98,
+  "ndp_candidate_relations": 2560,
+  "ndp_historical_correct_relations": 1158,
+  "ndp_mean_loss_local_rank0": 0.0019244782582609331,
+  "ndp_selected_relations_local_rank0": 416,
+  "optimizer_step_executed": true,
+  "run_id": "20261023_033008",
+  "saved_nodes": [
+    {
+      "effective_updates": 20,
+      "epoch_tag": 61,
+      "global_step": 35780,
+      "model": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0020/model.pth",
+      "model_sha256": "597c134291ab265ef8c5333517e7115b0293f9a9324f7fe22637bc3d4f9c84f5",
+      "optimizer_step_executed": true,
+      "rank_state": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0020/rank0_state.pt"
+    },
+    {
+      "effective_updates": 50,
+      "epoch_tag": 61,
+      "global_step": 35810,
+      "model": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0050/model.pth",
+      "model_sha256": "a34b34c81f2d74cf6c1573c8df8b6d7fca8e5733ad55e70d811d3682a036c630",
+      "optimizer_step_executed": true,
+      "rank_state": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0050/rank0_state.pt"
+    },
+    {
+      "effective_updates": 100,
+      "epoch_tag": 61,
+      "global_step": 35860,
+      "model": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0100/model.pth",
+      "model_sha256": "e3a57135a5c38b83b63f9ef6cc5568485a8ffa112dec1c3fc84522c882fe9a67",
+      "optimizer_step_executed": true,
+      "rank_state": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0100/rank0_state.pt"
+    },
+    {
+      "effective_updates": 200,
+      "epoch_tag": 61,
+      "global_step": 35960,
+      "model": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0200/model.pth",
+      "model_sha256": "548b49aa21a64f704d4db3f35d5621bbbc8dd53b492dde311bbced4fa5ec09f3",
+      "optimizer_step_executed": true,
+      "rank_state": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0200/rank0_state.pt"
+    },
+    {
+      "effective_updates": 400,
+      "epoch_tag": 61,
+      "global_step": 36160,
+      "model": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0400/model.pth",
+      "model_sha256": "d324919b7828ec264a0193fc1231e95374ff7da0531fdd17353692a1ac81c91b",
+      "optimizer_step_executed": true,
+      "rank_state": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0400/rank0_state.pt"
+    }
+  ],
+  "seed": 4321
+}

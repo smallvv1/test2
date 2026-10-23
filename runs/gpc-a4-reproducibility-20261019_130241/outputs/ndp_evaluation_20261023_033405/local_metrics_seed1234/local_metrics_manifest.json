@@ -1,0 +1,16 @@
+{
+  "status": "PASS_TRAIN_ONLY_FIXED_K5_METRICS",
+  "seed": 1234,
+  "graph": "/home/DIFFER/outputs/ndp_true_multipid_20261021_103952/reference_graph/seed1234/multi_pid_reference_graph.json",
+  "graph_sha256": "405d9976ec8cfac69fa2171ee612b22ce405b07c5220875266120296fb778e97",
+  "b0_features": "/home/DIFFER/outputs/ndp_margin_consistency_20261021_220823/feature_export/seed1234/k5_trajectory_features_seed1234.npz",
+  "b0_features_sha256": "0e0f53f4513a7f404dda532abbc7b7647c9cb51301258b020d1a9fe7f34c50ae",
+  "n1_features": "/home/DIFFER/outputs/ndp_evaluation_20261023_033405/k5_n1_seed1234/k5_trajectory_features_seed1234.npz",
+  "n1_features_sha256": "e3ad3ab7e51c7b937047dc339fff5829356517bf0fc880d6dd9f74bfe1f24d1a",
+  "relation_csv": "/home/DIFFER/outputs/ndp_evaluation_20261023_033405/local_metrics_seed1234/local_relation_metrics_seed1234.csv",
+  "node_csv": "/home/DIFFER/outputs/ndp_evaluation_20261023_033405/local_metrics_seed1234/local_node_summary_seed1234.csv",
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "purity_definition": "mean top-10 same-PID fraction in the exported train-only fixed K=5 endpoint bank",
+  "margin_definition": "mean positive cosine minus max negative-PID cosine"
+}

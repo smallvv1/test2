@@ -1,0 +1,236 @@
+{
+  "config": "/data/DIFFER/diagnostics/reconstructed_ltcc_eval_config.yml",
+  "config_sha256": "c7c9e967a5ae824d9bfad9fb27ea77bd1af645e4de009c18111609523d8d33e6",
+  "counts": {
+    "gallery": 7050,
+    "num_camera": 12,
+    "num_train_pids": 77,
+    "query": 493,
+    "train": 9576
+  },
+  "dataset": "ltcc",
+  "eval_contract": "released evaluator clothes-changing filter; normalized feat[0]; euclidean distance; no reranking",
+  "eval_only_reverse_adapters": 0,
+  "hyperparameter_selection": false,
+  "optimizer_step_executed": false,
+  "results": [
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31339631340748353,
+        "mINP": 0.0856958224454378,
+        "query_count": 493,
+        "rank1": 0.5153061151504517,
+        "rank10": 0.7346938848495483,
+        "rank5": 0.6632652878761292,
+        "valid_query_count": 392
+      },
+      "update": 0,
+      "weight": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/model_final.pth",
+      "weight_sha256": "8e721d6cbcf28a935ba1930979038e50884c8120d8a2c1ebd2ad30d0c10cd0ae"
+    },
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31275594309130605,
+        "mINP": 0.08505815327626458,
+        "query_count": 493,
+        "rank1": 0.5076530575752258,
+        "rank10": 0.7321428656578064,
+        "rank5": 0.670918345451355,
+        "valid_query_count": 392
+      },
+      "update": 20,
+      "weight": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0020/model.pth",
+      "weight_sha256": "15a707f56adabd03cfa3f516e90ff1012b1cfe19bf41c07d1cb4412bc194a97c"
+    },
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.3122839353158141,
+        "mINP": 0.08553425665503428,
+        "query_count": 493,
+        "rank1": 0.5153061151504517,
+        "rank10": 0.7372449040412903,
+        "rank5": 0.6632652878761292,
+        "valid_query_count": 392
+      },
+      "update": 50,
+      "weight": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0050/model.pth",
+      "weight_sha256": "29f18da4ca54da9470f70499e98b661e904cf5fc923d974c44e42ac2b9664872"
+    },
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.312056951152327,
+        "mINP": 0.08624163864569001,
+        "query_count": 493,
+        "rank1": 0.5229591727256775,
+        "rank10": 0.7346938848495483,
+        "rank5": 0.6658163070678711,
+        "valid_query_count": 392
+      },
+      "update": 100,
+      "weight": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0100/model.pth",
+      "weight_sha256": "b05a0e91fadc7b9f505ccc029933887b92c65d84c0129567e88ec8fda8d9071d"
+    },
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.3122475461366712,
+        "mINP": 0.08597893870858767,
+        "query_count": 493,
+        "rank1": 0.5280612111091614,
+        "rank10": 0.7321428656578064,
+        "rank5": 0.6734693646430969,
+        "valid_query_count": 392
+      },
+      "update": 200,
+      "weight": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0200/model.pth",
+      "weight_sha256": "df012a8e0716eed25f1eee392c3e0a001bf53b40dd9b6d65df11d6a7e8523358"
+    },
+    {
+      "arm": "B0",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.3119335965454227,
+        "mINP": 0.08461815984765676,
+        "query_count": 493,
+        "rank1": 0.5153061151504517,
+        "rank10": 0.7321428656578064,
+        "rank5": 0.6734693646430969,
+        "valid_query_count": 392
+      },
+      "update": 400,
+      "weight": "/home/DIFFER/outputs/ndp_overnight_20261020_201841/trajectory_seed4321/node_update0400/model.pth",
+      "weight_sha256": "095882043267dd80a4db2b333bcdf63c83028f1fedb344c87f8d1211fafe7b71"
+    },
+    {
+      "arm": "N1",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31339631340748353,
+        "mINP": 0.0856958224454378,
+        "query_count": 493,
+        "rank1": 0.5153061151504517,
+        "rank10": 0.7346938848495483,
+        "rank5": 0.6632652878761292,
+        "valid_query_count": 392
+      },
+      "update": 0,
+      "weight": "/home/DIFFER/outputs/gpc_v2_ltcc_20261015_155822/training/two_seed/B0_seed4321/model_final.pth",
+      "weight_sha256": "8e721d6cbcf28a935ba1930979038e50884c8120d8a2c1ebd2ad30d0c10cd0ae"
+    },
+    {
+      "arm": "N1",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.3127744336385707,
+        "mINP": 0.08511435929305314,
+        "query_count": 493,
+        "rank1": 0.5076530575752258,
+        "rank10": 0.7321428656578064,
+        "rank5": 0.670918345451355,
+        "valid_query_count": 392
+      },
+      "update": 20,
+      "weight": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0020/model.pth",
+      "weight_sha256": "597c134291ab265ef8c5333517e7115b0293f9a9324f7fe22637bc3d4f9c84f5"
+    },
+    {
+      "arm": "N1",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31242272998535,
+        "mINP": 0.0856838349851667,
+        "query_count": 493,
+        "rank1": 0.5204081535339355,
+        "rank10": 0.7346938848495483,
+        "rank5": 0.6607142686843872,
+        "valid_query_count": 392
+      },
+      "update": 50,
+      "weight": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0050/model.pth",
+      "weight_sha256": "a34b34c81f2d74cf6c1573c8df8b6d7fca8e5733ad55e70d811d3682a036c630"
+    },
+    {
+      "arm": "N1",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31256806543237453,
+        "mINP": 0.08579108298136563,
+        "query_count": 493,
+        "rank1": 0.5204081535339355,
+        "rank10": 0.7321428656578064,
+        "rank5": 0.668367326259613,
+        "valid_query_count": 392
+      },
+      "update": 100,
+      "weight": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0100/model.pth",
+      "weight_sha256": "e3a57135a5c38b83b63f9ef6cc5568485a8ffa112dec1c3fc84522c882fe9a67"
+    },
+    {
+      "arm": "N1",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.3124706950592549,
+        "mINP": 0.08610963873846399,
+        "query_count": 493,
+        "rank1": 0.5204081535339355,
+        "rank10": 0.7270408272743225,
+        "rank5": 0.668367326259613,
+        "valid_query_count": 392
+      },
+      "update": 200,
+      "weight": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0200/model.pth",
+      "weight_sha256": "548b49aa21a64f704d4db3f35d5621bbbc8dd53b492dde311bbced4fa5ec09f3"
+    },
+    {
+      "arm": "N1",
+      "metrics": {
+        "distance_inf_count": 0,
+        "distance_nan_count": 0,
+        "gallery_count": 7050,
+        "mAP": 0.31341969004129105,
+        "mINP": 0.08503841767003907,
+        "query_count": 493,
+        "rank1": 0.5076530575752258,
+        "rank10": 0.7219387888908386,
+        "rank5": 0.668367326259613,
+        "valid_query_count": 392
+      },
+      "update": 400,
+      "weight": "/home/DIFFER/outputs/ndp_training_20261023_033008/full_seed4321/node_update0400/model.pth",
+      "weight_sha256": "d324919b7828ec264a0193fc1231e95374ff7da0531fdd17353692a1ac81c91b"
+    }
+  ],
+  "seed": 4321,
+  "status": "PASS_OFFICIAL_LTCC_EVAL_WITH_MINP"
+}

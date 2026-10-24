@@ -1,0 +1,20 @@
+[
+  {
+    "effective_updates": 2980,
+    "epoch_tag": 66,
+    "global_step": 38741,
+    "model": "/home/DIFFER/log_NDP/ndp_v6_20261023_131720/n6_seed4321/node_update2980/model.pth",
+    "model_sha256": "f0b6515de3faffb8b75d03ca5313f5e664b02eb477a73e10f684a448eda96c85",
+    "optimizer_step_executed": true,
+    "rank_state": "/home/DIFFER/log_NDP/ndp_v6_20261023_131720/n6_seed4321/node_update2980/rank0_state.pt"
+  },
+  {
+    "effective_updates": 5960,
+    "epoch_tag": 71,
+    "global_step": 41722,
+    "model": "/home/DIFFER/log_NDP/ndp_v6_20261023_131720/n6_seed4321/node_update5960/model.pth",
+    "model_sha256": "d02505cb3c10e0c028cbfbe105335ce960b5c4c07ebb0511ef47b637fcdcc91e",
+    "optimizer_step_executed": true,
+    "rank_state": "/home/DIFFER/log_NDP/ndp_v6_20261023_131720/n6_seed4321/node_update5960/rank0_state.pt"
+  }
+]

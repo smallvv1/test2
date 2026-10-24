@@ -1,0 +1,21 @@
+{
+  "status": "PASS_NDP_V2_TRAIN_ONLY_FEATURE_EXPORT",
+  "seed": 1234,
+  "arm": "N6",
+  "device": "cuda:0",
+  "update0_feature": "/home/DIFFER/outputs/ndp_true_multipid_20261021_103952/full_features/seed1234/update0_full_features_seed1234.npz",
+  "update0_sha256": "cc317eb5be22a1377a216732cffbef8bc65ebf4226132d0746a1b24ceddaa930",
+  "weight": "/home/DIFFER/log_NDP/ndp_v6_20261023_131720/n6_seed1234/node_update5960/model.pth",
+  "weight_sha256": "28ab817a2a28c9f11f658f8af8ed74c35bc9eea37ba69f046ca8abaee808e1f9",
+  "output": "/home/DIFFER/log_NDP/ndp_v6_20261023_131720/local_features/seed1234_N6_update5960.npz",
+  "output_sha256": "358a07076e69a23b14e2e4b62f7ae36611b9f0973e65f3ed43199d9f462e2c61",
+  "image_count": 9576,
+  "feature_dim": 1024,
+  "updates": [
+    0,
+    5960
+  ],
+  "optimizer_step_executed": false,
+  "official_query_gallery_used": false,
+  "elapsed_seconds": 85.90956616401672
+}

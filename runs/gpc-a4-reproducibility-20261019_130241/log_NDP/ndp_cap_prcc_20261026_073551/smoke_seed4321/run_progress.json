@@ -1,0 +1,15 @@
+{
+  "batch_index": 20,
+  "effective_updates": 20,
+  "last_epoch": 4,
+  "saved_nodes": [
+    {
+      "epoch": 4,
+      "global_step": 1673,
+      "model": "/home/DIFFER/log_NDP/ndp_cap_prcc_20261026_073551/smoke_seed4321/node_update0020/model.pth",
+      "model_sha256": "ccbe41c6472df23d3d4d5654eca2062fd58cc4ad9ba0bcf6570da6e55f2588ce",
+      "rank_state": "/home/DIFFER/log_NDP/ndp_cap_prcc_20261026_073551/smoke_seed4321/node_update0020/rank0_state.pt",
+      "update": 20
+    }
+  ]
+}

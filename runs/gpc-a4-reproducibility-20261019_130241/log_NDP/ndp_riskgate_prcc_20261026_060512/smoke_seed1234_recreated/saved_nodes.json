@@ -1,0 +1,10 @@
+[
+  {
+    "epoch": 4,
+    "global_step": 1673,
+    "model": "/home/DIFFER/log_NDP/ndp_riskgate_prcc_20261026_060512/smoke_seed1234_recreated/node_update0020/model.pth",
+    "model_sha256": "cece2989575d79c5e558fcb9e3803f4b6d8be1f6511a91e249889d0cc85d7d89",
+    "rank_state": "/home/DIFFER/log_NDP/ndp_riskgate_prcc_20261026_060512/smoke_seed1234_recreated/node_update0020/rank0_state.pt",
+    "update": 20
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "epsilon": 0.02,
+  "lambda": 0.05,
+  "mode": "historically_safe_current_near_boundary",
+  "reference_correct_only": true,
+  "version": "NDP-RiskGate"
+}

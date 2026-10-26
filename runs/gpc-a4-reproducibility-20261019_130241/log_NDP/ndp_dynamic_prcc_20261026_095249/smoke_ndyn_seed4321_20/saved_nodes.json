@@ -1,0 +1,10 @@
+[
+  {
+    "epoch": 5,
+    "global_step": 2224,
+    "model": "/home/DIFFER/log_NDP/ndp_dynamic_prcc_20261026_095249/smoke_ndyn_seed4321_20/node_update0020/model.pth",
+    "model_sha256": "8bae91fb1416ad8e82e1203588ee75c581175fb887dfdaec48fe7a88d8139854",
+    "rank_state": "/home/DIFFER/log_NDP/ndp_dynamic_prcc_20261026_095249/smoke_ndyn_seed4321_20/node_update0020/rank0_state.pt",
+    "update": 20
+  }
+]

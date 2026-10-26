@@ -1,0 +1,34 @@
+{
+  "arm": "NDYN_TOP5",
+  "batch_index": 1653,
+  "effective_updates": 1653,
+  "elapsed_seconds": 712.0787558555603,
+  "end_epoch": 7,
+  "initialization": "warm-start B0 checkpoint",
+  "optimizer_step_executed": true,
+  "raw_epoch_mode": true,
+  "resume_checkpoint": "/home/DIFFER/log_NDP/ndp_dynamic_top5_prcc_20261026_115538/common_seed1234",
+  "saved_nodes": [
+    {
+      "epoch": 5,
+      "global_step": 2755,
+      "model": "/home/DIFFER/log_NDP/ndp_dynamic_top5_prcc_20261026_115538/top5_seed1234_3raw/node_rawepoch01_update0551/model.pth",
+      "model_sha256": "fe27298b18988318f421ea50d02f3c9c19f09a08d2bd45d3ea26b861ca8cdc5d",
+      "rank_state": "/home/DIFFER/log_NDP/ndp_dynamic_top5_prcc_20261026_115538/top5_seed1234_3raw/node_rawepoch01_update0551/rank0_state.pt",
+      "update": 551
+    },
+    {
+      "epoch": 7,
+      "global_step": 3857,
+      "model": "/home/DIFFER/log_NDP/ndp_dynamic_top5_prcc_20261026_115538/top5_seed1234_3raw/node_rawepoch03_update1653/model.pth",
+      "model_sha256": "8199ca31d7d28a17e7a5bdc5a0b676a14d22d3105263d90cc113c68b8a11a1b7",
+      "rank_state": "/home/DIFFER/log_NDP/ndp_dynamic_top5_prcc_20261026_115538/top5_seed1234_3raw/node_rawepoch03_update1653/rank0_state.pt",
+      "update": 1653
+    }
+  ],
+  "seed": 1234,
+  "segment_epochs": 3,
+  "start_epoch": 4,
+  "start_global_step": 2204,
+  "status": "PASS"
+}

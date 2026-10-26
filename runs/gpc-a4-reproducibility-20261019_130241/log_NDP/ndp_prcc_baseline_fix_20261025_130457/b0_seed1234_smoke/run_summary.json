@@ -1,0 +1,26 @@
+{
+  "arm": "B0",
+  "batch_index": 20,
+  "effective_updates": 20,
+  "elapsed_seconds": 14.103271722793579,
+  "end_epoch": 1,
+  "initialization": "PRCC common init + fresh optimizer",
+  "optimizer_step_executed": true,
+  "raw_epoch_mode": false,
+  "resume_checkpoint": null,
+  "saved_nodes": [
+    {
+      "epoch": 1,
+      "global_step": 20,
+      "model": "/home/DIFFER/log_NDP/ndp_prcc_baseline_fix_20261025_130457/b0_seed1234_smoke/node_update0020/model.pth",
+      "model_sha256": "705cddaf64b8bd4e7d710b096acc724cc1a2d91fa1e351be5f116a09b4dc6223",
+      "rank_state": "/home/DIFFER/log_NDP/ndp_prcc_baseline_fix_20261025_130457/b0_seed1234_smoke/node_update0020/rank0_state.pt",
+      "update": 20
+    }
+  ],
+  "seed": 1234,
+  "segment_epochs": 1,
+  "start_epoch": 0,
+  "start_global_step": 0,
+  "status": "PASS"
+}

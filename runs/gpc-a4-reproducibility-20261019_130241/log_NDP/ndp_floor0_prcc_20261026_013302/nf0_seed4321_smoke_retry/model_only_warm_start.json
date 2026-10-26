@@ -1,0 +1,8 @@
+{
+  "epoch": 3,
+  "global_step": 1653,
+  "model": "/home/DIFFER/log_NDP/ndp_prcc_baseline_fix_20261025_130457/b0_seed4321_3raw/node_rawepoch03_update1652/model.pth",
+  "model_sha256": "9c1bbfcd4830cd2f109a5c78a1ee6d59986af798d8c0f651e729b46e81d03cac",
+  "optimizer_scheduler_scaler_rng": "fresh; complete rank state was unavailable",
+  "status": "MODEL_ONLY_WARM_START"
+}

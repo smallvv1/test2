@@ -1,0 +1,26 @@
+{
+  "arm": "NF0",
+  "batch_index": 20,
+  "effective_updates": 20,
+  "elapsed_seconds": 15.78985595703125,
+  "end_epoch": 4,
+  "initialization": "PRCC common init + fresh optimizer",
+  "optimizer_step_executed": true,
+  "raw_epoch_mode": false,
+  "resume_checkpoint": null,
+  "saved_nodes": [
+    {
+      "epoch": 4,
+      "global_step": 1673,
+      "model": "/home/DIFFER/log_NDP/ndp_floor0_prcc_20261026_013302/nf0_seed1234_smoke_retry/node_update0020/model.pth",
+      "model_sha256": "40315802a8487362e28cd353db545d692f863e40c5abc3164165fcb8ce6eff5e",
+      "rank_state": "/home/DIFFER/log_NDP/ndp_floor0_prcc_20261026_013302/nf0_seed1234_smoke_retry/node_update0020/rank0_state.pt",
+      "update": 20
+    }
+  ],
+  "seed": 1234,
+  "segment_epochs": 1,
+  "start_epoch": 3,
+  "start_global_step": 1653,
+  "status": "PASS"
+}

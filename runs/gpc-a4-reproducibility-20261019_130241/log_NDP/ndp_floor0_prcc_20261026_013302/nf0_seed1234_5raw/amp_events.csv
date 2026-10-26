@@ -1,0 +1,2 @@
+rank,batch_index,epoch,global_step,found_inf,step_executed,scale_before,scale_after
+0,2192,7,3845,1,False,1024.0,512.0

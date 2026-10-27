@@ -1,0 +1,15 @@
+{
+  "batch_index": 20,
+  "effective_updates": 20,
+  "last_epoch": 5,
+  "saved_nodes": [
+    {
+      "epoch": 5,
+      "global_step": 2224,
+      "model": "/home/DIFFER/log_NDP/ndp_fresh_prcc_20261027_013857/smoke_nfres_seed1234_20/node_update0020/model.pth",
+      "model_sha256": "e2c493c9434e2bb34f1daadaa7e8f76a4f3d1751fc7daa74521ce0044eac0629",
+      "rank_state": "/home/DIFFER/log_NDP/ndp_fresh_prcc_20261027_013857/smoke_nfres_seed1234_20/node_update0020/rank0_state.pt",
+      "update": 20
+    }
+  ]
+}

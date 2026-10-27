@@ -1,0 +1,16 @@
+{
+  "epoch": 4,
+  "global_step": 2204,
+  "gpc_source_sha256": "d6d149ebbe8819552689d6ce5f1e053f5adea205a45f4ace3fce81296a1991c5",
+  "initialization": "t1 model-only checkpoint + newly constructed optimizer/scheduler/scaler/RNG",
+  "model_sha256": "2cb7e822fdef9133aa250ac81fe2ab21295ad8af98f2e4c5811f8f56af4da98f",
+  "optimizer": "fresh PRCC Bio+GPC runtime optimizer; no historical t1 optimizer state was available",
+  "rank_states": [
+    "/home/DIFFER/log_NDP/ndp_fresh_prcc_20261027_013857/common_seed1234/rank0_state.pt",
+    "/home/DIFFER/log_NDP/ndp_fresh_prcc_20261027_013857/common_seed1234/rank1_state.pt"
+  ],
+  "seed": 1234,
+  "status": "PASS",
+  "t1_model": "/home/DIFFER/log_NDP/ndp_dynamic_top5_prcc_20261026_115538/common_seed1234/model.pth",
+  "t1_model_sha256": "2cb7e822fdef9133aa250ac81fe2ab21295ad8af98f2e4c5811f8f56af4da98f"
+}

@@ -1,0 +1,8 @@
+{
+  "batch_index": 5,
+  "effective_updates": 4,
+  "epoch": 5,
+  "message": "unsupported NDP arm: NGATE",
+  "status": "FAIL",
+  "type": "ValueError"
+}

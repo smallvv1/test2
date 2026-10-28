@@ -1,0 +1,7 @@
+{
+  "epsilon": 0.02,
+  "lambda": 0.05,
+  "mode": "epoch_online_local_listwise_rank_tau_0.1",
+  "reference_correct_only": true,
+  "version": "NDP-Listwise"
+}

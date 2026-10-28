@@ -1,0 +1,26 @@
+{
+  "arm": "NCOMP",
+  "batch_index": 20,
+  "effective_updates": 20,
+  "elapsed_seconds": 109.28545498847961,
+  "end_epoch": 5,
+  "initialization": "warm-start B0 checkpoint",
+  "optimizer_step_executed": true,
+  "raw_epoch_mode": false,
+  "resume_checkpoint": "/home/DIFFER/log_NDP/ndp_triplet_complement_prcc_20261027_125510/common_seed4321",
+  "saved_nodes": [
+    {
+      "epoch": 5,
+      "global_step": 2224,
+      "model": "/home/DIFFER/log_NDP/ndp_triplet_complement_prcc_20261027_125510/smoke_ncomp_seed4321_20/node_update0020/model.pth",
+      "model_sha256": "ac5cbb0b21b4884c45f605925414bc786242fd4feec4d04a56176db0b200e515",
+      "rank_state": "/home/DIFFER/log_NDP/ndp_triplet_complement_prcc_20261027_125510/smoke_ncomp_seed4321_20/node_update0020/rank0_state.pt",
+      "update": 20
+    }
+  ],
+  "seed": 4321,
+  "segment_epochs": 1,
+  "start_epoch": 4,
+  "start_global_step": 2204,
+  "status": "PASS"
+}

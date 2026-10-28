@@ -1,0 +1,22 @@
+{
+  "fixed_selected_pid_count": 192,
+  "fresh_bank_epoch": 8,
+  "fresh_bank_path": "/home/DIFFER/log_NDP/ndp_triplet_complement_prcc_20261027_125510/nfresh_seed4321_5raw/fresh_bank_epoch04.npz",
+  "fresh_bank_sha256": "a41283b27792d0c1e02d491eb8477d8f73f47e25c469590f4cf8b2403d6a9656",
+  "fresh_bank_shape": [
+    17896,
+    1024
+  ],
+  "fresh_feature_tensor_sha256": "8e998a5984f9098eccfb766b82c34d498179ebe29b81526ad29c8755962e11d6",
+  "fresh_image_index_sha256": "e51a558451176a7dea849cb13ef9633ad5c75923334f28fd1b5fcb7ab25c4097",
+  "fresh_margin_mean": 0.006862929090857506,
+  "fresh_valid_pid_count": 192,
+  "margin_delta_max": 0.015117883682250977,
+  "margin_delta_mean": 0.000531035785873731,
+  "margin_delta_min": -0.012460649013519287,
+  "margin_delta_std": 0.0044409610112291255,
+  "old_margin_mean": 0.006331893304983775,
+  "rng_state_after_sha256": "1409dedad5a63d0c31b0387724f0f361fc5e5f9f5fe6fbd2706c1806d2d99641",
+  "rng_state_before_sha256": "1409dedad5a63d0c31b0387724f0f361fc5e5f9f5fe6fbd2706c1806d2d99641",
+  "rng_state_preserved": true
+}

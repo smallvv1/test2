@@ -1,0 +1,8 @@
+{
+  "batch_index": 1,
+  "effective_updates": 0,
+  "epoch": 5,
+  "message": "CUDA error: device-side assert triggered\nCUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\nFor debugging consider passing CUDA_LAUNCH_BLOCKING=1\nCompile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n",
+  "status": "FAIL",
+  "type": "RuntimeError"
+}

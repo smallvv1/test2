@@ -82,6 +82,20 @@ collect_files() {
     "${ROOT}/scripts/freeze_gpc_v2_saturation_threshold.py"
     "${ROOT}/scripts/gpc_v2_dev_protocol_audit.py"
     "${ROOT}/scripts/gpc_v2_expanded_dev_eval.py"
+    "${ROOT}/scripts/gpc_v2_paired_pid_bootstrap.py"
+    "${ROOT}/scripts/gpc_gradient_compatibility_audit.py"
+    "${ROOT}/scripts/gpc_v2_source_implementation_audit.py"
+    "${ROOT}/scripts/gpc_v2_finalize_current_reports.py"
+    "${ROOT}/scripts/gpc_a4_implementation_audit.py"
+    "${ROOT}/scripts/gpc_a4_recheck_train.py"
+    "${ROOT}/scripts/gpc_a4_amp_preflight.py"
+    "${ROOT}/scripts/gpc_a4_interface_preflight.py"
+    "${ROOT}/scripts/gpc_a4_paired_bootstrap.py"
+    "${ROOT}/scripts/gpc_a4_screen_decision.py"
+    "${ROOT}/scripts/gpc_a4_write_manifest.py"
+    "${ROOT}/scripts/gpc_a4_result_audit.py"
+    "${ROOT}/scripts/test_gpc_v2_expanded_dev_eval.py"
+    "${ROOT}/scripts/run_gpc_a4_ltcc_pipeline.sh"
   )
   for source in "${home_code[@]}"; do
     [[ -f "${source}" ]] && copy_one "${source}" "code/home_DIFFER/scripts/$(basename "${source}")"
@@ -104,6 +118,31 @@ collect_files() {
 
   [[ -f "${OUTPUT_ROOT}/状态_${RUN_TIME}.json" ]] && copy_one "${OUTPUT_ROOT}/状态_${RUN_TIME}.json" "metadata/状态_${RUN_TIME}.json"
   [[ -f "${OUTPUT_ROOT}/MANIFEST.json" ]] && copy_one "${OUTPUT_ROOT}/MANIFEST.json" "metadata/MANIFEST_${RUN_TIME}.json"
+  [[ -f "${OUTPUT_ROOT}/validation_closed_loop_manifest.json" ]] && copy_one "${OUTPUT_ROOT}/validation_closed_loop_manifest.json" "metadata/validation_closed_loop_manifest_${RUN_TIME}.json"
+  [[ -f "${OUTPUT_ROOT}/gpc_a4_paired_pid_statistics.json" ]] && copy_one "${OUTPUT_ROOT}/gpc_a4_paired_pid_statistics.json" "metadata/gpc_a4_paired_pid_statistics_${RUN_TIME}.json"
+  [[ -f "${OUTPUT_ROOT}/gpc_a4_exposure_statistics.json" ]] && copy_one "${OUTPUT_ROOT}/gpc_a4_exposure_statistics.json" "metadata/gpc_a4_exposure_statistics_${RUN_TIME}.json"
+  [[ -f "${OUTPUT_ROOT}/gpc_a4_old_new_audit.json" ]] && copy_one "${OUTPUT_ROOT}/gpc_a4_old_new_audit.json" "metadata/gpc_a4_old_new_audit_${RUN_TIME}.json"
+  local report
+  for report in \
+    "${ROOT}/reports/GPC_V2_EXPANDED_VALIDATION_REPORT.md" \
+    "${ROOT}/reports/GPC_V2_PAIRED_PID_BOOTSTRAP.md" \
+    "${ROOT}/reports/GPC_V2_SOURCE_IMPLEMENTATION_AUDIT.md" \
+    "${ROOT}/reports/GPC_GRADIENT_COMPATIBILITY_AUDIT.md" \
+    "${ROOT}/reports/GPC_V3_FEASIBILITY_DECISION.md" \
+    "${ROOT}/reports/GPC_A4_IMPLEMENTATION_AUDIT.md" \
+    "${ROOT}/reports/GPC_A4_PID_BALANCE_ANALYSIS.md" \
+    "${ROOT}/reports/GPC_A4_PAIRED_BOOTSTRAP_REPORT.md" \
+    "${ROOT}/reports/GPC_A4_TWO_SEED_CONFIRMATION.md" \
+    "${ROOT}/reports/GPC_A4_MECHANISM_CONTROL_REPORT.md" \
+    "${ROOT}/reports/GPC_A4_LTCC_FINAL_REPORT.md" \
+    "${ROOT}/reports/GPC_A4_EVALUATOR_FIX.md" \
+    "${ROOT}/reports/GPC_A4_OLD_NEW_REPRODUCIBILITY_AUDIT.md" \
+    "${ROOT}/reports/GPC_A4_TWO_SEED_PAIRED_STATISTICS.md" \
+    "${ROOT}/reports/GPC_A4_EXPOSURE_GRADIENT_AUDIT.md" \
+    "${ROOT}/reports/GPC_A4_RANDOM_CONTROL_AUDIT.md" \
+    "${ROOT}/reports/GPC_A4_NEXT_STAGE_DECISION.md"; do
+    [[ -f "${report}" ]] && copy_one "${report}" "reports/$(basename "${report}")"
+  done
   while IFS= read -r source; do
     [[ -f "${source}" ]] && copy_one "${source}" "reports/$(basename "${source}")"
   done < <(find "${ROOT}/reports" -maxdepth 1 -type f -name "*_${RUN_TIME}.md" -print | sort)
@@ -175,7 +214,9 @@ cat > "${STAGE}/metadata/PUBLISH_MANIFEST_${RUN_TIME}.json" <<EOF
 EOF
 
 git -C "${CHECKOUT}" add "${RUN_DIR}"
-git -C "${CHECKOUT}" diff --cached --check
+# 原始运行日志允许保留 Python/PPU/Git 的原文错误；这些日志中的尾随空格
+# 不应阻断代码与审计结果归档。代码、报告和 metadata 仍执行严格 whitespace 检查。
+git -C "${CHECKOUT}" diff --cached --check -- . ":(exclude)${RUN_DIR}/logs/**"
 if git -C "${CHECKOUT}" diff --cached --name-only | rg -n '\.(pth|pt|ckpt|npz|npy|bin|safetensors|jpg|jpeg|png|tar|zip)$'; then
   echo "中文错误：暂存区出现禁止文件，取消发布。" >&2
   write_status "失败" "暂存区安全检查失败。"

@@ -460,7 +460,7 @@ def gradient_validation_one(name: str, data: dict[str, Any], score: np.ndarray) 
     for batch in loader:
         inspected += 1; _all, relations = p7e.local_pairs(batch, bank); indices = [bank["path_to_index"][str(path)] for path in batch["image_path"]]; low_edges = []; high_edges = []
         for i, j in relations:
-            key = (min(indices[i], indices[j]), max(indices[i], indices[j])); pair_idx = pair_lookup.get(key); 
+            key = (min(indices[i], indices[j]), max(indices[i], indices[j])); pair_idx = pair_lookup.get(key);
             if pair_idx is None: continue
             value = score[pair_idx]
             if value <= low_cut: low_edges.append((i, j))

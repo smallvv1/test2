@@ -271,7 +271,7 @@ def source_audit() -> dict[str, Any]:
         "- I3 selector reconstruction uses the Phase 7I deterministic per-batch minimum-feasible budget and stable hash selector.",
         "- No query/gallery/test labels or retrieval outputs are used in pair construction.", "",
         "## Exact frozen sources", "",
-        "| Arm | Checkpoint | Checkpoint SHA256 | Feature bank | Feature SHA256 | Config |", 
+        "| Arm | Checkpoint | Checkpoint SHA256 | Feature bank | Feature SHA256 | Config |",
         "|---|---|---|---|---|---|",
     ]
     for arm in ARM_ORDER:

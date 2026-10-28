@@ -48,6 +48,104 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def protocol_fingerprint(protocol_path: Path) -> dict[str, Any]:
+    """返回评估协议及 Query/Gallery 清单的独立指纹。"""
+    query_path = protocol_path.with_name("expanded_query.csv")
+    gallery_path = protocol_path.with_name("expanded_gallery.csv")
+    for path in (protocol_path, query_path, gallery_path):
+        if not path.is_file():
+            raise FileNotFoundError(f"评估协议资产缺失：{path}")
+    return {
+        "protocol_sha256": sha256_file(protocol_path),
+        "query_sha256": sha256_file(query_path),
+        "gallery_sha256": sha256_file(gallery_path),
+    }
+
+
+def evaluation_config_fingerprint(cfg: Any) -> tuple[str, dict[str, Any]]:
+    """冻结影响离线指标的评估规则，避免错误复用旧 JSON。"""
+    settings = {
+        "metric": "LTCC CC: remove same PID+camera and same PID+clothing; euclidean distance after L2 normalization",
+        "feature_normalization": True,
+        "remove_same_pid_camera": True,
+        "remove_same_pid_clothes": True,
+        "test_batch": int(cfg.DATA.TEST_BATCH),
+        "model_name": str(cfg.MODEL.NAME),
+        "camera_num": 12,
+    }
+    encoded = json.dumps(settings, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(encoded).hexdigest(), settings
+
+
+def parse_spec_label(label: str) -> tuple[str, str, int]:
+    parts = label.split("_")
+    if len(parts) != 3 or not parts[2].startswith("seed"):
+        raise ValueError(f"非法 checkpoint 标签：{label}；应为 stage_ARM_seedN")
+    stage, arm, seed_text = parts
+    if not stage or not arm or not seed_text[4:].isdigit():
+        raise ValueError(f"非法 checkpoint 标签：{label}")
+    return stage, arm, int(seed_text[4:])
+
+
+def build_specs(training_root: Path, labels: list[str] | None = None,
+                arms: tuple[str, ...] = ("B0", "A4", "R2"),
+                seeds: tuple[int, ...] = (1234, 4321),
+                stage: str = "screen") -> list[tuple[str, Path]]:
+    """从明确名单生成评估项，不隐含 A1～A5。"""
+    if labels is None:
+        labels = [f"{stage}_{arm}_seed{seed}" for seed in seeds for arm in arms]
+    specs = []
+    seen = set()
+    for label in labels:
+        parsed_stage, arm, seed = parse_spec_label(label)
+        if label in seen:
+            raise ValueError(f"重复评估标签：{label}")
+        seen.add(label)
+        specs.append((label, training_root / parsed_stage / f"{arm}_seed{seed}"))
+    return specs
+
+
+def validate_spec_files(specs: list[tuple[str, Path]]) -> None:
+    missing = []
+    for label, directory in specs:
+        checkpoint = directory / "model_final.pth"
+        config = directory / "config.yml"
+        if not checkpoint.is_file():
+            missing.append(f"{label}: checkpoint={checkpoint}")
+        if not config.is_file():
+            missing.append(f"{label}: config={config}")
+    if missing:
+        raise FileNotFoundError("缺少明确要求的评估 arm，不静默跳过：\n" + "\n".join(missing))
+
+
+def reusable_result(path: Path, checkpoint: Path, protocol_meta: dict[str, Any],
+                   eval_config_sha256: str, query_count: int, gallery_count: int,
+                   effective_pid_count: int) -> tuple[dict[str, Any] | None, str]:
+    """只在 checkpoint、协议清单和评估规则均有指纹且完全一致时复用。"""
+    if not path.is_file():
+        return None, "已有单模型 JSON 不存在"
+    try:
+        result = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return None, f"已有 JSON 无法加载：{exc}"
+    checks = {
+        "checkpoint_sha256": sha256_file(checkpoint),
+        "protocol_sha256": protocol_meta["protocol_sha256"],
+        "query_sha256": protocol_meta["query_sha256"],
+        "gallery_sha256": protocol_meta["gallery_sha256"],
+        "evaluation_config_sha256": eval_config_sha256,
+    }
+    for key, expected in checks.items():
+        if result.get(key) != expected:
+            return None, f"{key} 缺失或不匹配"
+    metrics = result.get("metrics", {})
+    if (metrics.get("query_count"), metrics.get("gallery_count"), metrics.get("effective_pid_count")) != (query_count, gallery_count, effective_pid_count):
+        return None, "Query/Gallery/PID 数量不匹配"
+    if len(result.get("query_metrics", [])) != query_count:
+        return None, "已有逐 Query 结果数量不匹配"
+    return result, "完全匹配"
+
+
 def read_rows(path: Path) -> list[dict[str, Any]]:
     with path.open(newline="", encoding="utf-8") as stream:
         return [dict(row) for row in csv.DictReader(stream)]
@@ -270,6 +368,7 @@ def evaluate_one(label: str, checkpoint: Path, config: Path, query_rows: list[di
     print(f"中文说明：开始 PPU checkpoint 评估 arm={label} checkpoint={checkpoint}", flush=True)
     set_seed(1234)
     model, cfg, model_meta = load_model(config, checkpoint, device)
+    eval_config_sha256, eval_config = evaluation_config_fingerprint(cfg)
     features = extract_features(model, cfg, query_rows, gallery_rows, device)
     metrics, per_query = query_metrics(features, query_rows, gallery_rows)
     pid_rows = aggregate_pid(per_query)
@@ -282,6 +381,9 @@ def evaluate_one(label: str, checkpoint: Path, config: Path, query_rows: list[di
         "checkpoint": str(checkpoint),
         "checkpoint_sha256": model_meta["checkpoint_sha256"],
         "config": str(config),
+        "config_sha256": sha256_file(config),
+        "evaluation_config_sha256": eval_config_sha256,
+        "evaluation_config": eval_config,
         "runtime": {
             "device": str(device),
             "device_name": torch.cuda.get_device_name(device),
@@ -305,7 +407,9 @@ def evaluate_one(label: str, checkpoint: Path, config: Path, query_rows: list[di
 def paired(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
     aa = {row["image_path"]: row for row in a["query_metrics"]}
     bb = {row["image_path"]: row for row in b["query_metrics"]}
-    paths = sorted(set(aa) & set(bb))
+    if set(aa) != set(bb):
+        raise RuntimeError(f"配对模型 Query 清单不一致：{a.get('arm')}/{a.get('seed')} vs {b.get('arm')}/{b.get('seed')}")
+    paths = sorted(aa)
     r1_delta = [int(bb[path]["rank1"]) - int(aa[path]["rank1"]) for path in paths]
     ap_delta = [float(bb[path]["AP"]) - float(aa[path]["AP"]) for path in paths]
     return {
@@ -318,6 +422,9 @@ def paired(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
         "rank1_losses": int(sum(value < 0 for value in r1_delta)),
         "rank1_delta_mean": float(np.mean(r1_delta)),
         "AP_delta_mean": float(np.mean(ap_delta)),
+        "query_sha256": a.get("query_sha256"),
+        "gallery_sha256": a.get("gallery_sha256"),
+        "protocol_sha256": a.get("protocol_sha256"),
     }
 
 
@@ -327,44 +434,84 @@ def main() -> None:
     parser.add_argument("--protocol", required=True)
     parser.add_argument("--training-root", default=str(ROOT / "outputs/gpc_v2_ltcc_20261015_155822/training"))
     parser.add_argument("--output", required=True)
+    parser.add_argument("--specs", nargs="+", default=None, help="可选 checkpoint 标签，例如 screen_B0_seed1234")
+    parser.add_argument("--arms", default="B0,A4,R2", help="未提供 --specs 时的明确 arm 名单")
+    parser.add_argument("--seeds", default="1234,4321", help="未提供 --specs 时的明确 seed 名单")
+    parser.add_argument("--stage", default="screen", help="未提供 --specs 时的训练阶段")
+    parser.add_argument("--reuse-existing", action="store_true", help="仅复用带有完整协议/ checkpoint 指纹的已有 JSON")
     args = parser.parse_args()
-    protocol = json.loads(Path(args.protocol).read_text(encoding="utf-8"))
-    query_rows = read_rows(Path(args.protocol).with_name("expanded_query.csv"))
-    gallery_rows = read_rows(Path(args.protocol).with_name("expanded_gallery.csv"))
+    protocol_path = Path(args.protocol)
+    protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
+    protocol_meta = protocol_fingerprint(protocol_path)
+    query_rows = read_rows(protocol_path.with_name("expanded_query.csv"))
+    gallery_rows = read_rows(protocol_path.with_name("expanded_gallery.csv"))
+    query_paths = [row["image_path"] for row in query_rows]
+    gallery_paths = [row["image_path"] for row in gallery_rows]
+    if len(set(query_paths)) != len(query_paths) or len(set(gallery_paths)) != len(gallery_paths):
+        raise RuntimeError("Query 或 Gallery 清单包含重复图片路径")
+    if set(query_paths) & set(gallery_paths):
+        raise RuntimeError("Query/Gallery 存在同图重叠，拒绝评估")
+    if any(not row.get("legal_positive_count") or int(row["legal_positive_count"]) <= 0 for row in query_rows):
+        raise RuntimeError("协议存在无合法跨衣正样本 Query，拒绝评估")
     output = Path(args.output)
     output.mkdir(parents=True, exist_ok=True)
-    device = runtime_gate()
     training_root = Path(args.training_root)
-    specs = [
-        ("screen_B0_seed1234", training_root / "screen/B0_seed1234"),
-        ("screen_A1_seed1234", training_root / "screen/A1_seed1234"),
-        ("screen_A2_seed1234", training_root / "screen/A2_seed1234"),
-        ("screen_A3_seed1234", training_root / "screen/A3_seed1234"),
-        ("screen_A4_seed1234", training_root / "screen/A4_seed1234"),
-        ("screen_A5_seed1234", training_root / "screen/A5_seed1234"),
-        ("two_seed_B0_seed1234", training_root / "two_seed/B0_seed1234"),
-        ("two_seed_A5_seed1234", training_root / "two_seed/A5_seed1234"),
-        ("two_seed_B0_seed4321", training_root / "two_seed/B0_seed4321"),
-        ("two_seed_A5_seed4321", training_root / "two_seed/A5_seed4321"),
-    ]
+    if args.specs:
+        specs = build_specs(training_root, labels=args.specs)
+    else:
+        arms = tuple(item for item in args.arms.split(",") if item)
+        seeds = tuple(int(item) for item in args.seeds.split(",") if item)
+        if not arms or not seeds:
+            raise ValueError("--arms/--seeds 不能为空")
+        specs = build_specs(training_root, arms=arms, seeds=seeds, stage=args.stage)
+    validate_spec_files(specs)
+    # 先在 CPU 上加载配置，确定评估规则指纹；只有确定不能复用时才初始化 PPU。
+    config_fingerprints = {}
+    for label, directory in specs:
+        cfg_for_fingerprint = load_config(directory / "config.yml")
+        config_fingerprints[label] = evaluation_config_fingerprint(cfg_for_fingerprint)[0]
+    device = None
     results: dict[str, dict[str, Any]] = {}
     for label, directory in specs:
         checkpoint = directory / "model_final.pth"
         config = directory / "config.yml"
-        if not checkpoint.is_file() or not config.is_file():
-            raise FileNotFoundError(f"缺少已有 checkpoint/config：{checkpoint} / {config}")
-        results[label] = evaluate_one(label, checkpoint, config, query_rows, gallery_rows, device, output)
+        result_path = output / f"{label}.json"
+        reused = None
+        reuse_reason = "未启用 --reuse-existing"
+        if args.reuse_existing:
+            reused, reuse_reason = reusable_result(
+                result_path, checkpoint, protocol_meta, config_fingerprints[label],
+                len(query_rows), len(gallery_rows), len({int(row["raw_pid"]) for row in query_rows}),
+            )
+        if reused is not None:
+            reused["reuse_audit"] = {"reused": True, "reason": reuse_reason}
+            results[label] = reused
+            print(f"中文说明：复用已有完整评估 {label}；协议和 checkpoint 指纹一致。", flush=True)
+            continue
+        if device is None:
+            device = runtime_gate()
+        result = evaluate_one(label, checkpoint, config, query_rows, gallery_rows, device, output)
+        result.update(protocol_meta)
+        result["reuse_audit"] = {"reused": False, "reason": reuse_reason}
+        result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        results[label] = result
 
     paired_rows = []
-    for candidate in ("screen_A1_seed1234", "screen_A2_seed1234", "screen_A3_seed1234", "screen_A4_seed1234", "screen_A5_seed1234"):
-        paired_rows.append(paired(results["screen_B0_seed1234"], results[candidate]))
-    paired_rows.append(paired(results["two_seed_B0_seed1234"], results["two_seed_A5_seed1234"]))
-    paired_rows.append(paired(results["two_seed_B0_seed4321"], results["two_seed_A5_seed4321"]))
+    labels_by_seed = {}
+    for label, _directory in specs:
+        _stage, arm, seed = parse_spec_label(label)
+        labels_by_seed.setdefault(seed, {})[arm] = label
+    for seed, arms_for_seed in sorted(labels_by_seed.items()):
+        for baseline_arm, candidate_arm in (("B0", "A4"), ("B0", "R2"), ("A4", "R2")):
+            if baseline_arm in arms_for_seed and candidate_arm in arms_for_seed:
+                paired_rows.append(paired(results[arms_for_seed[baseline_arm]], results[arms_for_seed[candidate_arm]]))
     summary = {
         "created_utc": now(),
         "run_time": args.run_time,
         "protocol": str(Path(args.protocol)),
         "protocol_sha256": sha256_file(Path(args.protocol)),
+        "query_sha256": protocol_meta["query_sha256"],
+        "gallery_sha256": protocol_meta["gallery_sha256"],
         "query_count": len(query_rows),
         "gallery_count": len(gallery_rows),
         "effective_pid_count": len({int(row["raw_pid"]) for row in query_rows}),
@@ -373,6 +520,8 @@ def main() -> None:
         "historical_old_results_preserved": str(ROOT / "outputs/gpc_v2_ltcc_20261015_155822/dev_evaluation_screen.json"),
         "official_query_gallery_used": False,
         "cpu_model_fallback": False,
+        "specs": [label for label, _directory in specs],
+        "expected_missing_arms_are_errors": True,
     }
     (output / "expanded_dev_evaluation.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"status": "PASS", "output": str(output), "query_count": len(query_rows), "gallery_count": len(gallery_rows), "paired_comparisons": paired_rows}, ensure_ascii=False, indent=2), flush=True)

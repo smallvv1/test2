@@ -360,7 +360,7 @@ def source_audit() -> dict[str, Any]:
     write_json(FEASIBILITY_ROOT / "prototype_feasibility.json", {"phase": PHASE, "passed": passed, "train_only": True, "query_gallery_used": False, "dataset": payload["dataset"], "relations": relation_rows, "training_started": False})
     write_csv(FEASIBILITY_ROOT / "state_relation_structure.csv", relation_rows)
     lines = [
-        "# PHASE 7C Source Audit", "", "Source verification: **PASS**.", "", 
+        "# PHASE 7C Source Audit", "", "Source verification: **PASS**.", "",
         "Phase 7C uses a new output root and does not overwrite Phase 5, Phase 6, Phase 7A, or Phase 7B artifacts.", "",
         "## Exact Phase 7A sources", "",
         "| Arm | Run directory | Epoch | Seed | Model final | Config | Lambda |", "|---|---|---:|---:|---|---|---:|",

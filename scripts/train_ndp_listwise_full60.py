@@ -57,6 +57,7 @@ from data import build_dataset, build_img_transforms  # noqa: E402
 from data.dataset_loader import ImageDataset  # noqa: E402
 from loss import make_loss  # noqa: E402
 from model import build_model  # noqa: E402
+from model.build import factory as MODEL_FACTORY  # noqa: E402
 from processor.processor import test as processor_test  # noqa: E402
 from utils.metrics import R1_mAP_eval, R1_mAP_eval_LTCC  # noqa: E402
 
@@ -270,6 +271,32 @@ def load_initialization(output_root: Path, dataset_name: str) -> tuple[dict[str,
     return state, manifest
 
 
+def build_model_for_evaluation(cfg, dataset):
+    """Build the deployed architecture without downloading pretrained weights.
+
+    The deployed ``model.build_model`` wrapper hard-codes ``pretrained=True``.
+    That is appropriate for creating the formal initialization, but wrong when
+    evaluating a fully materialized local checkpoint: evaluation must not make
+    an unrelated HuggingFace/network request.  Construct the same factory
+    entry with ``pretrained=False`` and then load the final state dict.
+    """
+    model_type = cfg.MODEL.TYPE
+    if model_type in ["eva02"]:
+        # This formal run uses MODEL.TYPE=eva02_cloth.  Keep the guard explicit
+        # rather than silently constructing a different transformer variant.
+        raise RuntimeError("evaluation without download is not defined for MODEL.TYPE=eva02")
+    if model_type == "" or model_type == "eva02_cloth":
+        constructor = MODEL_FACTORY[cfg.MODEL.NAME]
+    else:
+        constructor = MODEL_FACTORY[f"{cfg.MODEL.NAME}_{model_type}"]
+    return constructor(
+        pretrained=False,
+        config=cfg,
+        num_classes=dataset.num_train_pids,
+        camera_num=dataset.num_camera,
+    )
+
+
 def atomic_torch_save(payload: Any, path: Path) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     torch.save(payload, temporary)
@@ -383,7 +410,7 @@ def reduce_vec(values: list[float], device: torch.device) -> list[float]:
 def eval_protocol(output_dir: Path, dataset_name: str, model_path: Path, cfg, device: torch.device) -> dict[str, Any]:
     dataset = build_dataset(cfg)
     state = torch.load(model_path, map_location="cpu", weights_only=False)
-    model = build_model(cfg, dataset.num_train_pids, dataset.num_camera)
+    model = build_model_for_evaluation(cfg, dataset)
     model.load_state_dict(state, strict=True)
     model.to(device).eval()
     _, transform_test = build_img_transforms(cfg)

@@ -1,0 +1,19 @@
+{
+  "arm": "NLIST",
+  "created_utc": "2026-10-28T12:50:56Z",
+  "dataset": "ltcc",
+  "epochs_completed": 60,
+  "global_step": 35760,
+  "gpc_context": "phase7i_relation_specificity",
+  "lambda_gpc": 0.1,
+  "lambda_ndp": 0.05,
+  "model_bytes": 1215890852,
+  "model_path": "/home/DIFFER/log_NDP/NDP_NLIST_FULL60_SEED1234_20261028_170218/LTCC/model_final.pth",
+  "model_sha256": "57a7ac388059735ada097e0dcf10568282bcad99f58c380862c2f5cd4d51c599",
+  "model_state_hash": "4f2282c91fc0117b94ad5c81e6b90b65a4d24f87960637f1b698867f51fb770c",
+  "nlist_tau": 0.1,
+  "per_rank_checkpoint_files_created": false,
+  "query_gallery_used_during_training": false,
+  "seed": 1234,
+  "train_only_reference": true
+}

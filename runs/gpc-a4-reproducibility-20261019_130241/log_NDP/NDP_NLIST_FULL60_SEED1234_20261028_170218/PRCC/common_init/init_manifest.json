@@ -1,0 +1,14 @@
+{
+  "created_utc": "2026-10-28T09:08:33Z",
+  "dataset": "prcc",
+  "file_sha256": "5d9656164cc7de1bcf85d25aade90ddefa055232e237ef7e20ca8b841cd7a754",
+  "formal_source": "/home/DIFFER/github_uploads/test2_20261016_141306/scripts/train_final_gpc.py",
+  "formal_source_sha256": "69ce0b4883df501d4f85f8732afb80ca2f8a7faa3f9046d40d941e1813268156",
+  "query_gallery_used": false,
+  "seed": 1234,
+  "source": "formal EVA02 Bio pretrained initialization",
+  "state_hash": "6567bd0d54e6919be355757c5a2d7fb2e5d1c2128368357e51b7047f5ded97fc",
+  "state_key_count": 515,
+  "state_numel": 304261974,
+  "train_count": 17896
+}

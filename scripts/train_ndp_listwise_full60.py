@@ -700,6 +700,8 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         meta["lambda_ndp"] = LAMBDA_NDP_TEACH if args.arm == "NTEACH" else meta["lambda_ndp"]
         meta["nteach_start_epoch"] = NTEACH_START_EPOCH if args.arm == "NTEACH" else None
         meta["nteach_teacher"] = "frozen B0 initialization feature bank; graph captured once before epoch-1 updates" if args.arm == "NTEACH" else None
+        meta["nteach_teacher_model_path"] = init_manifest.get("source") if args.arm == "NTEACH" else None
+        meta["nteach_teacher_state_hash"] = init_manifest.get("state_hash") if args.arm == "NTEACH" else None
         write_json(output_dir / "final_model.json", meta)
         # RUN_COMPLETE is reserved for the requested formal 60-epoch run.
         # Short paired gates must not be mistaken for a completed full run.

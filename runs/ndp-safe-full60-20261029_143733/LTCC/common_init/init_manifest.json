@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-10-29T06:38:00Z",
+  "dataset": "ltcc",
+  "file_sha256": "cbcfaf25c1fa599e4ba5473d7c47167b6dc2bdaf532f15ad2ec474e3e37b4788",
+  "formal_source": "/home/DIFFER/github_uploads/test2_20261016_141306/scripts/train_final_gpc.py",
+  "formal_source_sha256": "69ce0b4883df501d4f85f8732afb80ca2f8a7faa3f9046d40d941e1813268156",
+  "query_gallery_used": false,
+  "seed": 1234,
+  "source": "historical formal Bio common initialization",
+  "source_file_sha256": "72892762c37044b85dc9ed9999c833da574026c3715e760885363201a8a40ed0",
+  "source_meta_path": "/data/DIFFER/outputs/new_method_track/phase5b_id_damage_ds/common_init/COMMON_PHASE5B_INIT_HASHES.json",
+  "source_meta_sha256": "dd3acd0da3d935b2d734567b8db9bb171d63d64d24fe2a378f5b05cf335bee67",
+  "source_path": "/data/DIFFER/outputs/new_method_track/phase5b_id_damage_ds/common_init/COMMON_PHASE5B_INIT.pth",
+  "state_hash": "c593b713f631fcc78087095d160b62de9ef3196cb7cefd0495d0daa62cc83202",
+  "state_key_count": 515,
+  "state_numel": 303933965,
+  "train_count": 9576
+}

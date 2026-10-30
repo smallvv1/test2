@@ -53,6 +53,7 @@ MAX_SCHEDULE_EPOCHS = 60
 EPSILON = 0.02
 LAMBDA_NDP = 0.05
 LAMBDA_GPC = 0.1
+NDP_SAFE_MARGIN = 0.05
 NCAP_MAX_TARGET = 0.02
 NDYN_DELTA = 0.005
 NDYN_TOP5_DELTA_CAP = 0.005
@@ -628,6 +629,15 @@ def set_gpc_pair_context(run_id: str, seed: int) -> str:
     return phase
 
 
+def set_exact_gpc_pair_context(phase: str, seed: int) -> str:
+    """Use the frozen formal namespace literally, without an NDP prefix."""
+    if not phase or "_B0" in phase or "_N5" in phase or "_NDP" in phase:
+        raise ValueError(f"invalid arm-dependent GPC phase: {phase!r}")
+    gpc.p7.PHASE = str(phase)
+    gpc.p7.SEED = int(seed)
+    return str(phase)
+
+
 def batch_entries(batch: dict[str, Any], pids: torch.Tensor, clothes: torch.Tensor) -> list[dict[str, Any]]:
     return [
         {"pid": int(pids[i].detach().cpu()), "clothes_id": int(clothes[i].detach().cpu()), "image_path": str(batch["image_path"][i])}
@@ -754,15 +764,16 @@ def ndyn_should_select(margin0: float, margin1: float, delta: float = NDYN_DELTA
     return bool(margin0 > 0.0 and margin1 > 0.0 and margin1 < margin0 - delta and margin1 < 0.05)
 
 
-def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: str) -> torch.Tensor:
+def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: str, ndp_lambda: float | None = None) -> torch.Tensor:
     """Compose the fixed B0 loss or the B0+NDP loss without cross-contamination."""
     if arm == "B0":
         total = main_total
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST"}:
-        return main_total + LAMBDA_NDP * ndp_loss
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE"}:
+        coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
+        return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
 
@@ -822,7 +833,7 @@ def verify_gpc_pair(args: argparse.Namespace) -> None:
         prcc.phase6b.cleanup_dist()
 
 
-def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_rows, reference_features, arm, epoch, rank, iteration, global_step, stats, diagnostic_steps, ndp_epsilon):
+def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_rows, reference_features, arm, epoch, rank, iteration, global_step, stats, diagnostic_steps, ndp_epsilon, ndp_lambda=None):
     writer = base.MetricCapture()
     images = batch["image"].to(device, non_blocking=False)
     pids = batch["pid"].to(device, non_blocking=False)
@@ -852,7 +863,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE"}
     if ndp_enabled:
         ndp_values = []
         for local_index, entry in enumerate(entries):
@@ -877,6 +888,21 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                             continue
                     current_margin = positive_similarity - negative[pid_index] @ anchor
                     reference_margin = float(relation["reference_pid_margin"][pid_index])
+                    if arm == "NDP_SAFE":
+                        # Low-interference local identity hinge.  The graph
+                        # endpoint bank is detached; only the live anchor is
+                        # connected to the current EVA02 computation.
+                        selected_ndp += 1
+                        hinge = F.relu(
+                            torch.as_tensor(NDP_SAFE_MARGIN, dtype=current_margin.dtype, device=device)
+                            - current_margin
+                        )
+                        anchor_values.append(hinge)
+                        active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
+                        current_error_pid += int(float(current_margin.detach().float().cpu()) <= 0.0)
+                        correct_pid += int(float(current_margin.detach().float().cpu()) > 0.0)
+                        margin_sum += float(current_margin.detach().float().cpu())
+                        continue
                     if arm == "NLIST":
                         selected_ndp += 1
                         listwise_negative_similarities.append(negative[pid_index] @ anchor)
@@ -948,7 +974,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 ndp_loss = raw_ndp_loss if keep_ndp else raw_ndp_loss * 0.0
             else:
                 gate_status = "inactive_rank"
-    total = compose_total_loss(main_total, ndp_loss, arm)
+    total = compose_total_loss(main_total, ndp_loss, arm, ndp_lambda=ndp_lambda)
 
     # Batch-local Purity@10 is a training diagnostic, not the official PRCC metric.
     with torch.no_grad():
@@ -988,7 +1014,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     stats["gpc_selected"] += len(selected_gpc)
     gpc_info = dict(gpc_info)
     gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
-    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": LAMBDA_NDP if ndp_enabled else 0.0, "relation_info": gpc_info, "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
+    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 
 def finite_parameters(model: torch.nn.Module) -> bool:

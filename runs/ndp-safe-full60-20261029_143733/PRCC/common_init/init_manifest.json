@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-10-29T06:38:30Z",
+  "dataset": "prcc",
+  "file_sha256": "5d9656164cc7de1bcf85d25aade90ddefa055232e237ef7e20ca8b841cd7a754",
+  "formal_source": "/home/DIFFER/github_uploads/test2_20261016_141306/scripts/train_final_gpc.py",
+  "formal_source_sha256": "69ce0b4883df501d4f85f8732afb80ca2f8a7faa3f9046d40d941e1813268156",
+  "query_gallery_used": false,
+  "seed": 1234,
+  "source": "historical formal Bio common initialization",
+  "source_file_sha256": "db5c71389b37a859ec82b3e529c1cd7149c21a85df4a1b34f9650c9f6bd9378f",
+  "source_meta_path": "/data/DIFFER/outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json",
+  "source_meta_sha256": "002251807f6c597c3e65db5d1774109f78e79dd74c032fc06cffb11ed25774a4",
+  "source_path": "/data/DIFFER/outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth",
+  "state_hash": "6567bd0d54e6919be355757c5a2d7fb2e5d1c2128368357e51b7047f5ded97fc",
+  "state_key_count": 515,
+  "state_numel": 304261974,
+  "train_count": 17896
+}

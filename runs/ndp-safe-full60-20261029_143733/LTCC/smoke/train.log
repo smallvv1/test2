@@ -1,0 +1,2 @@
+2026-10-29 14:40:38,171 INFO epoch 1/1 loss=8.200266 ndp=0.000000 active=0/0 lr=8.422e-07 skip=0
+2026-10-29 14:42:11,201 INFO epoch 1/1 loss=8.205070 ndp=0.113680 active=479/480 lr=8.422e-07 skip=0

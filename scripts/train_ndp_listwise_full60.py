@@ -41,6 +41,10 @@ SEED = 1234
 EPOCHS = 60
 WARMUP_EPOCHS = 20
 LAMBDA_NDP = 0.05
+LAMBDA_NDP_SAFE = 0.005
+NDP_SAFE_MARGIN = 0.05
+NDP_SAFE_WARMUP_EPOCHS = 10
+NDP_SAFE_GRAPH_UPDATE_EVERY = 5
 TAU = 0.1
 GPC_CONTEXT = "phase7i_relation_specificity"
 EXPECTED_DEVICE_NAME = "PPU-ZW810E"
@@ -95,6 +99,7 @@ FORMAL = load_formal_module()
 # the candidate-selection code and hash namespace remain unchanged.
 FORMAL.ROOT = ENGINE
 import ndp_v5_prcc_runner as NDP  # noqa: E402
+import ndp_safe as NDP_SAFE  # noqa: E402
 
 
 def utc_now() -> str:
@@ -212,6 +217,28 @@ def init_paths(output_root: Path, dataset_name: str) -> tuple[Path, Path]:
     return directory / f"{dataset_name.upper()}_EVA02_BIO_INIT_SEED{SEED}.pth", directory / "init_manifest.json"
 
 
+FORMAL_COMMON_INIT = {
+    "ltcc": ENGINE / "outputs/new_method_track/phase5b_id_damage_ds/common_init/COMMON_PHASE5B_INIT.pth",
+    "prcc": ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth",
+}
+FORMAL_COMMON_META = {
+    "ltcc": ENGINE / "outputs/new_method_track/phase5b_id_damage_ds/common_init/COMMON_PHASE5B_INIT_HASHES.json",
+    "prcc": ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json",
+}
+
+
+def assert_no_rank_state_files(output_root: Path) -> None:
+    forbidden = []
+    for path in output_root.rglob("*"):
+        if not path.is_file():
+            continue
+        name = path.name.lower()
+        if (name.startswith("rank") and "state.pt" in name) or (name.startswith("rank") and "state.pth" in name) or (name.startswith("checkpoint_e") and "_rank" in name):
+            forbidden.append(str(path))
+    if forbidden:
+        raise RuntimeError("forbidden per-rank checkpoint detected: " + ", ".join(forbidden[:10]))
+
+
 def prepare_initialization(output_root: Path, dataset_name: str) -> dict[str, Any]:
     path, manifest_path = init_paths(output_root, dataset_name)
     if path.is_file() and manifest_path.is_file():
@@ -221,19 +248,21 @@ def prepare_initialization(output_root: Path, dataset_name: str) -> dict[str, An
         return manifest
     if path.exists() or manifest_path.exists():
         raise RuntimeError(f"partial initialization artifact: {path}")
-    cfg = cfg_for(dataset_name, output_root / dataset_name.upper() / "common_init")
-    if not torch.cuda.is_available() or torch.cuda.device_count() < 1:
-        raise RuntimeError("initialization requires a visible PPU/GPU")
-    torch.cuda.set_device(0)
-    set_seed(SEED)
-    dataset = build_dataset(cfg)
-    # The deployed /data model factory has a frozen pretrained constructor;
-    # its returned state is the formal EVA02/Bio initialization.
-    model = build_model(cfg, dataset.num_train_pids, dataset.num_camera)
-    model.to(torch.device("cuda:0")).eval()
-    state = FORMAL.cpu_state_dict(model)
+    source = FORMAL_COMMON_INIT[dataset_name]
+    source_meta_path = FORMAL_COMMON_META[dataset_name]
+    if not source.is_file() or not source_meta_path.is_file():
+        raise FileNotFoundError(f"missing historical formal common initialization: {source}")
+    source_meta = json.loads(source_meta_path.read_text(encoding="utf-8"))
+    state = torch.load(source, map_location="cpu", weights_only=False)
+    if sha256_file(source) != source_meta.get("state_sha256"):
+        raise RuntimeError(f"formal common-init file hash mismatch: {source}")
+    expected_state_hash = source_meta.get("state_hash")
+    if expected_state_hash is not None and state_hash(state) != expected_state_hash:
+        raise RuntimeError(f"formal common-init tensor hash mismatch: {source}")
     if any("reverse" in key.lower() for key in state):
-        raise RuntimeError("Bio initialization unexpectedly contains reverse parameters")
+        raise RuntimeError("formal Bio initialization unexpectedly contains reverse parameters")
+    cfg = cfg_for(dataset_name, output_root / dataset_name.upper() / "common_init")
+    dataset = build_dataset(cfg)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
     torch.save(state, temporary)
@@ -241,7 +270,11 @@ def prepare_initialization(output_root: Path, dataset_name: str) -> dict[str, An
     manifest = {
         "dataset": dataset_name,
         "seed": SEED,
-        "source": "formal EVA02 Bio pretrained initialization",
+        "source": "historical formal Bio common initialization",
+        "source_path": str(source),
+        "source_file_sha256": sha256_file(source),
+        "source_meta_path": str(source_meta_path),
+        "source_meta_sha256": sha256_file(source_meta_path),
         "formal_source": str(FORMAL_SOURCE),
         "formal_source_sha256": sha256_file(FORMAL_SOURCE),
         "state_hash": state_hash(state),
@@ -253,8 +286,7 @@ def prepare_initialization(output_root: Path, dataset_name: str) -> dict[str, An
         "created_utc": utc_now(),
     }
     write_json(manifest_path, manifest)
-    del model, dataset, state
-    torch.cuda.empty_cache()
+    del dataset, state
     return manifest
 
 
@@ -377,12 +409,17 @@ def identity_feature_bank(model, cfg, dataset, device) -> torch.Tensor:
     return NDP.extract_train_feature_bank(model, cfg, dataset, device)
 
 
-def make_online_graph(model, cfg, dataset, device, previous_signature):
+def make_online_graph(model, cfg, dataset, device, previous_signature, arm):
     bank = identity_feature_bank(model, cfg, dataset, device)
-    pids = torch.tensor([int(item["pid"]) for item in dataset.train], dtype=torch.long, device=device)
-    rows, reference_features, summary, signature = NDP.build_online_neighbor_graph(
-        bank, pids, device, max_negative_pids=3, block_size=512, previous_signature=previous_signature
-    )
+    if arm == "NDP_SAFE":
+        rows, reference_features, summary, signature = NDP_SAFE.build_safe_online_neighbor_graph(
+            bank, dataset.train, device, max_negative_pids=3, block_size=512, previous_signature=previous_signature
+        )
+    else:
+        pids = torch.tensor([int(item["pid"]) for item in dataset.train], dtype=torch.long, device=device)
+        rows, reference_features, summary, signature = NDP.build_online_neighbor_graph(
+            bank, pids, device, max_negative_pids=3, block_size=512, previous_signature=previous_signature
+        )
     return rows, reference_features, summary, signature
 
 
@@ -447,6 +484,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     rank, device = runtime_gate()
     output_dir = Path(args.output_dir).resolve() / args.dataset.upper()
     output_dir.mkdir(parents=True, exist_ok=True)
+    assert_no_rank_state_files(output_dir)
     artifact_dir = output_dir / "smoke" if args.smoke_steps else output_dir
     artifact_dir.mkdir(parents=True, exist_ok=True)
     logger = logger_for(artifact_dir / "train.log") if rank == 0 else None
@@ -455,7 +493,9 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     set_seed(SEED)
     dataset = build_dataset(cfg)
     state, init_manifest = load_initialization(Path(args.output_dir).resolve(), args.dataset)
-    raw = build_model(cfg, dataset.num_train_pids, dataset.num_camera)
+    # The exact formal common init is already materialized locally.  Build the
+    # same architecture without invoking a fresh pretrained download.
+    raw = build_model_for_evaluation(cfg, dataset)
     raw.load_state_dict(state, strict=True)
     raw.to(device).train()
     init_hash = state_hash(FORMAL.cpu_state_dict(raw))
@@ -473,7 +513,9 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     path_to_index = gpc_bank["path_to_index"]
     sampler = FORMAL.FinalBatchSampler(dataset.train, int(FORMAL.SPEC[args.dataset]["batch_size"]), int(FORMAL.SPEC[args.dataset]["num_instances"]), int(FORMAL.SPEC[args.dataset]["steps_per_epoch"]), SEED, rank)
     loader = FORMAL.build_train_loader(cfg, dataset, sampler)
-    NDP.set_gpc_pair_context(GPC_CONTEXT, SEED)
+    # The formal GPC namespace is part of the frozen selector hash.  It must
+    # be literal and arm-independent for B0 and NDP_SAFE.
+    gpc_phase = NDP.set_exact_gpc_pair_context(GPC_CONTEXT, SEED)
     resume = output_dir / "resume_latest.pth"
     start_epoch = 1
     global_step = 0
@@ -493,7 +535,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     end_epoch = min(max_epochs, EPOCHS)
     metrics_path = artifact_dir / "metrics_per_epoch.csv"
     summary_path = artifact_dir / "online_neighbor_summary.csv"
-    fields = ["epoch", "global_step", "train_loss", "ce_loss", "triplet_loss", "bio_loss", "gpc_loss", "ndp_loss", "ndp_raw_loss", "lr", "amp_scale_min", "amp_scale_max", "amp_scale_end", "skipped_steps", "optimizer_updates", "ndp_active_batches", "ndp_active_rate", "ndp_selected_relations", "ndp_active_relations", "mean_current_margin", "purity10", "online_relation_count", "online_valid_anchor_count", "online_neighbor_change_rate", "online_graph_sha256"]
+    fields = ["epoch", "global_step", "train_loss", "ce_loss", "triplet_loss", "bio_loss", "gpc_loss", "ndp_loss", "ndp_raw_loss", "ndp_feature_grad_norm", "main_feature_grad_norm", "ndp_main_grad_ratio", "ndp_lambda", "lr", "amp_scale_min", "amp_scale_max", "amp_scale_end", "skipped_steps", "optimizer_updates", "ndp_active_batches", "ndp_active_rate", "ndp_selected_relations", "ndp_active_relations", "mean_current_margin", "purity10", "online_relation_count", "online_valid_anchor_count", "online_neighbor_change_rate", "online_graph_sha256"]
     summary_fields = ["epoch", "online_relation_count", "online_valid_anchor_count", "online_neighbor_change_rate", "online_graph_sha256", "fresh_bank_shape", "fresh_bank_device", "train_only", "query_gallery_used"]
     if rank == 0 and not metrics_path.exists():
         with metrics_path.open("w", newline="", encoding="utf-8") as stream:
@@ -503,19 +545,28 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             csv.DictWriter(stream, fieldnames=summary_fields).writeheader()
     dist.barrier()
     previous_signature = None
+    cached_reference_rows: dict[int, list[dict[str, Any]]] = {}
+    cached_reference_features = torch.empty((0, 1024), dtype=torch.float32, device=device)
+    cached_graph_summary = {"online_relation_count": 0, "online_valid_anchor_count": 0, "online_neighbor_change_rate": None, "online_neighbor_graph_sha256": "", "fresh_bank_shape": [], "online_similarity_device": str(device)}
+    cached_graph_epoch = 0
     history: list[dict[str, Any]] = []
     try:
         for epoch in range(start_epoch, end_epoch + 1):
             scheduler.step(epoch)
-            reference_rows: dict[int, list[dict[str, Any]]] = {}
-            reference_features = torch.empty((0, 1024), dtype=torch.float32, device=device)
-            graph_summary = {"online_relation_count": 0, "online_valid_anchor_count": 0, "online_neighbor_change_rate": None, "online_neighbor_graph_sha256": "", "fresh_bank_shape": [], "online_similarity_device": str(device)}
-            if args.arm == "NLIST":
-                reference_rows, reference_features, graph_summary, previous_signature = make_online_graph(raw, cfg, dataset, device, previous_signature)
+            reference_rows = cached_reference_rows
+            reference_features = cached_reference_features
+            graph_summary = cached_graph_summary
+            if args.arm == "NDP_SAFE" and (cached_graph_epoch == 0 or epoch - cached_graph_epoch >= NDP_SAFE_GRAPH_UPDATE_EVERY):
+                cached_reference_rows, cached_reference_features, cached_graph_summary, previous_signature = make_online_graph(raw, cfg, dataset, device, previous_signature, args.arm)
+                cached_graph_summary["fresh_bank_shape"] = [len(dataset.train), 1024]
+                cached_graph_epoch = epoch
+                reference_rows, reference_features, graph_summary = cached_reference_rows, cached_reference_features, cached_graph_summary
+            elif args.arm == "NLIST":
+                reference_rows, reference_features, graph_summary, previous_signature = make_online_graph(raw, cfg, dataset, device, previous_signature, args.arm)
                 graph_summary["fresh_bank_shape"] = [len(dataset.train), 1024]
             sampler.prepare(epoch)
             stats = zero_stats()
-            sums = {key: 0.0 for key in ("total", "ce", "triplet", "bio", "gpc", "ndp", "ndp_raw")}
+            sums = {key: 0.0 for key in ("total", "ce", "triplet", "bio", "gpc", "ndp", "ndp_raw", "ndp_feature_grad_norm", "main_feature_grad_norm")}
             local_skips = 0
             local_scale_min = float(scaler.get_scale())
             local_scale_max = local_scale_min
@@ -526,7 +577,10 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             for iteration, batch in enumerate(iterator, start=1):
                 global_step += 1
                 optimizer.zero_grad(set_to_none=True)
-                result = NDP.forward_batch(model, loss_fn, batch, device, path_to_index, gpc_bank, reference_rows, reference_features, args.arm, epoch, rank, iteration, global_step, stats, 3, 0.02)
+                ndp_lambda = 0.0
+                if args.arm == "NDP_SAFE":
+                    ndp_lambda = LAMBDA_NDP_SAFE * min(1.0, float(epoch) / float(NDP_SAFE_WARMUP_EPOCHS))
+                result = NDP.forward_batch(model, loss_fn, batch, device, path_to_index, gpc_bank, reference_rows, reference_features, args.arm, epoch, rank, iteration, global_step, stats, 3, 0.02, ndp_lambda=ndp_lambda)
                 if not bool(torch.isfinite(result["total"].detach()).item()):
                     raise RuntimeError(f"non-finite total loss at {args.dataset}/epoch{epoch}/iteration{iteration}")
                 scaler.scale(result["total"]).backward()
@@ -554,7 +608,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             if rank == 0:
                 total_batches = max(1.0, count_values[7])
                 row = {
-                    "epoch": epoch, "global_step": global_step, "train_loss": reduced[0], "ce_loss": reduced[1], "triplet_loss": reduced[2], "bio_loss": reduced[3], "gpc_loss": reduced[4], "ndp_loss": reduced[5], "ndp_raw_loss": reduced[6], "lr": float(optimizer.param_groups[0]["lr"]), "amp_scale_min": float(scale_values[0]), "amp_scale_max": float(scale_values[1]), "amp_scale_end": float(scale_values[2]), "skipped_steps": int(count_values[8]), "optimizer_updates": int(count_values[7] - count_values[8]), "ndp_active_batches": int(count_values[0]), "ndp_active_rate": float(count_values[0] / total_batches), "ndp_selected_relations": int(count_values[1]), "ndp_active_relations": int(count_values[2]), "mean_current_margin": float(count_values[5] / max(1.0, count_values[3] + count_values[4])), "purity10": float(count_values[6] / total_batches), "online_relation_count": int(graph_summary.get("online_relation_count", 0)), "online_valid_anchor_count": int(graph_summary.get("online_valid_anchor_count", 0)), "online_neighbor_change_rate": graph_summary.get("online_neighbor_change_rate"), "online_graph_sha256": graph_summary.get("online_neighbor_graph_sha256", ""),
+                    "epoch": epoch, "global_step": global_step, "train_loss": reduced[0], "ce_loss": reduced[1], "triplet_loss": reduced[2], "bio_loss": reduced[3], "gpc_loss": reduced[4], "ndp_loss": reduced[5], "ndp_raw_loss": reduced[6], "ndp_feature_grad_norm": reduced[7], "main_feature_grad_norm": reduced[8], "ndp_main_grad_ratio": reduced[7] / max(reduced[8], 1e-12), "ndp_lambda": (LAMBDA_NDP_SAFE * min(1.0, float(epoch) / float(NDP_SAFE_WARMUP_EPOCHS)) if args.arm == "NDP_SAFE" else 0.0), "lr": float(optimizer.param_groups[0]["lr"]), "amp_scale_min": float(scale_values[0]), "amp_scale_max": float(scale_values[1]), "amp_scale_end": float(scale_values[2]), "skipped_steps": int(count_values[8]), "optimizer_updates": int(count_values[7] - count_values[8]), "ndp_active_batches": int(count_values[0]), "ndp_active_rate": float(count_values[0] / total_batches), "ndp_selected_relations": int(count_values[1]), "ndp_active_relations": int(count_values[2]), "mean_current_margin": float(count_values[5] / max(1.0, count_values[3] + count_values[4])), "purity10": float(count_values[6] / total_batches), "online_relation_count": int(graph_summary.get("online_relation_count", 0)), "online_valid_anchor_count": int(graph_summary.get("online_valid_anchor_count", 0)), "online_neighbor_change_rate": graph_summary.get("online_neighbor_change_rate"), "online_graph_sha256": graph_summary.get("online_neighbor_graph_sha256", ""),
                 }
                 with metrics_path.open("a", newline="", encoding="utf-8") as stream:
                     csv.DictWriter(stream, fieldnames=fields).writerow(row)
@@ -568,6 +622,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                 break
             if epoch % 5 == 0:
                 save_resume(output_dir, raw, optimizer, scheduler, scaler, epoch, global_step, device, args.dataset)
+                assert_no_rank_state_files(output_dir)
             dist.barrier()
     finally:
         if hasattr(loader, "shutdown"):
@@ -587,7 +642,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         state_final = FORMAL.cpu_state_dict(raw)
         atomic_torch_save(state_final, final_path)
         final_path.chmod(0o444)
-        meta = {"dataset": args.dataset, "arm": args.arm, "seed": SEED, "epochs_completed": end_epoch, "global_step": global_step, "model_path": str(final_path), "model_sha256": sha256_file(final_path), "model_state_hash": state_hash(state_final), "model_bytes": final_path.stat().st_size, "gpc_context": GPC_CONTEXT, "lambda_gpc": 0.1, "lambda_ndp": LAMBDA_NDP, "nlist_tau": TAU, "train_only_reference": True, "query_gallery_used_during_training": False, "per_rank_checkpoint_files_created": False, "created_utc": utc_now()}
+        meta = {"dataset": args.dataset, "arm": args.arm, "seed": SEED, "epochs_completed": end_epoch, "global_step": global_step, "model_path": str(final_path), "model_sha256": sha256_file(final_path), "model_state_hash": state_hash(state_final), "model_bytes": final_path.stat().st_size, "gpc_context": GPC_CONTEXT, "lambda_gpc": 0.1, "lambda_ndp": LAMBDA_NDP_SAFE if args.arm == "NDP_SAFE" else 0.0, "ndp_safe_margin": NDP_SAFE_MARGIN if args.arm == "NDP_SAFE" else None, "ndp_safe_warmup_epochs": NDP_SAFE_WARMUP_EPOCHS if args.arm == "NDP_SAFE" else None, "ndp_safe_graph_update_every": NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else None, "nlist_tau": TAU if args.arm == "NLIST" else None, "train_only_reference": True, "query_gallery_used_during_training": False, "per_rank_checkpoint_files_created": False, "created_utc": utc_now()}
         write_json(output_dir / "final_model.json", meta)
         write_json(output_dir / "RUN_COMPLETE.json", meta)
     dist.barrier()
@@ -596,6 +651,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         if (output_dir / "resume_latest.json").is_file():
             (output_dir / "resume_latest.json").unlink()
     dist.barrier()
+    assert_no_rank_state_files(output_dir)
     cleanup_dist()
     return {"dataset": args.dataset, "epochs_completed": end_epoch, "model": str(final_path) if rank == 0 else None}
 
@@ -605,7 +661,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=("prepare", "smoke", "train", "eval"), required=True)
     parser.add_argument("--dataset", choices=("ltcc", "prcc", "all"), required=True)
     parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--arm", choices=("NLIST",), default="NLIST")
+    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NLIST"), default="NDP_SAFE")
     parser.add_argument("--epochs", type=int, default=EPOCHS)
     parser.add_argument("--smoke-steps", type=int, default=0)
     parser.add_argument("--resume", action="store_true")

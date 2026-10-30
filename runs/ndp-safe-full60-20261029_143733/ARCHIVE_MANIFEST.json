@@ -1,0 +1,24 @@
+{
+  "experiment": "NDP_SAFE_FULL60_SEED1234",
+  "source_run": "NDP_SAFE_FULL60_SEED1234_20261029_143733",
+  "archive_date": "2026-10-30",
+  "contents": "Logs, metrics, JSON summaries, and the final Markdown report",
+  "files_archived": 52,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "__pycache__"
+  ],
+  "code_snapshot": [
+    "scripts/ndp_safe.py",
+    "scripts/ndp_v5_prcc_runner.py",
+    "scripts/train_ndp_listwise_full60.py",
+    "scripts/summarize_ndp_safe_full60.py",
+    "scripts/monitor_ndp_safe_full60.sh"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "dataset": "ltcc",
+  "epoch": 5,
+  "file": "/home/DIFFER/log_NDP/ndp_nteach_short_20261030_184754/LTCC_NTEACH/LTCC/resume_latest.pth",
+  "file_sha256": "5a40a34bd2813f3ef20e840d07a1ab3c3f36e5b2d8328ab29982a0f7e0b2be57",
+  "global_step": 2980,
+  "rank_state_count": 2,
+  "saved_utc": "2026-10-30T11:16:49Z"
+}

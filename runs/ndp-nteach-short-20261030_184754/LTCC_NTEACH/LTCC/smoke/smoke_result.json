@@ -1,0 +1,8 @@
+{
+  "arm": "NTEACH",
+  "created_utc": "2026-10-30T10:49:27Z",
+  "dataset": "ltcc",
+  "no_per_rank_checkpoint": true,
+  "passed": true,
+  "steps": 20
+}

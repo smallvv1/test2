@@ -435,7 +435,13 @@ def make_online_graph(model, cfg, dataset, device, previous_signature, arm):
 
 
 def annotate_teacher_graph(rows: dict[int, list[dict[str, Any]]], reference_features: torch.Tensor) -> dict[str, int]:
-    """Attach fixed B0-teacher margins to the detached train-only graph."""
+    """Attach fixed teacher margins and validity flags to a detached graph.
+
+    The graph is made once from the B0 initialization.  A relation is trusted
+    only when the teacher itself separates the same-PID reference from the
+    candidate negative PID by at least 0.02.  Current training features are
+    never used to rewrite this teacher selection.
+    """
     reliable = 0
     relations = 0
     for anchor_id, anchor_rows in rows.items():
@@ -597,7 +603,8 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             if args.arm in {"NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH"} and (cached_graph_epoch == 0 or (args.arm != "NTEACH" and epoch - cached_graph_epoch >= (NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else (NDP_SELECT_GRAPH_UPDATE_EVERY if args.arm == "NDP_SELECT" else NDP_V2_GRAPH_UPDATE_EVERY)))):
                 cached_reference_rows, cached_reference_features, cached_graph_summary, previous_signature = make_online_graph(raw, cfg, dataset, device, previous_signature, args.arm)
                 if args.arm == "NTEACH":
-                    cached_graph_summary.update(annotate_teacher_graph(cached_reference_rows, cached_reference_features))
+                    teacher_counts = annotate_teacher_graph(cached_reference_rows, cached_reference_features)
+                    cached_graph_summary.update(teacher_counts)
                 cached_graph_summary["fresh_bank_shape"] = [len(dataset.train), 1024]
                 cached_graph_epoch = epoch
                 reference_rows, reference_features, graph_summary = cached_reference_rows, cached_reference_features, cached_graph_summary

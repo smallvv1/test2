@@ -1,0 +1,23 @@
+{
+  "experiment": "NDP_TEACHER_SHORT_LTCC_PRCC",
+  "source_run": "ndp_nteach_short_20261030_184754",
+  "archive_date": "2026-10-30",
+  "contents": "Frozen-teacher short-run logs, metrics, JSON summaries, smoke results, and report",
+  "files_archived": 42,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.tar",
+    "*.zip",
+    "__pycache__"
+  ],
+  "code_commit": "281944c"
+}

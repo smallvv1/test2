@@ -943,13 +943,20 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         margin_sum += detached_margin
                         continue
                     if arm == "NTEACH":
+                        # The relation endpoints and teacher margin were
+                        # captured once from the B0 initialization.  Protect
+                        # only a reliable teacher ordering that has actually
+                        # crossed into a mild current identity confusion.
                         teacher_margin = float(relation.get("teacher_pid_margin", [reference_margin] * len(relation["negative_pid"]))[pid_index])
                         detached_margin = float(current_margin.detach().float().cpu())
                         if teacher_margin < 0.02 or not (-0.05 < detached_margin < 0.0):
                             continue
                         selected_ndp += 1
                         target_margin = min(0.05, max(0.01, 0.25 * teacher_margin))
-                        hinge = F.relu(torch.as_tensor(target_margin, dtype=current_margin.dtype, device=device) - current_margin)
+                        hinge = F.relu(
+                            torch.as_tensor(target_margin, dtype=current_margin.dtype, device=device)
+                            - current_margin
+                        )
                         anchor_values.append(hinge)
                         active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
                         current_error_pid += 1

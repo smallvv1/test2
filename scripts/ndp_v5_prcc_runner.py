@@ -789,7 +789,7 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT"}:
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2"}:
         coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
@@ -881,7 +881,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2"}
     if ndp_enabled:
         ndp_values = []
         for local_index, entry in enumerate(entries):
@@ -934,6 +934,27 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         selected_ndp += 1
                         hinge = F.relu(
                             torch.as_tensor(0.02, dtype=current_margin.dtype, device=device)
+                            - current_margin
+                        )
+                        anchor_values.append(hinge)
+                        active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
+                        current_error_pid += int(detached_margin <= 0.0)
+                        correct_pid += int(detached_margin > 0.0)
+                        margin_sum += detached_margin
+                        continue
+                    if arm == "NDP_V2":
+                        # Keep only a robust multi-clothes positive reference.
+                        # Admit a narrow negative near-boundary margin with a
+                        # small target instead of forcing historical recovery.
+                        if not bool(relation.get("safe_positive_reliable", False)):
+                            continue
+                        detached_margin = float(current_margin.detach().float().cpu())
+                        if not (-0.05 < detached_margin < 0.05):
+                            continue
+                        selected_ndp += 1
+                        target_margin = 0.005 if detached_margin <= 0.0 else 0.02
+                        hinge = F.relu(
+                            torch.as_tensor(target_margin, dtype=current_margin.dtype, device=device)
                             - current_margin
                         )
                         anchor_values.append(hinge)

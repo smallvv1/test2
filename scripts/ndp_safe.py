@@ -57,9 +57,11 @@ def build_safe_online_neighbor_graph(
     reliable_positive_count = 0
     cross_clothes = 0
     if robust_positive:
-        # Avoid one accelerator->CPU synchronization per candidate image.
-        # Score padded same-PID candidates in accelerator batches, then copy
-        # only the small score table for deterministic clothes-aware selection.
+        # The robust-positive branch used to perform one accelerator->CPU
+        # synchronization per candidate image.  On PRCC this made graph
+        # construction take hours.  Build a padded candidate table and score
+        # it in accelerator batches; only the small score table is copied to
+        # CPU for the deterministic, PID/clothes-aware selection below.
         candidate_lists: list[list[int]] = []
         for anchor_index, pid in enumerate(pids):
             candidates = [index for index in by_pid.get(pid, []) if index != anchor_index]

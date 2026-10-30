@@ -943,9 +943,11 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         margin_sum += detached_margin
                         continue
                     if arm == "NDP_V2":
-                        # Keep only a robust multi-clothes positive reference.
-                        # Admit a narrow negative near-boundary margin with a
-                        # small target instead of forcing historical recovery.
+                        # V2 keeps only a robust, multi-clothes positive
+                        # reference.  Unlike NDP_SELECT it also admits a
+                        # modest negative current margin, but only in a
+                        # narrow near-boundary band and with a small positive
+                        # target to avoid forcing full historical recovery.
                         if not bool(relation.get("safe_positive_reliable", False)):
                             continue
                         detached_margin = float(current_margin.detach().float().cpu())
@@ -1058,7 +1060,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         ndp_feature_norm, ndp_probe_valid = finite_gradient_norm(ndp_feature_grad)
         main_feature_norm, main_probe_valid = finite_gradient_norm(main_feature_grad)
     else:
-        # Keep aggregate CSV fields finite. These zeros mean "not probed";
+        # Keep aggregate CSV fields finite.  These zeros mean "not probed";
         # the first diagnostic batches carry the actual probe values.
         ndp_feature_norm = 0.0
         main_feature_norm = 0.0

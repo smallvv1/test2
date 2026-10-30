@@ -1,0 +1,23 @@
+{
+  "experiment": "NDP_V2_SHORT_LTCC",
+  "source_run": "ndp_v2_short_20261030_173957",
+  "archive_date": "2026-10-30",
+  "contents": "LTCC short-run logs, metrics, JSON summaries, smoke results, and report",
+  "files_archived": 25,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.tar",
+    "*.zip",
+    "__pycache__"
+  ],
+  "code_commit": "9451d99"
+}

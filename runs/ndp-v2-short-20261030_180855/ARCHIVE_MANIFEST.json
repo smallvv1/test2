@@ -1,0 +1,23 @@
+{
+  "experiment": "NDP_V2_SHORT_PRCC",
+  "source_run": "ndp_v2_short_20261030_180855",
+  "archive_date": "2026-10-30",
+  "contents": "PRCC short-run logs, metrics, and JSON summaries",
+  "files_archived": 9,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.tar",
+    "*.zip",
+    "__pycache__"
+  ],
+  "code_commit": "9451d99"
+}

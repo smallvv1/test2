@@ -1,0 +1,8 @@
+{
+  "arm": "NDP_V2",
+  "created_utc": "2026-10-30T09:47:54Z",
+  "dataset": "prcc",
+  "no_per_rank_checkpoint": true,
+  "passed": true,
+  "steps": 20
+}

@@ -1,0 +1,2 @@
+epoch,online_relation_count,online_valid_anchor_count,online_neighbor_change_rate,online_graph_sha256,fresh_bank_shape,fresh_bank_device,train_only,query_gallery_used
+1,28728,9576,,7f977a319910e85363b9bb6791ed1878d56b5afc52bde917b9c465f5c7dadf49,"[9576, 1024]",cuda:0,True,False

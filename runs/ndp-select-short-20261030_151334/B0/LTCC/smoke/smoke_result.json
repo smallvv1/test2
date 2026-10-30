@@ -1,0 +1,8 @@
+{
+  "arm": "B0",
+  "created_utc": "2026-10-30T07:14:05Z",
+  "dataset": "ltcc",
+  "no_per_rank_checkpoint": true,
+  "passed": true,
+  "steps": 20
+}

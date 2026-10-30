@@ -1,0 +1,23 @@
+{
+  "experiment": "NDP_SELECT_LTCC_PRCC_SHORT",
+  "source_run": "ndp_select_short_20261030_151334",
+  "archive_date": "2026-10-30",
+  "contents": "Short-run logs, metrics, JSON summaries, and report",
+  "files_archived": 42,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.tar",
+    "*.zip",
+    "__pycache__"
+  ],
+  "code_commit": "ee320a13c0d3a94a52b5d25d97d5ef3e5044e7cd"
+}

@@ -67,6 +67,11 @@ def build_safe_online_neighbor_graph(
     for anchor_index, anchor_rows in rows.items():
         for row in anchor_rows:
             row["positive_local"] = [int(fresh_features.shape[0]) + int(anchor_index)]
+            row["safe_positive_cross_clothes"] = bool(
+                clothes[anchor_index] >= 0
+                and positive_indices[anchor_index] < len(clothes)
+                and clothes[positive_indices[anchor_index]] != clothes[anchor_index]
+            )
     summary = dict(summary)
     summary.update({
         "safe_positive_definition": "same_pid_cross_clothes_first_else_same_pid_first",

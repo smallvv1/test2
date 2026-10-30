@@ -616,6 +616,24 @@ def scalar(value: Any) -> float:
     return float(value.detach().float().cpu()) if torch.is_tensor(value) else float(value)
 
 
+def finite_gradient_norm(gradient: torch.Tensor | None) -> tuple[float, bool]:
+    """Return a finite diagnostic norm without turning unavailable probes into NaN.
+
+    The probe is diagnostic only.  A missing/non-finite autograd result must not
+    be confused with a zero NDP gradient, so the boolean is retained by the
+    caller while the numeric field stays CSV-safe.
+    """
+    if gradient is None:
+        return 0.0, False
+    try:
+        value = torch.linalg.vector_norm(gradient.detach().float())
+        if not bool(torch.isfinite(value).item()):
+            return 0.0, False
+        return float(value.cpu()), True
+    except (RuntimeError, ValueError, TypeError):
+        return 0.0, False
+
+
 def set_gpc_pair_context(run_id: str, seed: int) -> str:
     """Set the frozen GPC selector context without encoding the NDP arm.
 
@@ -771,7 +789,7 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE"}:
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT"}:
         coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
@@ -863,7 +881,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT"}
     if ndp_enabled:
         ndp_values = []
         for local_index, entry in enumerate(entries):
@@ -902,6 +920,27 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         current_error_pid += int(float(current_margin.detach().float().cpu()) <= 0.0)
                         correct_pid += int(float(current_margin.detach().float().cpu()) > 0.0)
                         margin_sum += float(current_margin.detach().float().cpu())
+                        continue
+                    if arm == "NDP_SELECT":
+                        # Selective low-interference gate: only a reliable
+                        # cross-clothes positive and a currently correct but
+                        # near-boundary negative relation are eligible.  The
+                        # detached predicate never participates in backward.
+                        if not bool(relation.get("safe_positive_cross_clothes", False)):
+                            continue
+                        detached_margin = float(current_margin.detach().float().cpu())
+                        if not (0.0 < detached_margin < 0.05):
+                            continue
+                        selected_ndp += 1
+                        hinge = F.relu(
+                            torch.as_tensor(0.02, dtype=current_margin.dtype, device=device)
+                            - current_margin
+                        )
+                        anchor_values.append(hinge)
+                        active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
+                        current_error_pid += int(detached_margin <= 0.0)
+                        correct_pid += int(detached_margin > 0.0)
+                        margin_sum += detached_margin
                         continue
                     if arm == "NLIST":
                         selected_ndp += 1
@@ -985,13 +1024,25 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         purity = (pids[top] == pids[:, None]).float().mean()
     need_diag = stats["batches"] < diagnostic_steps and ndp_enabled
     if need_diag:
-        ndp_feature_grad = torch.autograd.grad(ndp_loss, feat[0], retain_graph=True, allow_unused=True)[0]
-        main_feature_grad = torch.autograd.grad(main_total, feat[0], retain_graph=True, allow_unused=True)[0]
-        ndp_feature_norm = float(torch.linalg.vector_norm(ndp_feature_grad.float()).detach().cpu()) if ndp_feature_grad is not None else 0.0
-        main_feature_norm = float(torch.linalg.vector_norm(main_feature_grad.float()).detach().cpu()) if main_feature_grad is not None else 0.0
+        try:
+            ndp_feature_grad = torch.autograd.grad(
+                ndp_loss, feat[0], retain_graph=True, allow_unused=True
+            )[0]
+            main_feature_grad = torch.autograd.grad(
+                main_total, feat[0], retain_graph=True, allow_unused=True
+            )[0]
+        except (RuntimeError, ValueError, TypeError):
+            ndp_feature_grad = None
+            main_feature_grad = None
+        ndp_feature_norm, ndp_probe_valid = finite_gradient_norm(ndp_feature_grad)
+        main_feature_norm, main_probe_valid = finite_gradient_norm(main_feature_grad)
     else:
-        ndp_feature_norm = float("nan")
-        main_feature_norm = float("nan")
+        # Keep aggregate CSV fields finite. These zeros mean "not probed";
+        # the first diagnostic batches carry the actual probe values.
+        ndp_feature_norm = 0.0
+        main_feature_norm = 0.0
+        ndp_probe_valid = False
+        main_probe_valid = False
     components = getattr(loss_fn, "last_components", {})
     stats["batches"] += 1
     stats["active_batches"] += int(active_ndp > 0 and ndp_enabled)
@@ -1014,7 +1065,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     stats["gpc_selected"] += len(selected_gpc)
     gpc_info = dict(gpc_info)
     gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
-    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
+    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 
 def finite_parameters(model: torch.nn.Module) -> bool:

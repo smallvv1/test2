@@ -57,6 +57,11 @@ NDP_SAFE_MARGIN = 0.05
 NCAP_MAX_TARGET = 0.02
 NDYN_DELTA = 0.005
 NDYN_TOP5_DELTA_CAP = 0.005
+NDP_RANK_TEACHER_MIN_MARGIN = 0.02
+NDP_RANK_TEACHER_MAX_MARGIN = 0.10
+NDP_RANK_CURRENT_MAX_MARGIN = 0.05
+NDP_RANK_TARGET_MIN_MARGIN = 0.01
+NDP_RANK_TARGET_MAX_MARGIN = 0.05
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -789,7 +794,7 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE"}:
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK"}:
         coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
@@ -881,7 +886,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK"}
     if ndp_enabled:
         ndp_values = []
         for local_index, entry in enumerate(entries):
@@ -934,6 +939,23 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         selected_ndp += 1
                         hinge = F.relu(
                             torch.as_tensor(0.02, dtype=current_margin.dtype, device=device)
+                            - current_margin
+                        )
+                        anchor_values.append(hinge)
+                        active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
+                        current_error_pid += int(detached_margin <= 0.0)
+                        correct_pid += int(detached_margin > 0.0)
+                        margin_sum += detached_margin
+                        continue
+                    if arm == "NDP_RANK":
+                        teacher_margin = float(relation.get("teacher_pid_margin", [reference_margin] * len(relation["negative_pid"]))[pid_index])
+                        detached_margin = float(current_margin.detach().float().cpu())
+                        if not (NDP_RANK_TEACHER_MIN_MARGIN <= teacher_margin <= NDP_RANK_TEACHER_MAX_MARGIN and detached_margin < NDP_RANK_CURRENT_MAX_MARGIN):
+                            continue
+                        selected_ndp += 1
+                        target_margin = min(NDP_RANK_TARGET_MAX_MARGIN, max(NDP_RANK_TARGET_MIN_MARGIN, 0.5 * teacher_margin))
+                        hinge = F.relu(
+                            torch.as_tensor(target_margin, dtype=current_margin.dtype, device=device)
                             - current_margin
                         )
                         anchor_values.append(hinge)

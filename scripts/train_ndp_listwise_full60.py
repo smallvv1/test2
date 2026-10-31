@@ -55,6 +55,12 @@ NDP_V2_WARMUP_EPOCHS = 2
 NDP_V2_GRAPH_UPDATE_EVERY = 5
 LAMBDA_NDP_TEACH = 0.001
 NTEACH_START_EPOCH = 2
+LAMBDA_NDP_RANK = 0.005
+NDP_RANK_TEACHER_MIN_MARGIN = 0.02
+NDP_RANK_TEACHER_MAX_MARGIN = 0.10
+NDP_RANK_CURRENT_MAX_MARGIN = 0.05
+NDP_RANK_TARGET_MIN_MARGIN = 0.01
+NDP_RANK_TARGET_MAX_MARGIN = 0.05
 TAU = 0.1
 GPC_CONTEXT = "phase7i_relation_specificity"
 EXPECTED_DEVICE_NAME = "PPU-ZW810E"
@@ -430,10 +436,10 @@ def identity_feature_bank(model, cfg, dataset, device) -> torch.Tensor:
 
 def make_online_graph(model, cfg, dataset, device, previous_signature, arm):
     bank = identity_feature_bank(model, cfg, dataset, device)
-    if arm in {"NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE"}:
+    if arm in {"NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK"}:
         rows, reference_features, summary, signature = NDP_SAFE.build_safe_online_neighbor_graph(
             bank, dataset.train, device, max_negative_pids=3, block_size=512, previous_signature=previous_signature
-            , robust_positive=(arm in {"NDP_V2", "NTEACH", "NTEACH_SAFE"})
+            , robust_positive=(arm in {"NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK"})
         )
     else:
         pids = torch.tensor([int(item["pid"]) for item in dataset.train], dtype=torch.long, device=device)
@@ -603,7 +609,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     cached_reference_features = torch.empty((0, 1024), dtype=torch.float32, device=device)
     cached_graph_summary = {"online_relation_count": 0, "online_valid_anchor_count": 0, "online_neighbor_change_rate": None, "online_neighbor_graph_sha256": "", "fresh_bank_shape": [], "online_similarity_device": str(device)}
     cached_graph_epoch = 0
-    if args.arm in {"NTEACH", "NTEACH_SAFE"} and resume_nteach_graph is not None:
+    if args.arm in {"NTEACH", "NTEACH_SAFE", "NDP_RANK"} and resume_nteach_graph is not None:
         cached_reference_rows = resume_nteach_graph["rows"]
         cached_reference_features = resume_nteach_graph["features"].to(device=device, dtype=torch.float32)
         cached_graph_summary = dict(resume_nteach_graph["summary"])
@@ -611,6 +617,22 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         cached_graph_epoch = int(resume_nteach_graph["captured_epoch"])
         if logger:
             logger.info("恢复冻结 NTEACH 教师图：captured_epoch=%d feature_state_hash=%s", cached_graph_epoch, resume_nteach_graph.get("feature_state_hash"))
+    teacher_graph_model = None
+    if args.arm == "NDP_RANK" and cached_graph_epoch == 0:
+        if args.teacher_model is None:
+            raise RuntimeError("NDP_RANK requires --teacher-model pointing to a completed Bio+GPC model")
+        teacher_path = Path(args.teacher_model).resolve()
+        if not teacher_path.is_file():
+            raise FileNotFoundError(f"missing NDP_RANK teacher model: {teacher_path}")
+        teacher_payload = torch.load(teacher_path, map_location="cpu", weights_only=False)
+        teacher_state = teacher_payload["model"] if isinstance(teacher_payload, dict) and "model" in teacher_payload else teacher_payload
+        teacher_graph_model = build_model_for_evaluation(cfg, dataset)
+        teacher_graph_model.load_state_dict(teacher_state, strict=True)
+        teacher_graph_model.to(device).eval()
+        for parameter in teacher_graph_model.parameters():
+            parameter.requires_grad_(False)
+        if logger:
+            logger.info("加载冻结 NDP_RANK 教师：%s sha256=%s", teacher_path, sha256_file(teacher_path))
     history: list[dict[str, Any]] = []
     try:
         for epoch in range(start_epoch, end_epoch + 1):
@@ -618,14 +640,22 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             reference_rows = cached_reference_rows
             reference_features = cached_reference_features
             graph_summary = cached_graph_summary
-            if args.arm in {"NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE"} and (cached_graph_epoch == 0 or (args.arm not in {"NTEACH", "NTEACH_SAFE"} and epoch - cached_graph_epoch >= (NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else (NDP_SELECT_GRAPH_UPDATE_EVERY if args.arm == "NDP_SELECT" else NDP_V2_GRAPH_UPDATE_EVERY)))):
-                cached_reference_rows, cached_reference_features, cached_graph_summary, previous_signature = make_online_graph(raw, cfg, dataset, device, previous_signature, args.arm)
-                if args.arm in {"NTEACH", "NTEACH_SAFE"}:
+            if args.arm in {"NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK"} and (cached_graph_epoch == 0 or (args.arm not in {"NTEACH", "NTEACH_SAFE", "NDP_RANK"} and epoch - cached_graph_epoch >= (NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else (NDP_SELECT_GRAPH_UPDATE_EVERY if args.arm == "NDP_SELECT" else NDP_V2_GRAPH_UPDATE_EVERY)))):
+                graph_model = teacher_graph_model if args.arm == "NDP_RANK" and teacher_graph_model is not None else raw
+                cached_reference_rows, cached_reference_features, cached_graph_summary, previous_signature = make_online_graph(graph_model, cfg, dataset, device, previous_signature, args.arm)
+                if args.arm in {"NTEACH", "NTEACH_SAFE", "NDP_RANK"}:
                     teacher_counts = annotate_teacher_graph(cached_reference_rows, cached_reference_features)
                     cached_graph_summary.update(teacher_counts)
                 cached_graph_summary["fresh_bank_shape"] = [len(dataset.train), 1024]
                 cached_graph_epoch = epoch
                 reference_rows, reference_features, graph_summary = cached_reference_rows, cached_reference_features, cached_graph_summary
+                if args.arm == "NDP_RANK" and teacher_graph_model is not None:
+                    del teacher_graph_model
+                    teacher_graph_model = None
+                    graph_model = None
+                    gc.collect()
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
             elif args.arm == "NLIST":
                 reference_rows, reference_features, graph_summary, previous_signature = make_online_graph(raw, cfg, dataset, device, previous_signature, args.arm)
                 graph_summary["fresh_bank_shape"] = [len(dataset.train), 1024]
@@ -651,6 +681,8 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     ndp_lambda = LAMBDA_NDP_V2 * min(1.0, float(epoch - NDP_V2_START_EPOCH + 1) / float(NDP_V2_WARMUP_EPOCHS))
                 elif args.arm in {"NTEACH", "NTEACH_SAFE"} and epoch >= NTEACH_START_EPOCH:
                     ndp_lambda = LAMBDA_NDP_TEACH
+                elif args.arm == "NDP_RANK":
+                    ndp_lambda = LAMBDA_NDP_RANK
                 result = NDP.forward_batch(model, loss_fn, batch, device, path_to_index, gpc_bank, reference_rows, reference_features, args.arm, epoch, rank, iteration, global_step, stats, 3, 0.02, ndp_lambda=ndp_lambda)
                 if not bool(torch.isfinite(result["total"].detach()).item()):
                     raise RuntimeError(f"non-finite total loss at {args.dataset}/epoch{epoch}/iteration{iteration}")
@@ -694,7 +726,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                 break
             if epoch % 5 == 0:
                 resume_graph = None
-                if args.arm in {"NTEACH", "NTEACH_SAFE"} and cached_graph_epoch > 0:
+                if args.arm in {"NTEACH", "NTEACH_SAFE", "NDP_RANK"} and cached_graph_epoch > 0:
                     feature_cpu = cached_reference_features.detach().cpu().contiguous()
                     resume_graph = {
                         "rows": cached_reference_rows,
@@ -756,7 +788,8 @@ def main() -> None:
     parser.add_argument("--mode", choices=("prepare", "smoke", "train", "eval"), required=True)
     parser.add_argument("--dataset", choices=("ltcc", "prcc", "all"), required=True)
     parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NLIST"), default="NTEACH")
+    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NLIST"), default="NTEACH")
+    parser.add_argument("--teacher-model", type=Path, default=None, help="completed frozen Bio+GPC model used only to build NDP_RANK train-only teacher graph")
     parser.add_argument("--epochs", type=int, default=EPOCHS)
     parser.add_argument("--smoke-steps", type=int, default=0)
     parser.add_argument("--resume", action="store_true")

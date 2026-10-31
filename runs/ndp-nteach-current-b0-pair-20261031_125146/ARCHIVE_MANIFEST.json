@@ -1,0 +1,24 @@
+{
+  "experiment": "NDP_NTEACH_CURRENT_B0_PAIR",
+  "source_run": "ndp_nteach_current_b0_pair_20261031_125146",
+  "archive_date": "2026-10-31",
+  "status": "COMPLETE_AVAILABLE_RESULTS",
+  "contents": "Current-B0 pair logs, metrics, JSON summaries, evaluation results, and report",
+  "files_archived": 31,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.tar",
+    "*.zip",
+    "__pycache__"
+  ],
+  "code_commit": "755779d"
+}

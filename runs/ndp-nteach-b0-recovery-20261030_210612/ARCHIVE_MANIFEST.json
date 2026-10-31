@@ -4,7 +4,7 @@
   "archive_date": "2026-10-30",
   "status": "COMPLETE_B0_BASELINE",
   "contents": "B0 baseline recovery training logs, smoke results, metrics, completion metadata, and resume metadata",
-  "files_archived": 14,
+  "files_archived": 16,
   "excluded": [
     "*.pth",
     "*.pt",

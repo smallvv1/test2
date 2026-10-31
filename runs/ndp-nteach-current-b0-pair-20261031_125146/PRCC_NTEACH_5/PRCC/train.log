@@ -1,0 +1,5 @@
+2026-10-31 17:34:44,398 INFO epoch 1/5 loss=7.166429 ndp=0.011873 active=167/167 lr=8.422e-07 skip=0
+2026-10-31 17:37:07,073 INFO epoch 2/5 loss=7.134131 ndp=0.011198 active=158/158 lr=9.031e-07 skip=0
+2026-10-31 17:39:27,556 INFO epoch 3/5 loss=7.128955 ndp=0.012191 active=162/162 lr=9.641e-07 skip=0
+2026-10-31 17:41:45,983 INFO epoch 4/5 loss=7.102210 ndp=0.011794 active=152/152 lr=1.025e-06 skip=0
+2026-10-31 17:44:04,454 INFO epoch 5/5 loss=7.083610 ndp=0.010805 active=143/143 lr=1.086e-06 skip=0

@@ -1,0 +1,9 @@
+{
+  "dataset": "prcc",
+  "epoch": 5,
+  "file": "/home/DIFFER/log_NDP/ndp_nteach_safe_pair_20261031_180000/PRCC_NTEACH_SAFE_5/PRCC/resume_latest.pth",
+  "file_sha256": "3ecd9d6f9670b3ab19b7e90d18138ad58dfb226881d615137f605e6543cff421",
+  "global_step": 2755,
+  "rank_state_count": 2,
+  "saved_utc": "2026-10-31T10:18:36Z"
+}

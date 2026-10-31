@@ -4,7 +4,7 @@
   "archive_date": "2026-10-31",
   "status": "COMPLETE_AVAILABLE_RESULTS",
   "contents": "Current-B0 pair logs, metrics, JSON summaries, evaluation results, and report",
-  "files_archived": 31,
+  "files_archived": 49,
   "excluded": [
     "*.pth",
     "*.pt",

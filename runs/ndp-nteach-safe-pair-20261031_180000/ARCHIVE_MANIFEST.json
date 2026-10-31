@@ -1,0 +1,24 @@
+{
+  "experiment": "NDP_NTEACH_SAFE_PAIR",
+  "source_run": "ndp_nteach_safe_pair_20261031_180000",
+  "archive_date": "2026-10-31",
+  "status": "COMPLETE_AVAILABLE_RESULTS",
+  "contents": "NTEACH-safe LTCC/PRCC pair logs, metrics, JSON summaries, evaluation results, and report",
+  "files_archived": 22,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.tar",
+    "*.zip",
+    "__pycache__"
+  ],
+  "code_commit": "ffa6fa3"
+}

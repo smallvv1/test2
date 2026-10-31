@@ -1,0 +1,6 @@
+epoch,online_relation_count,online_valid_anchor_count,online_neighbor_change_rate,online_graph_sha256,fresh_bank_shape,fresh_bank_device,train_only,query_gallery_used
+1,53688,17896,,cab63f903e24a67dca21f13fc507c1cc933d7e5ce5f2c944ddbb80025a9df674,"[17896, 1024]",cuda:0,True,False
+2,53688,17896,,cab63f903e24a67dca21f13fc507c1cc933d7e5ce5f2c944ddbb80025a9df674,"[17896, 1024]",cuda:0,True,False
+3,53688,17896,,cab63f903e24a67dca21f13fc507c1cc933d7e5ce5f2c944ddbb80025a9df674,"[17896, 1024]",cuda:0,True,False
+4,53688,17896,,cab63f903e24a67dca21f13fc507c1cc933d7e5ce5f2c944ddbb80025a9df674,"[17896, 1024]",cuda:0,True,False
+5,53688,17896,,cab63f903e24a67dca21f13fc507c1cc933d7e5ce5f2c944ddbb80025a9df674,"[17896, 1024]",cuda:0,True,False

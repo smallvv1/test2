@@ -356,7 +356,7 @@ def capture_rank_state(optimizer, scheduler, scaler, device: torch.device) -> di
     }
 
 
-def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int, global_step: int, device: torch.device, dataset_name: str) -> None:
+def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int, global_step: int, device: torch.device, dataset_name: str, nteach_graph: dict[str, Any] | None = None) -> None:
     local = capture_rank_state(optimizer, scheduler, scaler, device)
     gathered: list[Any] = [None] * WORLD_SIZE
     dist.all_gather_object(gathered, local)
@@ -374,6 +374,15 @@ def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int,
             "gpc_context": GPC_CONTEXT,
             "no_per_rank_checkpoint": True,
         }
+        if nteach_graph is not None:
+            payload["nteach_graph"] = {
+                "rows": nteach_graph["rows"],
+                "features": nteach_graph["features"].detach().cpu(),
+                "summary": nteach_graph["summary"],
+                "signature": nteach_graph.get("signature"),
+                "captured_epoch": int(nteach_graph["captured_epoch"]),
+                "feature_state_hash": nteach_graph.get("feature_state_hash"),
+            }
         atomic_torch_save(payload, output_dir / "resume_latest.pth")
         write_json(output_dir / "resume_latest.json", {
             "dataset": dataset_name,
@@ -387,7 +396,7 @@ def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int,
     dist.barrier()
 
 
-def load_resume(path: Path, raw, optimizer, scheduler, scaler, rank: int, device: torch.device) -> tuple[int, int]:
+def load_resume(path: Path, raw, optimizer, scheduler, scaler, rank: int, device: torch.device) -> tuple[int, int, dict[str, Any] | None]:
     payload = torch.load(path, map_location="cpu", weights_only=False)
     if payload.get("dataset") is None or payload.get("seed") != SEED or len(payload.get("rank_states", [])) != WORLD_SIZE:
         raise RuntimeError(f"invalid single-file resume payload: {path}")
@@ -397,7 +406,7 @@ def load_resume(path: Path, raw, optimizer, scheduler, scaler, rank: int, device
     scheduler.load_state_dict(local["scheduler"])
     scaler.load_state_dict(local["scaler"])
     NDP.base.restore_rng(local["rng"], device)
-    return int(payload["epoch"]), int(payload["global_step"])
+    return int(payload["epoch"]), int(payload["global_step"]), payload.get("nteach_graph")
 
 
 def logger_for(path: Path) -> logging.Logger:
@@ -563,12 +572,13 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     resume = output_dir / "resume_latest.pth"
     start_epoch = 1
     global_step = 0
+    resume_nteach_graph: dict[str, Any] | None = None
     if resume.is_file() and args.resume:
-        previous_epoch, global_step = load_resume(resume, raw, optimizer, scheduler, scaler, rank, device)
+        previous_epoch, global_step, resume_nteach_graph = load_resume(resume, raw, optimizer, scheduler, scaler, rank, device)
         start_epoch = previous_epoch + 1
         raw.train()
         if logger:
-            logger.info("从单文件恢复：epoch=%d global_step=%d", previous_epoch, global_step)
+            logger.info("从单文件恢复：epoch=%d global_step=%d teacher_graph=%s", previous_epoch, global_step, bool(resume_nteach_graph))
     elif resume.is_file() and not args.resume:
         raise RuntimeError(f"resume_latest.pth exists; pass --resume or move it before a fresh run: {resume}")
 
@@ -593,6 +603,14 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     cached_reference_features = torch.empty((0, 1024), dtype=torch.float32, device=device)
     cached_graph_summary = {"online_relation_count": 0, "online_valid_anchor_count": 0, "online_neighbor_change_rate": None, "online_neighbor_graph_sha256": "", "fresh_bank_shape": [], "online_similarity_device": str(device)}
     cached_graph_epoch = 0
+    if args.arm == "NTEACH" and resume_nteach_graph is not None:
+        cached_reference_rows = resume_nteach_graph["rows"]
+        cached_reference_features = resume_nteach_graph["features"].to(device=device, dtype=torch.float32)
+        cached_graph_summary = dict(resume_nteach_graph["summary"])
+        previous_signature = resume_nteach_graph.get("signature")
+        cached_graph_epoch = int(resume_nteach_graph["captured_epoch"])
+        if logger:
+            logger.info("恢复冻结 NTEACH 教师图：captured_epoch=%d feature_state_hash=%s", cached_graph_epoch, resume_nteach_graph.get("feature_state_hash"))
     history: list[dict[str, Any]] = []
     try:
         for epoch in range(start_epoch, end_epoch + 1):
@@ -675,7 +693,18 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             if args.smoke_steps:
                 break
             if epoch % 5 == 0:
-                save_resume(output_dir, raw, optimizer, scheduler, scaler, epoch, global_step, device, args.dataset)
+                resume_graph = None
+                if args.arm == "NTEACH" and cached_graph_epoch > 0:
+                    feature_cpu = cached_reference_features.detach().cpu().contiguous()
+                    resume_graph = {
+                        "rows": cached_reference_rows,
+                        "features": feature_cpu,
+                        "summary": cached_graph_summary,
+                        "signature": previous_signature,
+                        "captured_epoch": cached_graph_epoch,
+                        "feature_state_hash": sha256_bytes(feature_cpu.view(torch.uint8).numpy().tobytes()),
+                    }
+                save_resume(output_dir, raw, optimizer, scheduler, scaler, epoch, global_step, device, args.dataset, nteach_graph=resume_graph)
                 assert_no_rank_state_files(output_dir)
             dist.barrier()
     finally:
@@ -702,6 +731,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         meta["nteach_teacher"] = "frozen B0 initialization feature bank; graph captured once before epoch-1 updates" if args.arm == "NTEACH" else None
         meta["nteach_teacher_model_path"] = init_manifest.get("source") if args.arm == "NTEACH" else None
         meta["nteach_teacher_state_hash"] = init_manifest.get("state_hash") if args.arm == "NTEACH" else None
+        meta["nteach_teacher_graph_persisted_in_resume"] = True if args.arm == "NTEACH" else False
         write_json(output_dir / "final_model.json", meta)
         # RUN_COMPLETE is reserved for the requested formal 60-epoch run.
         # Short paired gates must not be mistaken for a completed full run.

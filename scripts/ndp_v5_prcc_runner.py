@@ -789,7 +789,7 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH"}:
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE"}:
         coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
@@ -881,7 +881,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE"}
     if ndp_enabled:
         ndp_values = []
         for local_index, entry in enumerate(entries):
@@ -942,7 +942,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         correct_pid += int(detached_margin > 0.0)
                         margin_sum += detached_margin
                         continue
-                    if arm == "NTEACH":
+                    if arm in {"NTEACH", "NTEACH_SAFE"}:
                         # The relation endpoints and teacher margin were
                         # captured once from the B0 initialization.  Protect
                         # only a reliable teacher ordering that has actually
@@ -950,6 +950,12 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         teacher_margin = float(relation.get("teacher_pid_margin", [reference_margin] * len(relation["negative_pid"]))[pid_index])
                         detached_margin = float(current_margin.detach().float().cpu())
                         if teacher_margin < 0.02 or not (-0.05 < detached_margin < 0.0):
+                            continue
+                        # NTEACH_SAFE additionally requires the teacher's
+                        # positive endpoint to be supported by two distinct
+                        # clothes identities. This detached gate leaves the
+                        # live anchor as the only gradient path.
+                        if arm == "NTEACH_SAFE" and not bool(relation.get("safe_positive_reliable", False)):
                             continue
                         selected_ndp += 1
                         target_margin = min(0.05, max(0.01, 0.25 * teacher_margin))

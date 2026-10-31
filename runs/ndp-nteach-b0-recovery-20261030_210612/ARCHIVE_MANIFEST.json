@@ -2,9 +2,9 @@
   "experiment": "NDP_NTEACH_B0_RECOVERY",
   "source_run": "ndp_nteach_b0_recovery_20261030_210612",
   "archive_date": "2026-10-30",
-  "status": "PARTIAL_RECOVERY_DIAGNOSTICS",
-  "contents": "Partial B0 recovery training logs, smoke results, metrics, and resume metadata",
-  "files_archived": 12,
+  "status": "COMPLETE_B0_BASELINE",
+  "contents": "B0 baseline recovery training logs, smoke results, metrics, completion metadata, and resume metadata",
+  "files_archived": 14,
   "excluded": [
     "*.pth",
     "*.pt",

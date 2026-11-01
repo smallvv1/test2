@@ -948,6 +948,11 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         margin_sum += detached_margin
                         continue
                     if arm == "NDP_RANK":
+                        # Teacher-guided local ranking.  The teacher graph is
+                        # fixed and detached; only the live student anchor is
+                        # connected to the loss.  We keep reliable but
+                        # genuinely dangerous teacher relations, rather than
+                        # forcing recovery of every historical neighbor.
                         teacher_margin = float(relation.get("teacher_pid_margin", [reference_margin] * len(relation["negative_pid"]))[pid_index])
                         detached_margin = float(current_margin.detach().float().cpu())
                         if not (NDP_RANK_TEACHER_MIN_MARGIN <= teacher_margin <= NDP_RANK_TEACHER_MAX_MARGIN and detached_margin < NDP_RANK_CURRENT_MAX_MARGIN):
@@ -975,8 +980,8 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                             continue
                         # NTEACH_SAFE additionally requires the teacher's
                         # positive endpoint to be supported by two distinct
-                        # clothes identities. This detached gate leaves the
-                        # live anchor as the only gradient path.
+                        # clothes identities.  This is a detached reliability
+                        # gate; the live anchor remains the only gradient path.
                         if arm == "NTEACH_SAFE" and not bool(relation.get("safe_positive_reliable", False)):
                             continue
                         selected_ndp += 1

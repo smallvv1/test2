@@ -1,0 +1,2 @@
+2026-10-31 18:45:00,576 INFO 加载冻结 NDP_RANK 教师：/home/DIFFER/log_NDP/ndp_nteach_current_b0_pair_20261031_125146/PRCC_B0_full/PRCC/model_final.pth sha256=74aed55925603adfdfb07325f5b6646608a8d60d23c613852c5951d521263772
+2026-10-31 18:46:47,212 INFO epoch 1/1 loss=10.088315 ndp=0.036867 active=27/30 lr=8.422e-07 skip=0

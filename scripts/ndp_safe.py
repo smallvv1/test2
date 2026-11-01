@@ -158,6 +158,14 @@ def build_safe_online_neighbor_graph(
     for anchor_index, anchor_rows in rows.items():
         for row in anchor_rows:
             row["positive_local"] = [int(fresh_features.shape[0]) + int(index) for index in positive_offsets[anchor_index]]
+            # Keep the source image indices separately from ``positive_local``.
+            # The latter points into the combined [fresh_bank, positive_bank]
+            # tensor and therefore cannot be reused after a student-bank
+            # refresh.  NDP_SR keeps the teacher-selected relation/index set,
+            # but rebuilds its endpoint tensor in the live student's space.
+            row["positive_source_indices"] = [
+                int(index) for index in positive_reference_indices[anchor_index]
+            ]
             row["safe_positive_cross_clothes"] = bool(
                 clothes[anchor_index] >= 0
                 and positive_indices[anchor_index] < len(clothes)

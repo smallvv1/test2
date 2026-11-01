@@ -62,6 +62,9 @@ NDP_RANK_TEACHER_MAX_MARGIN = 0.10
 NDP_RANK_CURRENT_MAX_MARGIN = 0.05
 NDP_RANK_TARGET_MIN_MARGIN = 0.01
 NDP_RANK_TARGET_MAX_MARGIN = 0.05
+NDP_SR_TEACHER_MIN_MARGIN = 0.02
+NDP_SR_TEACHER_MAX_MARGIN = 0.10
+NDP_SR_CONFUSION_MARGIN = 0.02
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -794,7 +797,7 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK"}:
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR"}:
         coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
@@ -886,7 +889,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR"}
     if ndp_enabled:
         ndp_values = []
         for local_index, entry in enumerate(entries):
@@ -894,6 +897,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
             anchor = representation[local_index]
             anchor_values = []
             listwise_negative_similarities = []
+            sr_candidates = []
             for relation in reference_rows.get(anchor_id, []):
                 positive = reference_features[relation["positive_local"]]
                 negative = reference_features[relation["negative_local"]]
@@ -968,6 +972,19 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         current_error_pid += int(detached_margin <= 0.0)
                         correct_pid += int(detached_margin > 0.0)
                         margin_sum += detached_margin
+                        continue
+                    if arm == "NDP_SR":
+                        # Teacher endpoints are never used here.  The rows and
+                        # source indices come from the teacher, while
+                        # ``reference_features`` is a refreshed student-space
+                        # bank.  Keep only a teacher-reliable candidate below
+                        # the fixed local confusion boundary, then supervise
+                        # the single lowest-margin PID for this anchor.
+                        teacher_margin = float(relation.get("teacher_pid_margin", [reference_margin] * len(relation["negative_pid"]))[pid_index])
+                        detached_margin = float(current_margin.detach().float().cpu())
+                        if not (NDP_SR_TEACHER_MIN_MARGIN <= teacher_margin <= NDP_SR_TEACHER_MAX_MARGIN and detached_margin < NDP_SR_CONFUSION_MARGIN):
+                            continue
+                        sr_candidates.append((detached_margin, current_margin))
                         continue
                     if arm in {"NTEACH", "NTEACH_SAFE"}:
                         # The relation endpoints and teacher margin were
@@ -1049,6 +1066,17 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                     current_error_pid += int(float(current_margin.detach().float().cpu()) <= 0.0)
                     correct_pid += int(float(current_margin.detach().float().cpu()) > 0.0)
                     margin_sum += float(current_margin.detach().float().cpu())
+            if arm == "NDP_SR" and sr_candidates:
+                _, current_margin = min(sr_candidates, key=lambda item: item[0])
+                selected_ndp += 1
+                target_margin = torch.as_tensor(NDP_SR_CONFUSION_MARGIN, dtype=current_margin.dtype, device=device)
+                hinge = F.relu(target_margin - current_margin)
+                anchor_values.append(hinge)
+                detached_margin = float(current_margin.detach().float().cpu())
+                active_ndp += int(detached_margin < NDP_SR_CONFUSION_MARGIN)
+                current_error_pid += int(detached_margin <= 0.0)
+                correct_pid += int(detached_margin > 0.0)
+                margin_sum += detached_margin
             if arm == "NLIST" and listwise_negative_similarities:
                 listwise_loss = listwise_local_rank_loss(
                     positive_similarity,

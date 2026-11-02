@@ -1,0 +1,27 @@
+{
+  "experiment": "NDP_LATE_FULL60_SEED1234",
+  "archive_date": "2026-11-02",
+  "status": "COMPLETE_LTCC_PRCC_WITH_SMOKE",
+  "source_runs": [
+    "ndp_late_full60_seed1234_20261102_014655",
+    "ndp_late_smoke_20261102_014008",
+    "ndp_late_smoke_20261102_014253"
+  ],
+  "contents": {
+    "full60": ["LTCC", "PRCC"],
+    "smoke": ["LTCC", "PRCC"]
+  },
+  "files_archived": 22,
+  "excluded": [
+    "model_final.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "image_and_archive_files",
+    "__pycache__"
+  ],
+  "code_commit_before_archive": "25c1844"
+}

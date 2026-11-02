@@ -1,0 +1,28 @@
+{
+  "dataset": "ltcc",
+  "evaluated_utc": "2026-11-02T12:52:58Z",
+  "model": "/home/DIFFER/log_NDP/ndp_gpc_full60_seed1234_20261102_161200/LTCC/model_final.pth",
+  "model_sha256": "219bbee063f5ef4d5675d7f7dfa2621bf0ef6fa6a76507c8a4e9e652747255eb",
+  "protocols": {
+    "clothes_changing": {
+      "gallery_count": 7050,
+      "mAP": 0.29158800282395925,
+      "mINP": null,
+      "mINP_status": "Unavailable: repository evaluator does not expose mINP",
+      "query_count": 493,
+      "rank1": 0.5204081535339355,
+      "rank10": 0.7117347121238708,
+      "rank5": 0.6530612111091614
+    },
+    "general": {
+      "gallery_count": 7050,
+      "mAP": 0.5259882992333267,
+      "mINP": null,
+      "mINP_status": "Unavailable: repository evaluator does not expose mINP",
+      "query_count": 493,
+      "rank1": 0.8377282023429871,
+      "rank10": 0.9229208827018738,
+      "rank5": 0.8985801339149475
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "experiment": "NDP_GPC_FULL60_SEED1234",
+  "status": "COMPLETE_LTCC_PRCC_EVAL",
+  "created_utc": "2026-11-02T12:55:08Z",
+  "datasets": ["LTCC", "PRCC"],
+  "epochs": 60,
+  "seed": 1234,
+  "training_device": "PPU/GPU",
+  "train_only_reference": true,
+  "lambda_gpc": 0.1,
+  "lambda_ndp": 0.005,
+  "per_rank_checkpoint_files_created": false,
+  "archived_model_files": false,
+  "contents": "formal training/evaluation logs, metrics, JSON summaries, and 20-step smoke outputs",
+  "server_output": "/home/DIFFER/log_NDP/ndp_gpc_full60_seed1234_20261102_161200"
+}

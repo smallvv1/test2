@@ -1,0 +1,3 @@
+2026-11-02 09:43:27,269 INFO 加载冻结 NDP_LATE 教师：/home/DIFFER/log_NDP/ndp_nteach_current_b0_pair_20261031_125146/PRCC_B0_full/PRCC/model_final.pth sha256=74aed55925603adfdfb07325f5b6646608a8d60d23c613852c5951d521263772
+2026-11-02 09:46:35,241 INFO NDP_LATE teacher graph fixed; student train-only reference shape=(53688, 1024)
+2026-11-02 09:46:41,860 INFO epoch 1/60 loss=10.082710 ndp=0.000000 active=0/0 lr=8.422e-07 skip=0

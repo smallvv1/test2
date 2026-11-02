@@ -65,6 +65,11 @@ NDP_RANK_TARGET_MAX_MARGIN = 0.05
 NDP_SR_TEACHER_MIN_MARGIN = 0.02
 NDP_SR_TEACHER_MAX_MARGIN = 0.10
 NDP_SR_CONFUSION_MARGIN = 0.02
+NDP_LATE_TEACHER_MIN_MARGIN = 0.02
+NDP_LATE_TEACHER_MAX_MARGIN = 0.10
+NDP_LATE_CONFUSION_MARGIN = 0.0
+NDP_LATE_TARGET_MARGIN = 0.01
+NDP_LATE_START_EPOCH = 16
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -797,7 +802,7 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR"}:
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE"}:
         coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
@@ -889,7 +894,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE"}
     if ndp_enabled:
         ndp_values = []
         for local_index, entry in enumerate(entries):
@@ -1009,6 +1014,23 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         current_error_pid += 1
                         margin_sum += detached_margin
                         continue
+                    if arm == "NDP_LATE":
+                        # Delay intervention until the base Bio+GPC model has
+                        # learned its identity space.  After the delay, only
+                        # a teacher-reliable relation that has crossed into a
+                        # real current confusion (margin <= 0) is eligible.
+                        # The endpoint bank remains in the live student space.
+                        if epoch < NDP_LATE_START_EPOCH:
+                            continue
+                        teacher_margin = float(relation.get("teacher_pid_margin", [reference_margin] * len(relation["negative_pid"]))[pid_index])
+                        detached_margin = float(current_margin.detach().float().cpu())
+                        if not (
+                            NDP_LATE_TEACHER_MIN_MARGIN <= teacher_margin <= NDP_LATE_TEACHER_MAX_MARGIN
+                            and detached_margin <= NDP_LATE_CONFUSION_MARGIN
+                        ):
+                            continue
+                        sr_candidates.append((detached_margin, current_margin))
+                        continue
                     if arm == "NDP_V2":
                         # V2 keeps only a robust, multi-clothes positive
                         # reference.  Unlike NDP_SELECT it also admits a
@@ -1075,6 +1097,18 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 active_ndp += int(detached_margin < NDP_SR_CONFUSION_MARGIN)
                 current_error_pid += int(detached_margin <= 0.0)
                 correct_pid += int(detached_margin > 0.0)
+                margin_sum += detached_margin
+            if arm == "NDP_LATE" and epoch >= NDP_LATE_START_EPOCH and sr_candidates:
+                _, current_margin = min(sr_candidates, key=lambda item: item[0])
+                selected_ndp += 1
+                hinge = F.relu(
+                    torch.as_tensor(NDP_LATE_TARGET_MARGIN, dtype=current_margin.dtype, device=device)
+                    - current_margin
+                )
+                anchor_values.append(hinge)
+                detached_margin = float(current_margin.detach().float().cpu())
+                active_ndp += int(detached_margin <= NDP_LATE_CONFUSION_MARGIN)
+                current_error_pid += int(detached_margin <= 0.0)
                 margin_sum += detached_margin
             if arm == "NLIST" and listwise_negative_similarities:
                 listwise_loss = listwise_local_rank_loss(

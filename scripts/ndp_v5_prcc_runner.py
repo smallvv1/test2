@@ -974,12 +974,9 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         margin_sum += detached_margin
                         continue
                     if arm == "NDP_SR":
-                        # Teacher endpoints are never used here.  The rows and
-                        # source indices come from the teacher, while
-                        # ``reference_features`` is a refreshed student-space
-                        # bank.  Keep only a teacher-reliable candidate below
-                        # the fixed local confusion boundary, then supervise
-                        # the single lowest-margin PID for this anchor.
+                        # Only the teacher-selected relation/index set is
+                        # reused.  The endpoints in reference_features are a
+                        # refreshed student train bank.
                         teacher_margin = float(relation.get("teacher_pid_margin", [reference_margin] * len(relation["negative_pid"]))[pid_index])
                         detached_margin = float(current_margin.detach().float().cpu())
                         if not (NDP_SR_TEACHER_MIN_MARGIN <= teacher_margin <= NDP_SR_TEACHER_MAX_MARGIN and detached_margin < NDP_SR_CONFUSION_MARGIN):
@@ -1069,8 +1066,10 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
             if arm == "NDP_SR" and sr_candidates:
                 _, current_margin = min(sr_candidates, key=lambda item: item[0])
                 selected_ndp += 1
-                target_margin = torch.as_tensor(NDP_SR_CONFUSION_MARGIN, dtype=current_margin.dtype, device=device)
-                hinge = F.relu(target_margin - current_margin)
+                hinge = F.relu(
+                    torch.as_tensor(NDP_SR_CONFUSION_MARGIN, dtype=current_margin.dtype, device=device)
+                    - current_margin
+                )
                 anchor_values.append(hinge)
                 detached_margin = float(current_margin.detach().float().cpu())
                 active_ndp += int(detached_margin < NDP_SR_CONFUSION_MARGIN)

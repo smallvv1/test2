@@ -1,0 +1,34 @@
+{
+  "experiment": "NDP_SR_FULL60_SEED1234",
+  "source_runs": [
+    "ndp_sr_full60_seed1234_20261101_010500",
+    "ndp_sr_smoke_20261101_005721",
+    "ndp_sr_smoke_20261101_010038_retry",
+    "ndp_sr_smoke_20261101_010322_retry"
+  ],
+  "archive_date": "2026-11-02",
+  "status": "COMPLETE_LTCC_PRCC_WITH_SMOKE_RETRIES",
+  "contents": "NDP_SR full60 LTCC/PRCC logs, metrics, evaluations, launcher logs, and smoke/retry diagnostics",
+  "files_archived": 31,
+  "excluded": [
+    "*.pth",
+    "*.pt",
+    "*.ckpt",
+    "*.npz",
+    "*.npy",
+    "*.bin",
+    "*.safetensors",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.tar",
+    "*.zip",
+    "__pycache__"
+  ],
+  "code_commit_base": "c3834a9",
+  "code_snapshot_includes": [
+    "scripts/ndp_safe.py",
+    "scripts/ndp_v5_prcc_runner.py",
+    "scripts/train_ndp_listwise_full60.py"
+  ]
+}

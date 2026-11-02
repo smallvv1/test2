@@ -14,6 +14,7 @@ from ndp_v5_prcc_runner import (  # noqa: E402
     gradient_gate_from_grads,
     listwise_local_rank_loss,
     ndp_relation_excluded_by_triplet_pid,
+    select_ndp_gpc_confusions,
     ndp_target_margin,
     ndyn_should_select,
     ndyn_top5_target_margin,
@@ -79,6 +80,35 @@ def test_ncomp_excludes_only_matching_negative_pid():
     assert ndp_relation_excluded_by_triplet_pid(7, 7)
     assert not ndp_relation_excluded_by_triplet_pid(8, 7)
     assert not ndp_relation_excluded_by_triplet_pid(7, -1)
+
+
+def test_ndp_gpc_uses_gpc_positive_and_second_negative_pid_with_live_gradient():
+    representation = torch.tensor(
+        [
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.70710677, 0.70710677, 0.0],
+            [0.70710677, 0.70710677, 0.0],
+            [0.6, 0.6, 0.52915025],
+            [0.6, 0.6, 0.52915025],
+        ],
+        dtype=torch.float32,
+        requires_grad=True,
+    )
+    pids = torch.tensor([0, 0, 1, 1, 2, 2])
+    selected_gpc = [(0, 1, (0, 1), (0, 0, 0))]
+
+    selected = select_ndp_gpc_confusions(representation, pids, selected_gpc)
+
+    assert len(selected) == 1
+    margin, negative_pid = selected[0]
+    assert negative_pid == 2
+    assert float(margin.detach()) < 0.0
+    loss = torch.relu(torch.tensor(0.01) - margin)
+    loss.backward()
+    assert representation.grad is not None
+    assert torch.isfinite(representation.grad).all()
+    assert float(torch.linalg.vector_norm(representation.grad)) > 0.0
 
 
 def test_online_neighbors_are_distinct_pids_and_positive_reference_excludes_anchor():
@@ -151,6 +181,16 @@ def test_nlist_total_contains_only_registered_ndp_weight():
     total.backward()
     assert torch.isclose(main.grad, torch.tensor(1.0))
     assert torch.isclose(ndp.grad, torch.tensor(0.05))
+
+
+def test_ndp_gpc_total_uses_formal_small_weight():
+    main = torch.tensor(3.0, requires_grad=True)
+    ndp = torch.tensor(2.0, requires_grad=True)
+    total = compose_total_loss(main, ndp, "NDP_GPC", ndp_lambda=0.005)
+
+    assert torch.isclose(total, torch.tensor(3.01))
+    total.backward()
+    assert torch.isclose(ndp.grad, torch.tensor(0.005))
 
 
 def test_nf0_uses_zero_floor_for_small_positive_reference_margin():

@@ -70,6 +70,8 @@ NDP_LATE_TEACHER_MAX_MARGIN = 0.10
 NDP_LATE_CONFUSION_MARGIN = 0.0
 NDP_LATE_TARGET_MARGIN = 0.01
 NDP_LATE_START_EPOCH = 16
+NDP_GPC_CONFUSION_MARGIN = 0.0
+NDP_GPC_TARGET_MARGIN = 0.01
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -725,6 +727,62 @@ def ndp_relation_excluded_by_triplet_pid(negative_pid: int, hard_negative_pid: i
     return int(negative_pid) == int(hard_negative_pid) and int(hard_negative_pid) >= 0
 
 
+def select_ndp_gpc_confusions(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    selected_gpc: list[tuple[int, int, tuple[int, int], tuple[int, int, int]]],
+) -> list[tuple[torch.Tensor, int]]:
+    """Select current batch risks attached to the frozen GPC positive pairs.
+
+    GPC supplies the positive relation ``(left, right)``.  For each such
+    relation, choose the closest different-PID image to the pair in the
+    current student space, excluding the original Batch-Hard negative PID for
+    either endpoint so this branch complements rather than duplicates Triplet.
+    The returned margin keeps its live autograd path through all three student
+    features; only the candidate index and the confusion gate are detached.
+    """
+    if not selected_gpc:
+        return []
+    hard_negative_pids, _valid = batch_hard_negative_pid(representation, pids)
+    selected: list[tuple[torch.Tensor, int]] = []
+    for left, right, _image_key, _state_key in selected_gpc:
+        left_pid = int(pids[int(left)].detach().cpu())
+        if int(pids[int(right)].detach().cpu()) != left_pid:
+            continue
+        candidate_mask = pids != left_pid
+        excluded = {
+            int(hard_negative_pids[int(left)].detach().cpu()),
+            int(hard_negative_pids[int(right)].detach().cpu()),
+        }
+        candidate_indices = torch.nonzero(candidate_mask, as_tuple=False).flatten()
+        if candidate_indices.numel() == 0:
+            continue
+        keep = [
+            int(index)
+            for index in candidate_indices.detach().cpu().tolist()
+            if int(pids[index].detach().cpu()) not in excluded
+        ]
+        if not keep:
+            continue
+        candidate_indices = torch.as_tensor(keep, dtype=torch.long, device=representation.device)
+        with torch.no_grad():
+            pair_scores = 0.5 * (
+                representation[candidate_indices] @ representation[int(left)]
+                + representation[candidate_indices] @ representation[int(right)]
+            )
+            negative_index = int(candidate_indices[int(torch.argmax(pair_scores).item())].item())
+            negative_pid = int(pids[negative_index].detach().cpu())
+        positive_similarity = torch.sum(representation[int(left)] * representation[int(right)])
+        negative_similarity = 0.5 * (
+            torch.sum(representation[negative_index] * representation[int(left)])
+            + torch.sum(representation[negative_index] * representation[int(right)])
+        )
+        current_margin = positive_similarity - negative_similarity
+        if float(current_margin.detach().float().cpu()) <= NDP_GPC_CONFUSION_MARGIN:
+            selected.append((current_margin, negative_pid))
+    return selected
+
+
 def gradient_gate_from_grads(g_base: torch.Tensor | None, g_ndp: torch.Tensor | None) -> tuple[bool, float, str]:
     """Return a detached compatibility decision for two feature gradients.
 
@@ -802,8 +860,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE"}:
-        coefficient = LAMBDA_NDP if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else LAMBDA_NDP) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -894,10 +952,24 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC"}
     if ndp_enabled:
         ndp_values = []
+        if arm == "NDP_GPC":
+            for current_margin, _negative_pid in select_ndp_gpc_confusions(representation, pids, selected_gpc):
+                selected_ndp += 1
+                active_ndp += 1
+                current_error_pid += 1
+                margin_sum += float(current_margin.detach().float().cpu())
+                ndp_values.append(
+                    F.relu(
+                        torch.as_tensor(NDP_GPC_TARGET_MARGIN, dtype=current_margin.dtype, device=device)
+                        - current_margin
+                    )
+                )
         for local_index, entry in enumerate(entries):
+            if arm == "NDP_GPC":
+                continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
             anchor_values = []
@@ -1578,7 +1650,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=("prepare", "verify_gpc_pair", "train"), required=True)
     parser.add_argument("--seed", type=int, choices=(1234, 3456, 4321), default=1234)
-    parser.add_argument("--arm", choices=("B0", "N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_LATE"), default="N5")
+    parser.add_argument("--arm", choices=("B0", "N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_LATE", "NDP_GPC"), default="N5")
     parser.add_argument("--run-id", default="ndp_v5_prcc")
     parser.add_argument("--run-dir", type=Path, default=None)
     parser.add_argument("--feature", type=Path, default=DEFAULT_FEATURE)

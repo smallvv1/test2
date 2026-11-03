@@ -11,6 +11,16 @@
   "lambda_ndp": 0.005,
   "per_rank_checkpoint_files_created": false,
   "archived_model_files": false,
-  "contents": "formal training/evaluation logs, metrics, JSON summaries, and 20-step smoke outputs",
+  "contents": "formal training/evaluation logs, metrics, JSON summaries, 20-step smoke outputs, and the later LTCC smoke100 output",
+  "additional_smoke100": {
+    "dataset": "LTCC",
+    "steps": 20,
+    "passed": true,
+    "source_server_output": "/home/DIFFER/log_NDP/ndp_gpc_smoke100_20261102_080840/"
+  },
+  "code_sync": [
+    "tests/test_ndp_v5_b0_loss_contract.py",
+    "core training scripts already matched repository HEAD"
+  ],
   "server_output": "/home/DIFFER/log_NDP/ndp_gpc_full60_seed1234_20261102_161200"
 }

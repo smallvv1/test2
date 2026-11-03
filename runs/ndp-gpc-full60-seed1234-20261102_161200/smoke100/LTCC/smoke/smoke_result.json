@@ -1,0 +1,8 @@
+{
+  "arm": "NDP_GPC",
+  "created_utc": "2026-11-02T08:11:00Z",
+  "dataset": "ltcc",
+  "no_per_rank_checkpoint": true,
+  "passed": true,
+  "steps": 20
+}

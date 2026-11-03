@@ -19,6 +19,8 @@ from ndp_v5_prcc_runner import (  # noqa: E402
     ndyn_top5_target_margin,
     nrg_should_select,
     rng_state_digest,
+    select_ndp_gpc_delta_probes,
+    select_ndp_gpc_delta_protections,
     select_ndp_gpc_impacts,
 )
 
@@ -82,6 +84,32 @@ def test_gpc_impact_requires_live_gpc_graph():
     detached_gpc = torch.tensor(0.5)
 
     assert select_ndp_gpc_impacts(representation, pids, selected_gpc, detached_gpc) == []
+
+
+def test_gpc_delta_uses_observed_relation_margin_as_dynamic_target():
+    representation = torch.tensor(
+        [[1.0, 0.0], [1.0, 0.0], [0.95, 0.3122499], [0.0, 1.0]],
+        dtype=torch.float32,
+    )
+    pids = torch.tensor([0, 0, 1, 2])
+    selected_gpc = [(0, 1, (10, 11), (12, 13, 14))]
+    probes = select_ndp_gpc_delta_probes(representation, pids, selected_gpc)
+    assert len(probes) == 1
+    target = probes[0]["before_margin"] + 0.01
+    protected = select_ndp_gpc_delta_protections(
+        representation, pids, selected_gpc, {probes[0]["key"]: {"target_margin": target}}
+    )
+    assert len(protected) == 1
+    assert protected[0][1] == target
+
+
+def test_gpc_delta_total_uses_fixed_low_coefficient():
+    main = torch.tensor(3.0, requires_grad=True)
+    ndp = torch.tensor(2.0, requires_grad=True)
+    total = compose_total_loss(main, ndp, "NDP_GPC_DELTA")
+    total.backward()
+    assert torch.isclose(total, torch.tensor(3.002))
+    assert torch.isclose(ndp.grad, torch.tensor(0.001))
 
 
 def test_ncomp_uses_original_raw_euclidean_batch_hard_pid():

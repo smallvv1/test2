@@ -73,6 +73,7 @@ NDP_LATE_START_EPOCH = 16
 NDP_GPC_CONFUSION_MARGIN = 0.0
 NDP_GPC_TARGET_MARGIN = 0.01
 NDP_GPC_IMPACT_TARGET_MARGIN = 0.01
+NDP_GPC_DELTA_MAX_RISK = 4096
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -846,6 +847,153 @@ def select_ndp_gpc_impacts(
     return selected
 
 
+def gpc_relation_key(image_key: Any, state_key: Any) -> str:
+    """Return a stable, train-only identifier for a reusable GPC state relation.
+
+    ``image_key`` identifies one sampled image pair and almost never repeats
+    across epochs.  The frozen selector's ``state_key`` identifies the actual
+    same-PID/clothes relation, so it is the correct granularity for carrying a
+    measured post-step risk to a later batch.
+    """
+    return json.dumps(
+        ["state", json_safe(state_key)],
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def select_ndp_gpc_delta_probes(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    selected_gpc: list[tuple[int, int, tuple[int, int], tuple[int, int, int]]],
+) -> list[dict[str, Any]]:
+    """Choose the local relation whose *actual* post-step change is measured.
+
+    This is deliberately a probe only: it adds no gradient and does not use a
+    threshold.  The nearest different-PID image is fixed before the optimizer
+    step; the same three current-batch features are evaluated again after the
+    step by ``measure_gpc_delta_after``.
+    """
+    if not selected_gpc:
+        return []
+    probes: list[dict[str, Any]] = []
+    for left, right, image_key, state_key in selected_gpc:
+        left = int(left)
+        right = int(right)
+        pid = int(pids[left].detach().cpu())
+        if int(pids[right].detach().cpu()) != pid:
+            continue
+        candidate_indices = torch.nonzero(pids != pid, as_tuple=False).flatten()
+        if candidate_indices.numel() == 0:
+            continue
+        with torch.no_grad():
+            pair_scores = 0.5 * (
+                representation[candidate_indices] @ representation[left]
+                + representation[candidate_indices] @ representation[right]
+            )
+            negative_index = int(candidate_indices[int(torch.argmax(pair_scores).item())].item())
+            negative_pid = int(pids[negative_index].detach().cpu())
+        positive_similarity = torch.sum(representation[left] * representation[right])
+        negative_similarity = 0.5 * (
+            torch.sum(representation[negative_index] * representation[left])
+            + torch.sum(representation[negative_index] * representation[right])
+        )
+        probes.append({
+            "left": left,
+            "right": right,
+            "negative": negative_index,
+            "negative_pid": negative_pid,
+            "key": gpc_relation_key(image_key, state_key),
+            "before_margin": float((positive_similarity - negative_similarity).detach().float().cpu()),
+        })
+    return probes
+
+
+def select_ndp_gpc_delta_protections(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    selected_gpc: list[tuple[int, int, tuple[int, int], tuple[int, int, int]]],
+    observed_risks: dict[str, dict[str, Any]] | None,
+) -> list[tuple[torch.Tensor, float, int]]:
+    """Protect only relations previously observed to lose margin in reality.
+
+    The target comes from the relation's own pre-step margin.  There is no
+    global Margin gate and no teacher-space target; a relation is eligible only
+    after a real optimizer update has decreased its current-batch margin.
+    """
+    if not selected_gpc or not observed_risks:
+        return []
+    protections: list[tuple[torch.Tensor, float, int]] = []
+    for probe in select_ndp_gpc_delta_probes(representation, pids, selected_gpc):
+        risk = observed_risks.get(str(probe["key"]))
+        if not risk:
+            continue
+        left = int(probe["left"])
+        right = int(probe["right"])
+        negative = int(probe["negative"])
+        current_margin = (
+            torch.sum(representation[left] * representation[right])
+            - 0.5 * (
+                torch.sum(representation[negative] * representation[left])
+                + torch.sum(representation[negative] * representation[right])
+            )
+        )
+        target = float(risk.get("target_margin", risk.get("before_margin", 0.0)))
+        if math.isfinite(target) and float(current_margin.detach().float().cpu()) < target:
+            protections.append((current_margin, target, int(probe["negative_pid"])))
+    return protections
+
+
+@torch.no_grad()
+def measure_gpc_delta_after(
+    model: torch.nn.Module,
+    batch: dict[str, Any],
+    device: torch.device,
+    probes: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Measure the same local margins after the actual optimizer update.
+
+    The extra forward is executed only for batches containing a GPC probe.  It
+    uses the raw module (not DDP communication), and restores the device RNG so
+    the diagnostic cannot change the training trajectory.
+    """
+    if not probes:
+        return []
+    raw_model = model.module if hasattr(model, "module") else model
+    rng = base.rng_state(device)
+    unique_indices = sorted({int(probe[key]) for probe in probes for key in ("left", "right", "negative")})
+    local_index = {original: position for position, original in enumerate(unique_indices)}
+    index_tensor = torch.as_tensor(unique_indices, dtype=torch.long, device=device)
+    images = batch["image"].to(device, non_blocking=False).index_select(0, index_tensor)
+    camids = batch["camid"].to(device, non_blocking=False).index_select(0, index_tensor)
+    with amp.autocast(enabled=True):
+        _score, feat = raw_model(images, cam_label=camids)
+    representation = F.normalize(feat[0].float(), dim=-1)
+    base.restore_rng(rng, device)
+    observed: list[dict[str, Any]] = []
+    for probe in probes:
+        left = local_index[int(probe["left"])]
+        right = local_index[int(probe["right"])]
+        negative = local_index[int(probe["negative"])]
+        after_margin = float((
+            torch.sum(representation[left] * representation[right])
+            - 0.5 * (
+                torch.sum(representation[negative] * representation[left])
+                + torch.sum(representation[negative] * representation[right])
+            )
+        ).float().cpu())
+        before_margin = float(probe["before_margin"])
+        observed.append({
+            "key": str(probe["key"]),
+            "before_margin": before_margin,
+            "after_margin": after_margin,
+            "delta": after_margin - before_margin,
+            "negative_pid": int(probe["negative_pid"]),
+        })
+    return observed
+
+
 def gradient_gate_from_grads(g_base: torch.Tensor | None, g_ndp: torch.Tensor | None) -> tuple[bool, float, str]:
     """Return a detached compatibility decision for two feature gradients.
 
@@ -923,8 +1071,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT"}:
-        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm == "NDP_GPC_IMPACT" else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -985,7 +1133,7 @@ def verify_gpc_pair(args: argparse.Namespace) -> None:
         prcc.phase6b.cleanup_dist()
 
 
-def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_rows, reference_features, arm, epoch, rank, iteration, global_step, stats, diagnostic_steps, ndp_epsilon, ndp_lambda=None):
+def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_rows, reference_features, arm, epoch, rank, iteration, global_step, stats, diagnostic_steps, ndp_epsilon, ndp_lambda=None, gpc_delta_risks=None):
     writer = base.MetricCapture()
     images = batch["image"].to(device, non_blocking=False)
     pids = batch["pid"].to(device, non_blocking=False)
@@ -1015,7 +1163,8 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT"}
+    gpc_delta_probes = select_ndp_gpc_delta_probes(representation, pids, selected_gpc) if arm == "NDP_GPC_DELTA" else []
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA"}
     if ndp_enabled:
         ndp_values = []
         if arm == "NDP_GPC":
@@ -1042,8 +1191,23 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 )
                 active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
                 ndp_values.append(hinge)
+        if arm == "NDP_GPC_DELTA":
+            for current_margin, target_margin, _negative_pid in select_ndp_gpc_delta_protections(
+                representation, pids, selected_gpc, gpc_delta_risks
+            ):
+                selected_ndp += 1
+                current_value = float(current_margin.detach().float().cpu())
+                current_error_pid += int(current_value <= 0.0)
+                correct_pid += int(current_value > 0.0)
+                margin_sum += current_value
+                hinge = F.relu(
+                    torch.as_tensor(target_margin, dtype=current_margin.dtype, device=device)
+                    - current_margin
+                )
+                active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
+                ndp_values.append(hinge)
         for local_index, entry in enumerate(entries):
-            if arm in {"NDP_GPC", "NDP_GPC_IMPACT"}:
+            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA"}:
                 continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
@@ -1306,7 +1470,18 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         k = min(10, max(1, pair.shape[0] - 1))
         top = pair.topk(k=k, dim=1).indices
         purity = (pids[top] == pids[:, None]).float().mean()
-    need_diag = stats["batches"] < diagnostic_steps and ndp_enabled
+    # Probe the first few batches as before, but also probe the first batch in
+    # which the newly observed GPC-delta protection is actually active.  The
+    # risk table is populated only after an optimizer step, so a first-N-only
+    # probe can report a zero NDP gradient even when the loss is live later in
+    # the epoch.  This is diagnostics only and does not alter the objective.
+    need_diag = (
+        ndp_enabled
+        and (
+            stats["batches"] < diagnostic_steps
+            or (arm == "NDP_GPC_DELTA" and active_ndp > 0 and ndp_loss.requires_grad)
+        )
+    )
     if need_diag:
         try:
             ndp_feature_grad = torch.autograd.grad(
@@ -1349,7 +1524,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     stats["gpc_selected"] += len(selected_gpc)
     gpc_info = dict(gpc_info)
     gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
-    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
+    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "gpc_delta_probes": gpc_delta_probes, "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 
 def finite_parameters(model: torch.nn.Module) -> bool:

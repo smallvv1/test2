@@ -1,0 +1,20 @@
+{
+  "archive": "ndp-gpc-delta-validation-20261103",
+  "seed": 1234,
+  "smoke": {
+    "LTCC": {"steps": 20, "passed": true, "gpc_delta_probes": 4, "gpc_delta_decreases": 1},
+    "PRCC": {"steps": 20, "passed": true, "gpc_delta_probes": 190, "gpc_delta_decreases": 67}
+  },
+  "train_only_gradient_check": {
+    "LTCC": {"epochs": 1, "active_batches": 1, "ndp_feature_grad_norm": 0.0000321036, "ndp_main_grad_ratio": 0.0097802},
+    "PRCC": {"epochs": 1, "active_batches": 495, "ndp_feature_grad_norm": 0.00908935, "ndp_main_grad_ratio": 0.0286405}
+  },
+  "ltcc_lambda_zero_full60": {
+    "output_root": "/home/DIFFER/log_NDP/ndp_gpc_impact_lambda0_full60_20261103",
+    "ndp_lambda": 0.0,
+    "cc_rank1": 55.357,
+    "cc_map": 32.991
+  },
+  "model_files_archived": false,
+  "query_gallery_used_for_selection": false
+}

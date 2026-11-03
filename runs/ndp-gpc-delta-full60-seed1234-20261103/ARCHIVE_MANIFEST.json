@@ -1,0 +1,18 @@
+{
+  "archive": "ndp-gpc-delta-full60-seed1234-20261103",
+  "seed": 1234,
+  "arm": "NDP_GPC_DELTA",
+  "datasets": ["LTCC", "PRCC"],
+  "epochs": 60,
+  "lambda_gpc": 0.1,
+  "lambda_ndp": 0.001,
+  "train_only_reference": true,
+  "query_gallery_used_during_training": false,
+  "per_rank_checkpoint_files_created": false,
+  "model_files_archived": false,
+  "full_output_root": "/home/DIFFER/log_NDP/ndp_gpc_delta_full60_20261103",
+  "eval_sha256": {
+    "LTCC/eval_final.json": "6e69feab752e73fa8ed137926b4ef4819f36d8228bf9ef530235ae593b6f14c1",
+    "PRCC/eval_final.json": "3cb7c3de127b68ac4ba0afc4986ee39f15316836aceef59cfc187e57ab1b1f24"
+  }
+}

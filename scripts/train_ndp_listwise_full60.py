@@ -76,6 +76,8 @@ NDP_LATE_TARGET_MARGIN = 0.01
 NDP_LATE_REFRESH_EVERY = 5
 LAMBDA_NDP_GPC = 0.005
 LAMBDA_NDP_GPC_IMPACT = 0.001
+LAMBDA_NDP_GPC_DELTA = 0.001
+NDP_GPC_DELTA_MAX_RISK = 4096
 TAU = 0.1
 GPC_CONTEXT = "phase7i_relation_specificity"
 EXPECTED_DEVICE_NAME = "PPU-ZW810E"
@@ -378,10 +380,12 @@ def capture_rank_state(optimizer, scheduler, scaler, device: torch.device) -> di
     }
 
 
-def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int, global_step: int, device: torch.device, dataset_name: str, nteach_graph: dict[str, Any] | None = None) -> None:
+def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int, global_step: int, device: torch.device, dataset_name: str, nteach_graph: dict[str, Any] | None = None, gpc_delta_risks: dict[str, dict[str, Any]] | None = None) -> None:
     local = capture_rank_state(optimizer, scheduler, scaler, device)
     gathered: list[Any] = [None] * WORLD_SIZE
     dist.all_gather_object(gathered, local)
+    gathered_delta_risks: list[Any] = [None] * WORLD_SIZE
+    dist.all_gather_object(gathered_delta_risks, dict(gpc_delta_risks or {}))
     dist.barrier()
     if int(os.environ.get("RANK", "0")) == 0:
         payload = {
@@ -405,6 +409,8 @@ def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int,
                 "captured_epoch": int(nteach_graph["captured_epoch"]),
                 "feature_state_hash": nteach_graph.get("feature_state_hash"),
             }
+        if gpc_delta_risks is not None:
+            payload["gpc_delta_risks_by_rank"] = gathered_delta_risks
         atomic_torch_save(payload, output_dir / "resume_latest.pth")
         write_json(output_dir / "resume_latest.json", {
             "dataset": dataset_name,
@@ -418,7 +424,7 @@ def save_resume(output_dir: Path, raw, optimizer, scheduler, scaler, epoch: int,
     dist.barrier()
 
 
-def load_resume(path: Path, raw, optimizer, scheduler, scaler, rank: int, device: torch.device) -> tuple[int, int, dict[str, Any] | None]:
+def load_resume(path: Path, raw, optimizer, scheduler, scaler, rank: int, device: torch.device) -> tuple[int, int, dict[str, Any] | None, dict[str, dict[str, Any]]]:
     payload = torch.load(path, map_location="cpu", weights_only=False)
     if payload.get("dataset") is None or payload.get("seed") != SEED or len(payload.get("rank_states", [])) != WORLD_SIZE:
         raise RuntimeError(f"invalid single-file resume payload: {path}")
@@ -428,7 +434,12 @@ def load_resume(path: Path, raw, optimizer, scheduler, scaler, rank: int, device
     scheduler.load_state_dict(local["scheduler"])
     scaler.load_state_dict(local["scaler"])
     NDP.base.restore_rng(local["rng"], device)
-    return int(payload["epoch"]), int(payload["global_step"]), payload.get("nteach_graph")
+    risk_by_rank = payload.get("gpc_delta_risks_by_rank")
+    if isinstance(risk_by_rank, list) and rank < len(risk_by_rank):
+        risks = dict(risk_by_rank[rank] or {})
+    else:
+        risks = dict(payload.get("gpc_delta_risks", {}))
+    return int(payload["epoch"]), int(payload["global_step"]), payload.get("nteach_graph"), risks
 
 
 def logger_for(path: Path) -> logging.Logger:
@@ -522,6 +533,7 @@ def zero_stats() -> dict[str, float]:
         "triplet_hard_excluded": 0, "triplet_filter_candidates": 0,
         "gate_evaluated": 0, "gate_kept": 0, "gate_conflict": 0,
         "gate_invalid": 0, "gate_cosine_sum": 0.0,
+        "gpc_delta_probes": 0, "gpc_delta_decreases": 0,
     }
 
 
@@ -616,8 +628,9 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     start_epoch = 1
     global_step = 0
     resume_nteach_graph: dict[str, Any] | None = None
+    gpc_delta_risks: dict[str, dict[str, Any]] = {}
     if resume.is_file() and args.resume:
-        previous_epoch, global_step, resume_nteach_graph = load_resume(resume, raw, optimizer, scheduler, scaler, rank, device)
+        previous_epoch, global_step, resume_nteach_graph, gpc_delta_risks = load_resume(resume, raw, optimizer, scheduler, scaler, rank, device)
         start_epoch = previous_epoch + 1
         raw.train()
         if logger:
@@ -632,7 +645,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     end_epoch = min(max_epochs, EPOCHS)
     metrics_path = artifact_dir / "metrics_per_epoch.csv"
     summary_path = artifact_dir / "online_neighbor_summary.csv"
-    fields = ["epoch", "global_step", "train_loss", "ce_loss", "triplet_loss", "bio_loss", "gpc_loss", "ndp_loss", "ndp_raw_loss", "ndp_feature_grad_norm", "main_feature_grad_norm", "ndp_main_grad_ratio", "ndp_lambda", "lr", "amp_scale_min", "amp_scale_max", "amp_scale_end", "skipped_steps", "optimizer_updates", "ndp_active_batches", "ndp_active_rate", "ndp_selected_relations", "ndp_active_relations", "mean_current_margin", "purity10", "online_relation_count", "online_valid_anchor_count", "online_neighbor_change_rate", "online_graph_sha256"]
+    fields = ["epoch", "global_step", "train_loss", "ce_loss", "triplet_loss", "bio_loss", "gpc_loss", "ndp_loss", "ndp_raw_loss", "ndp_feature_grad_norm", "main_feature_grad_norm", "ndp_main_grad_ratio", "ndp_lambda", "lr", "amp_scale_min", "amp_scale_max", "amp_scale_end", "skipped_steps", "optimizer_updates", "ndp_active_batches", "ndp_active_rate", "ndp_selected_relations", "ndp_active_relations", "mean_current_margin", "purity10", "gpc_delta_probes", "gpc_delta_decreases", "online_relation_count", "online_valid_anchor_count", "online_neighbor_change_rate", "online_graph_sha256"]
     summary_fields = ["epoch", "online_relation_count", "online_valid_anchor_count", "online_neighbor_change_rate", "online_graph_sha256", "fresh_bank_shape", "fresh_bank_device", "train_only", "query_gallery_used"]
     if rank == 0 and not metrics_path.exists():
         with metrics_path.open("w", newline="", encoding="utf-8") as stream:
@@ -752,15 +765,38 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     ndp_lambda = LAMBDA_NDP_GPC
                 elif args.arm == "NDP_GPC_IMPACT":
                     ndp_lambda = LAMBDA_NDP_GPC_IMPACT
+                elif args.arm == "NDP_GPC_DELTA":
+                    ndp_lambda = LAMBDA_NDP_GPC_DELTA
                 if args.ndp_lambda_override is not None:
                     ndp_lambda = float(args.ndp_lambda_override)
-                result = NDP.forward_batch(model, loss_fn, batch, device, path_to_index, gpc_bank, reference_rows, reference_features, args.arm, epoch, rank, iteration, global_step, stats, 3, 0.02, ndp_lambda=ndp_lambda)
+                result = NDP.forward_batch(model, loss_fn, batch, device, path_to_index, gpc_bank, reference_rows, reference_features, args.arm, epoch, rank, iteration, global_step, stats, 3, 0.02, ndp_lambda=ndp_lambda, gpc_delta_risks=gpc_delta_risks)
                 if not bool(torch.isfinite(result["total"].detach()).item()):
                     raise RuntimeError(f"non-finite total loss at {args.dataset}/epoch{epoch}/iteration{iteration}")
                 scaler.scale(result["total"]).backward()
                 scaler.step(optimizer)
                 inf = int(NDP.base.found_inf(scaler, optimizer) > 0)
                 scaler.update()
+                if args.arm == "NDP_GPC_DELTA" and inf == 0:
+                    observed = NDP.measure_gpc_delta_after(model, batch, device, result.get("gpc_delta_probes", []))
+                    stats["gpc_delta_probes"] += len(observed)
+                    for record in observed:
+                        if not np.isfinite(record["delta"]) or record["delta"] >= 0.0:
+                            continue
+                        stats["gpc_delta_decreases"] += 1
+                        key = str(record["key"])
+                        previous = gpc_delta_risks.get(key)
+                        target = max(float(record["before_margin"]), float(previous.get("target_margin", float("-inf"))) if previous else float("-inf"))
+                        gpc_delta_risks[key] = {
+                            "target_margin": target,
+                            "before_margin": float(record["before_margin"]),
+                            "after_margin": float(record["after_margin"]),
+                            "delta": float(record["delta"]),
+                            "negative_pid": int(record["negative_pid"]),
+                            "step": int(global_step),
+                        }
+                        if len(gpc_delta_risks) > NDP_GPC_DELTA_MAX_RISK:
+                            oldest = min(gpc_delta_risks.items(), key=lambda item: int(item[1].get("step", 0)))[0]
+                            gpc_delta_risks.pop(oldest, None)
                 local_skips += inf
                 local_scale_min = min(local_scale_min, float(scaler.get_scale()))
                 local_scale_max = max(local_scale_max, float(scaler.get_scale()))
@@ -776,13 +812,34 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             # prefix length separately.
             denom = max(1, iteration)
             reduced = reduce_vec([sums[key] / denom for key in sums], device)
-            count_values = reduce_vec([stats["active_batches"], stats["selected_relations"], stats["active_relations"], stats["current_error_pid"], stats["correct_pid"], stats["margin_sum"], stats["purity_sum"], stats["batches"], local_skips], device)
+            count_values = reduce_vec([stats["active_batches"], stats["selected_relations"], stats["active_relations"], stats["current_error_pid"], stats["correct_pid"], stats["margin_sum"], stats["purity_sum"], stats["batches"], local_skips, stats["gpc_delta_probes"], stats["gpc_delta_decreases"]], device)
             scale_values = torch.tensor([local_scale_min, local_scale_max, float(scaler.get_scale())], dtype=torch.float64, device=device)
             dist.all_reduce(scale_values[0], op=dist.ReduceOp.MIN); dist.all_reduce(scale_values[1], op=dist.ReduceOp.MAX); dist.all_reduce(scale_values[2], op=dist.ReduceOp.MAX)
             if rank == 0:
                 total_batches = max(1.0, count_values[7])
+                epoch_ndp_lambda = 0.0
+                if args.arm == "NDP_SAFE":
+                    epoch_ndp_lambda = LAMBDA_NDP_SAFE * min(1.0, float(epoch) / float(NDP_SAFE_WARMUP_EPOCHS))
+                elif args.arm == "NDP_SELECT" and epoch >= NDP_SELECT_START_EPOCH:
+                    epoch_ndp_lambda = LAMBDA_NDP_SELECT * min(1.0, float(epoch - NDP_SELECT_START_EPOCH + 1) / float(NDP_SELECT_WARMUP_EPOCHS))
+                elif args.arm == "NDP_V2" and epoch >= NDP_V2_START_EPOCH:
+                    epoch_ndp_lambda = LAMBDA_NDP_V2 * min(1.0, float(epoch - NDP_V2_START_EPOCH + 1) / float(NDP_V2_WARMUP_EPOCHS))
+                elif args.arm in {"NTEACH", "NTEACH_SAFE"} and epoch >= NTEACH_START_EPOCH:
+                    epoch_ndp_lambda = LAMBDA_NDP_TEACH
+                elif args.arm == "NDP_RANK":
+                    epoch_ndp_lambda = LAMBDA_NDP_RANK
+                elif args.arm == "NDP_SR":
+                    epoch_ndp_lambda = LAMBDA_NDP_SR
+                elif args.arm == "NDP_LATE" and epoch >= NDP_LATE_START_EPOCH:
+                    epoch_ndp_lambda = LAMBDA_NDP_LATE
+                elif args.arm == "NDP_GPC":
+                    epoch_ndp_lambda = LAMBDA_NDP_GPC
+                elif args.arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA"}:
+                    epoch_ndp_lambda = LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else LAMBDA_NDP_GPC_DELTA
+                if args.ndp_lambda_override is not None:
+                    epoch_ndp_lambda = float(args.ndp_lambda_override)
                 row = {
-                    "epoch": epoch, "global_step": global_step, "train_loss": reduced[0], "ce_loss": reduced[1], "triplet_loss": reduced[2], "bio_loss": reduced[3], "gpc_loss": reduced[4], "ndp_loss": reduced[5], "ndp_raw_loss": reduced[6], "ndp_feature_grad_norm": reduced[7], "main_feature_grad_norm": reduced[8], "ndp_main_grad_ratio": reduced[7] / max(reduced[8], 1e-12), "ndp_lambda": (LAMBDA_NDP_SAFE * min(1.0, float(epoch) / float(NDP_SAFE_WARMUP_EPOCHS)) if args.arm == "NDP_SAFE" else (LAMBDA_NDP_SELECT * min(1.0, float(epoch - NDP_SELECT_START_EPOCH + 1) / float(NDP_SELECT_WARMUP_EPOCHS)) if args.arm == "NDP_SELECT" and epoch >= NDP_SELECT_START_EPOCH else (LAMBDA_NDP_V2 * min(1.0, float(epoch - NDP_V2_START_EPOCH + 1) / float(NDP_V2_WARMUP_EPOCHS)) if args.arm == "NDP_V2" and epoch >= NDP_V2_START_EPOCH else 0.0))), "lr": float(optimizer.param_groups[0]["lr"]), "amp_scale_min": float(scale_values[0]), "amp_scale_max": float(scale_values[1]), "amp_scale_end": float(scale_values[2]), "skipped_steps": int(count_values[8]), "optimizer_updates": int(count_values[7] - count_values[8]), "ndp_active_batches": int(count_values[0]), "ndp_active_rate": float(count_values[0] / total_batches), "ndp_selected_relations": int(count_values[1]), "ndp_active_relations": int(count_values[2]), "mean_current_margin": float(count_values[5] / max(1.0, count_values[3] + count_values[4])), "purity10": float(count_values[6] / total_batches), "online_relation_count": int(graph_summary.get("online_relation_count", 0)), "online_valid_anchor_count": int(graph_summary.get("online_valid_anchor_count", 0)), "online_neighbor_change_rate": graph_summary.get("online_neighbor_change_rate"), "online_graph_sha256": graph_summary.get("online_neighbor_graph_sha256", ""),
+                    "epoch": epoch, "global_step": global_step, "train_loss": reduced[0], "ce_loss": reduced[1], "triplet_loss": reduced[2], "bio_loss": reduced[3], "gpc_loss": reduced[4], "ndp_loss": reduced[5], "ndp_raw_loss": reduced[6], "ndp_feature_grad_norm": reduced[7], "main_feature_grad_norm": reduced[8], "ndp_main_grad_ratio": reduced[7] / max(reduced[8], 1e-12), "ndp_lambda": epoch_ndp_lambda, "lr": float(optimizer.param_groups[0]["lr"]), "amp_scale_min": float(scale_values[0]), "amp_scale_max": float(scale_values[1]), "amp_scale_end": float(scale_values[2]), "skipped_steps": int(count_values[8]), "optimizer_updates": int(count_values[7] - count_values[8]), "ndp_active_batches": int(count_values[0]), "ndp_active_rate": float(count_values[0] / total_batches), "ndp_selected_relations": int(count_values[1]), "ndp_active_relations": int(count_values[2]), "mean_current_margin": float(count_values[5] / max(1.0, count_values[3] + count_values[4])), "purity10": float(count_values[6] / total_batches), "gpc_delta_probes": int(count_values[9]), "gpc_delta_decreases": int(count_values[10]), "online_relation_count": int(graph_summary.get("online_relation_count", 0)), "online_valid_anchor_count": int(graph_summary.get("online_valid_anchor_count", 0)), "online_neighbor_change_rate": graph_summary.get("online_neighbor_change_rate"), "online_graph_sha256": graph_summary.get("online_neighbor_graph_sha256", ""),
                 }
                 row["ndp_lambda"] = float(ndp_lambda)
                 with metrics_path.open("a", newline="", encoding="utf-8") as stream:
@@ -807,7 +864,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                         "captured_epoch": cached_graph_epoch,
                         "feature_state_hash": sha256_bytes(feature_cpu.view(torch.uint8).numpy().tobytes()),
                     }
-                save_resume(output_dir, raw, optimizer, scheduler, scaler, epoch, global_step, device, args.dataset, nteach_graph=resume_graph)
+                save_resume(output_dir, raw, optimizer, scheduler, scaler, epoch, global_step, device, args.dataset, nteach_graph=resume_graph, gpc_delta_risks=gpc_delta_risks if args.arm == "NDP_GPC_DELTA" else None)
                 assert_no_rank_state_files(output_dir)
             dist.barrier()
     finally:
@@ -829,10 +886,12 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         atomic_torch_save(state_final, final_path)
         final_path.chmod(0o444)
         meta = {"dataset": args.dataset, "arm": args.arm, "seed": SEED, "epochs_completed": end_epoch, "global_step": global_step, "model_path": str(final_path), "model_sha256": sha256_file(final_path), "model_state_hash": state_hash(state_final), "model_bytes": final_path.stat().st_size, "initialization_source": init_manifest.get("source"), "model_only_warm_start": bool(init_manifest.get("model_only_warm_start", False)), "gpc_context": GPC_CONTEXT, "lambda_gpc": 0.1, "lambda_ndp": LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_SAFE if args.arm == "NDP_SAFE" else (LAMBDA_NDP_SELECT if args.arm == "NDP_SELECT" else (LAMBDA_NDP_V2 if args.arm == "NDP_V2" else 0.0))))), "ndp_rank_definition": "frozen B0 teacher margin in [0.02,0.10], current student margin <0.05, target=clamp(0.5*teacher_margin,0.01,0.05)" if args.arm == "NDP_RANK" else None, "ndp_sr_definition": "teacher-selected train-only indices; student-space refreshed endpoints; one lowest-margin reliable relation per anchor; ReLU(0.02-student_margin)" if args.arm == "NDP_SR" else None, "ndp_sr_refresh_every": NDP_SR_REFRESH_EVERY if args.arm == "NDP_SR" else None, "ndp_sr_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_sr_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_late_definition": "teacher-selected train-only indices; student-space refreshed endpoints; activation starts at epoch 16; one lowest-margin relation per anchor only when current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_LATE" else None, "ndp_late_start_epoch": NDP_LATE_START_EPOCH if args.arm == "NDP_LATE" else None, "ndp_late_refresh_every": NDP_LATE_REFRESH_EVERY if args.arm == "NDP_LATE" else None, "ndp_late_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_late_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_rank_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_rank_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_safe_margin": NDP_SAFE_MARGIN if args.arm == "NDP_SAFE" else None, "ndp_safe_warmup_epochs": NDP_SAFE_WARMUP_EPOCHS if args.arm == "NDP_SAFE" else None, "ndp_safe_graph_update_every": NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else (NDP_SELECT_GRAPH_UPDATE_EVERY if args.arm == "NDP_SELECT" else (NDP_V2_GRAPH_UPDATE_EVERY if args.arm == "NDP_V2" else None)), "ndp_select_start_epoch": NDP_SELECT_START_EPOCH if args.arm == "NDP_SELECT" else None, "ndp_select_warmup_epochs": NDP_SELECT_WARMUP_EPOCHS if args.arm == "NDP_SELECT" else None, "ndp_v2_start_epoch": NDP_V2_START_EPOCH if args.arm == "NDP_V2" else None, "ndp_v2_warmup_epochs": NDP_V2_WARMUP_EPOCHS if args.arm == "NDP_V2" else None, "nlist_tau": TAU if args.arm == "NLIST" else None, "train_only_reference": True, "query_gallery_used_during_training": False, "per_rank_checkpoint_files_created": False, "created_utc": utc_now()}
-        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"])))))
+        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else (LAMBDA_NDP_GPC_DELTA if args.arm == "NDP_GPC_DELTA" else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"]))))))
         meta["ndp_gpc_definition"] = "current batch GPC-selected same-ID positive pair; exclude original Batch-Hard negative PID; pair-nearest remaining negative; current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC" else None
         meta["ndp_gpc_impact_definition"] = "current batch GPC-selected same-ID positive pair; pair-nearest different-PID negative including Batch-Hard; retain only negative first-order local-margin projection under GPC descent; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC_IMPACT" else None
         meta["ndp_gpc_impact_lambda"] = LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else None
+        meta["ndp_gpc_delta_definition"] = "train-only GPC-selected same-ID relation; nearest different-PID negative; record local margin before and after the actual optimizer step; protect only observed decreases with that relation's own pre-step margin target" if args.arm == "NDP_GPC_DELTA" else None
+        meta["ndp_gpc_delta_max_risk"] = NDP_GPC_DELTA_MAX_RISK if args.arm == "NDP_GPC_DELTA" else None
         meta["nteach_start_epoch"] = NTEACH_START_EPOCH if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher"] = "frozen B0 initialization feature bank; graph captured once before epoch-1 updates" if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher_model_path"] = init_manifest.get("source") if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
@@ -862,7 +921,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=("prepare", "smoke", "train", "eval"), required=True)
     parser.add_argument("--dataset", choices=("ltcc", "prcc", "all"), required=True)
     parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NLIST"), default="NTEACH")
+    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NLIST"), default="NTEACH")
     parser.add_argument("--teacher-model", type=Path, default=None, help="completed frozen Bio+GPC model used only to build NDP_RANK train-only teacher graph")
     parser.add_argument("--epochs", type=int, default=EPOCHS)
     parser.add_argument("--smoke-steps", type=int, default=0)

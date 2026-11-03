@@ -19,6 +19,7 @@ from ndp_v5_prcc_runner import (  # noqa: E402
     ndyn_top5_target_margin,
     nrg_should_select,
     rng_state_digest,
+    select_ndp_gpc_impacts,
 )
 
 
@@ -61,6 +62,26 @@ def test_n5_total_contains_only_registered_ndp_weight():
     total.backward()
     assert torch.isclose(main.grad, torch.tensor(1.0))
     assert torch.isclose(ndp.grad, torch.tensor(0.05))
+
+
+def test_gpc_impact_total_uses_low_fixed_coefficient():
+    main = torch.tensor(3.0, requires_grad=True)
+    ndp = torch.tensor(2.0, requires_grad=True)
+    total = compose_total_loss(main, ndp, "NDP_GPC_IMPACT")
+
+    assert torch.isclose(total, torch.tensor(3.002))
+    total.backward()
+    assert torch.isclose(main.grad, torch.tensor(1.0))
+    assert torch.isclose(ndp.grad, torch.tensor(0.001))
+
+
+def test_gpc_impact_requires_live_gpc_graph():
+    representation = torch.eye(3, dtype=torch.float32, requires_grad=True)
+    pids = torch.tensor([0, 0, 1])
+    selected_gpc = [(0, 1, (0, 1), (0, 1, 0))]
+    detached_gpc = torch.tensor(0.5)
+
+    assert select_ndp_gpc_impacts(representation, pids, selected_gpc, detached_gpc) == []
 
 
 def test_ncomp_uses_original_raw_euclidean_batch_hard_pid():

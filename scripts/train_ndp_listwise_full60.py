@@ -35,6 +35,7 @@ from torch.utils.data import ConcatDataset, DataLoader
 
 ROOT = Path("/home/DIFFER")
 ENGINE = Path("/data/DIFFER")
+REPO_ROOT = Path(__file__).resolve().parents[1]
 FORMAL_SOURCE = ROOT / "github_uploads/test2_20261016_141306/scripts/train_final_gpc.py"
 WORLD_SIZE = 2
 SEED = 1234
@@ -74,6 +75,7 @@ NDP_LATE_CONFUSION_MARGIN = 0.0
 NDP_LATE_TARGET_MARGIN = 0.01
 NDP_LATE_REFRESH_EVERY = 5
 LAMBDA_NDP_GPC = 0.005
+LAMBDA_NDP_GPC_IMPACT = 0.001
 TAU = 0.1
 GPC_CONTEXT = "phase7i_relation_specificity"
 EXPECTED_DEVICE_NAME = "PPU-ZW810E"
@@ -81,6 +83,7 @@ EXPECTED_DEVICE_NAME = "PPU-ZW810E"
 sys.path.insert(0, str(ENGINE))
 sys.path.insert(0, str(ENGINE / "scripts"))
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 # Preload the deployed engine modules before loading the historical formal
 # wrapper.  The wrapper then reuses these module objects instead of importing
@@ -747,6 +750,10 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     ndp_lambda = LAMBDA_NDP_LATE
                 elif args.arm == "NDP_GPC":
                     ndp_lambda = LAMBDA_NDP_GPC
+                elif args.arm == "NDP_GPC_IMPACT":
+                    ndp_lambda = LAMBDA_NDP_GPC_IMPACT
+                if args.ndp_lambda_override is not None:
+                    ndp_lambda = float(args.ndp_lambda_override)
                 result = NDP.forward_batch(model, loss_fn, batch, device, path_to_index, gpc_bank, reference_rows, reference_features, args.arm, epoch, rank, iteration, global_step, stats, 3, 0.02, ndp_lambda=ndp_lambda)
                 if not bool(torch.isfinite(result["total"].detach()).item()):
                     raise RuntimeError(f"non-finite total loss at {args.dataset}/epoch{epoch}/iteration{iteration}")
@@ -822,8 +829,10 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         atomic_torch_save(state_final, final_path)
         final_path.chmod(0o444)
         meta = {"dataset": args.dataset, "arm": args.arm, "seed": SEED, "epochs_completed": end_epoch, "global_step": global_step, "model_path": str(final_path), "model_sha256": sha256_file(final_path), "model_state_hash": state_hash(state_final), "model_bytes": final_path.stat().st_size, "initialization_source": init_manifest.get("source"), "model_only_warm_start": bool(init_manifest.get("model_only_warm_start", False)), "gpc_context": GPC_CONTEXT, "lambda_gpc": 0.1, "lambda_ndp": LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_SAFE if args.arm == "NDP_SAFE" else (LAMBDA_NDP_SELECT if args.arm == "NDP_SELECT" else (LAMBDA_NDP_V2 if args.arm == "NDP_V2" else 0.0))))), "ndp_rank_definition": "frozen B0 teacher margin in [0.02,0.10], current student margin <0.05, target=clamp(0.5*teacher_margin,0.01,0.05)" if args.arm == "NDP_RANK" else None, "ndp_sr_definition": "teacher-selected train-only indices; student-space refreshed endpoints; one lowest-margin reliable relation per anchor; ReLU(0.02-student_margin)" if args.arm == "NDP_SR" else None, "ndp_sr_refresh_every": NDP_SR_REFRESH_EVERY if args.arm == "NDP_SR" else None, "ndp_sr_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_sr_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_late_definition": "teacher-selected train-only indices; student-space refreshed endpoints; activation starts at epoch 16; one lowest-margin relation per anchor only when current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_LATE" else None, "ndp_late_start_epoch": NDP_LATE_START_EPOCH if args.arm == "NDP_LATE" else None, "ndp_late_refresh_every": NDP_LATE_REFRESH_EVERY if args.arm == "NDP_LATE" else None, "ndp_late_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_late_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_rank_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_rank_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_safe_margin": NDP_SAFE_MARGIN if args.arm == "NDP_SAFE" else None, "ndp_safe_warmup_epochs": NDP_SAFE_WARMUP_EPOCHS if args.arm == "NDP_SAFE" else None, "ndp_safe_graph_update_every": NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else (NDP_SELECT_GRAPH_UPDATE_EVERY if args.arm == "NDP_SELECT" else (NDP_V2_GRAPH_UPDATE_EVERY if args.arm == "NDP_V2" else None)), "ndp_select_start_epoch": NDP_SELECT_START_EPOCH if args.arm == "NDP_SELECT" else None, "ndp_select_warmup_epochs": NDP_SELECT_WARMUP_EPOCHS if args.arm == "NDP_SELECT" else None, "ndp_v2_start_epoch": NDP_V2_START_EPOCH if args.arm == "NDP_V2" else None, "ndp_v2_warmup_epochs": NDP_V2_WARMUP_EPOCHS if args.arm == "NDP_V2" else None, "nlist_tau": TAU if args.arm == "NLIST" else None, "train_only_reference": True, "query_gallery_used_during_training": False, "per_rank_checkpoint_files_created": False, "created_utc": utc_now()}
-        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"]))))
+        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"])))))
         meta["ndp_gpc_definition"] = "current batch GPC-selected same-ID positive pair; exclude original Batch-Hard negative PID; pair-nearest remaining negative; current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC" else None
+        meta["ndp_gpc_impact_definition"] = "current batch GPC-selected same-ID positive pair; pair-nearest different-PID negative including Batch-Hard; retain only negative first-order local-margin projection under GPC descent; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC_IMPACT" else None
+        meta["ndp_gpc_impact_lambda"] = LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else None
         meta["nteach_start_epoch"] = NTEACH_START_EPOCH if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher"] = "frozen B0 initialization feature bank; graph captured once before epoch-1 updates" if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher_model_path"] = init_manifest.get("source") if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
@@ -853,13 +862,14 @@ def main() -> None:
     parser.add_argument("--mode", choices=("prepare", "smoke", "train", "eval"), required=True)
     parser.add_argument("--dataset", choices=("ltcc", "prcc", "all"), required=True)
     parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NLIST"), default="NTEACH")
+    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NLIST"), default="NTEACH")
     parser.add_argument("--teacher-model", type=Path, default=None, help="completed frozen Bio+GPC model used only to build NDP_RANK train-only teacher graph")
     parser.add_argument("--epochs", type=int, default=EPOCHS)
     parser.add_argument("--smoke-steps", type=int, default=0)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--init-model", type=Path, default=None, help="model-only warm-start for a matched short continuation")
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--ndp-lambda-override", type=float, default=None, help="paired control only: override NDP weight while keeping the selected NDP branch and GPC unchanged")
     args = parser.parse_args()
     if args.seed != SEED:
         raise RuntimeError("this formal run is frozen to seed=1234")

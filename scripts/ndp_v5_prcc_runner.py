@@ -72,6 +72,7 @@ NDP_LATE_TARGET_MARGIN = 0.01
 NDP_LATE_START_EPOCH = 16
 NDP_GPC_CONFUSION_MARGIN = 0.0
 NDP_GPC_TARGET_MARGIN = 0.01
+NDP_GPC_IMPACT_TARGET_MARGIN = 0.01
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -783,6 +784,68 @@ def select_ndp_gpc_confusions(
     return selected
 
 
+def select_ndp_gpc_impacts(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    selected_gpc: list[tuple[int, int, tuple[int, int], tuple[int, int, int]]],
+    gpc_loss: torch.Tensor,
+) -> list[tuple[torch.Tensor, torch.Tensor, int]]:
+    """Keep only relations whose first-order margin is harmed by GPC.
+
+    The candidate is the closest different-PID image to each actual GPC
+    positive pair in the current student space.  Unlike NDP_GPC, the original
+    Batch-Hard PID is not discarded here: it is retained only when the live
+    GPC descent direction projects negatively onto this local margin.  This
+    makes the branch a GPC-impact diagnostic/protection path rather than a
+    second static hard-negative miner.
+    """
+    if not selected_gpc or not gpc_loss.requires_grad or not representation.requires_grad:
+        return []
+    try:
+        gpc_grad = torch.autograd.grad(gpc_loss, representation, retain_graph=True, allow_unused=True)[0]
+    except (RuntimeError, ValueError, TypeError):
+        return []
+    if gpc_grad is None:
+        return []
+    gpc_grad = gpc_grad.detach().float()
+    selected: list[tuple[torch.Tensor, torch.Tensor, int]] = []
+    for left, right, _image_key, _state_key in selected_gpc:
+        left = int(left); right = int(right)
+        pid = int(pids[left].detach().cpu())
+        if int(pids[right].detach().cpu()) != pid:
+            continue
+        candidate_indices = torch.nonzero(pids != pid, as_tuple=False).flatten()
+        if candidate_indices.numel() == 0:
+            continue
+        with torch.no_grad():
+            pair_scores = 0.5 * (
+                representation[candidate_indices] @ representation[left]
+                + representation[candidate_indices] @ representation[right]
+            )
+            negative_index = int(candidate_indices[int(torch.argmax(pair_scores).item())].item())
+            negative_pid = int(pids[negative_index].detach().cpu())
+        positive_similarity = torch.sum(representation[left] * representation[right])
+        negative_similarity = 0.5 * (
+            torch.sum(representation[negative_index] * representation[left])
+            + torch.sum(representation[negative_index] * representation[right])
+        )
+        current_margin = positive_similarity - negative_similarity
+        # Analytic feature-space gradient of the local margin.  Multiplying by
+        # -grad(GPC) estimates the first-order margin change under a GPC-only
+        # descent step without building a second-order graph.
+        margin_grad_left = representation[right] - 0.5 * representation[negative_index]
+        margin_grad_right = representation[left] - 0.5 * representation[negative_index]
+        margin_grad_negative = -0.5 * (representation[left] + representation[right])
+        impact = (
+            torch.sum(margin_grad_left * (-gpc_grad[left]))
+            + torch.sum(margin_grad_right * (-gpc_grad[right]))
+            + torch.sum(margin_grad_negative * (-gpc_grad[negative_index]))
+        ).detach()
+        if bool(torch.isfinite(impact).item()) and float(impact.cpu()) < 0.0:
+            selected.append((current_margin, impact, negative_pid))
+    return selected
+
+
 def gradient_gate_from_grads(g_base: torch.Tensor | None, g_ndp: torch.Tensor | None) -> tuple[bool, float, str]:
     """Return a detached compatibility decision for two feature gradients.
 
@@ -860,8 +923,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC"}:
-        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else LAMBDA_NDP) if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm == "NDP_GPC_IMPACT" else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -952,7 +1015,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_hard_excluded = 0
     triplet_filter_candidates = 0
     margin_sum = 0.0
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT"}
     if ndp_enabled:
         ndp_values = []
         if arm == "NDP_GPC":
@@ -967,8 +1030,20 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                         - current_margin
                     )
                 )
+        if arm == "NDP_GPC_IMPACT":
+            for current_margin, _impact, _negative_pid in select_ndp_gpc_impacts(representation, pids, selected_gpc, gpc_loss):
+                selected_ndp += 1
+                current_error_pid += int(float(current_margin.detach().float().cpu()) <= 0.0)
+                correct_pid += int(float(current_margin.detach().float().cpu()) > 0.0)
+                margin_sum += float(current_margin.detach().float().cpu())
+                hinge = F.relu(
+                    torch.as_tensor(NDP_GPC_IMPACT_TARGET_MARGIN, dtype=current_margin.dtype, device=device)
+                    - current_margin
+                )
+                active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
+                ndp_values.append(hinge)
         for local_index, entry in enumerate(entries):
-            if arm == "NDP_GPC":
+            if arm in {"NDP_GPC", "NDP_GPC_IMPACT"}:
                 continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
@@ -1650,7 +1725,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=("prepare", "verify_gpc_pair", "train"), required=True)
     parser.add_argument("--seed", type=int, choices=(1234, 3456, 4321), default=1234)
-    parser.add_argument("--arm", choices=("B0", "N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_LATE", "NDP_GPC"), default="N5")
+    parser.add_argument("--arm", choices=("B0", "N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT"), default="N5")
     parser.add_argument("--run-id", default="ndp_v5_prcc")
     parser.add_argument("--run-dir", type=Path, default=None)
     parser.add_argument("--feature", type=Path, default=DEFAULT_FEATURE)

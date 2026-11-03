@@ -1,0 +1,18 @@
+{
+  "experiment": "NDP_GPC_PAIRED_CONTROL_SMOKE",
+  "created_utc": "2026-11-03T02:19:30Z",
+  "status": "ALL_SMOKE_RUNS_PASSED",
+  "source_run": "/home/DIFFER/log_NDP/ndp_gpc_paired_control_20261103_021427/",
+  "datasets": ["LTCC", "PRCC"],
+  "arms": ["B0", "NDP_GPC", "NDP_GPC_NDP0"],
+  "steps": 20,
+  "files_archived": 24,
+  "contents": "train logs, per-epoch metrics, online-neighbor summaries, and smoke result JSON for each paired-control arm",
+  "excluded": [
+    "model weights",
+    "checkpoint files",
+    "image and archive files",
+    "__pycache__"
+  ],
+  "code_commit": "f1f660b"
+}

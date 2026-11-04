@@ -82,6 +82,20 @@ NDP_DELTA_FIX_MIN_DROP = 1e-4
 NDP_DELTA_FIX_MIN_OBSERVATIONS = 1
 NDP_DELTA_FIX_MAX_PROTECTIONS_PER_BATCH = 1
 NDP_DELTA_FIX_MAX_PROTECTION_BATCHES = 16
+# NDP-AD is a deliberately small, batch-local adaptation of ANFI's
+# affinity/discrepancy idea.  The topology is used only for detached
+# selection/weighting; the ranking term below stays connected to the current
+# student features.  Keeping one relation per batch makes this a protection
+# path, not a second dense Triplet miner.
+NDP_AD_K = 5
+NDP_AD_TAU = 0.1
+NDP_AD_MAX_RELATIONS_PER_BATCH = 1
+NDP_AD_MAX_PROTECTION_BATCHES = 16
+# NDP-SHN: soft identity-center hard-negative mining with a multi-positive
+# contrastive objective.  It deliberately uses only the current fixed batch.
+NDP_SHN_TOPK = 3
+NDP_SHN_TAU = 0.2
+NDP_SHN_MAX_ANCHORS_PER_BATCH = 8
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -737,6 +751,196 @@ def ndp_relation_excluded_by_triplet_pid(negative_pid: int, hard_negative_pid: i
     return int(negative_pid) == int(hard_negative_pid) and int(hard_negative_pid) >= 0
 
 
+def select_ndp_ad_relations(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    selected_gpc: list[tuple[int, int, tuple[int, int], tuple[int, int, int]]],
+    max_relations: int = NDP_AD_MAX_RELATIONS_PER_BATCH,
+    k: int = NDP_AD_K,
+) -> list[tuple[torch.Tensor, torch.Tensor, torch.Tensor, int, float, float]]:
+    """Select sparse GPC-linked discrepancy relations in the live student space.
+
+    This is the lightweight NDP-AD path.  The frozen GPC selector supplies the
+    same-ID affinity relation.  A detached KNN adjacency then measures how
+    much the positive pair and a candidate different-PID neighbor share local
+    neighborhood structure.  The most affinity-close candidate with the
+    largest neighborhood discrepancy is retained, while the original
+    Batch-Hard negative PID is excluded so the term complements Triplet.
+
+    The returned positive/negative similarities are *not* detached.  Only the
+    candidate choice and adaptive topology weight are detached, which keeps a
+    real gradient path to the current student representation and avoids any
+    teacher-space or historical-margin target.
+    """
+    if not selected_gpc or representation.ndim != 2 or representation.shape[0] < 3:
+        return []
+    if max_relations <= 0:
+        return []
+    n = int(representation.shape[0])
+    with torch.no_grad():
+        detached = representation.detach().float()
+        pair = detached @ detached.t()
+        pair.fill_diagonal_(-float("inf"))
+        neighbor_k = min(max(1, int(k)), n - 1)
+        neighbor_values, neighbor_indices = pair.topk(neighbor_k, dim=1)
+        # Softmax adjacency is a compact, scale-stable neighborhood profile.
+        adjacency = torch.zeros_like(pair)
+        adjacency.scatter_(1, neighbor_indices, F.softmax(neighbor_values / NDP_AD_TAU, dim=1))
+        hard_negative_pids, hard_valid = batch_hard_negative_pid(detached, pids)
+
+    candidates: list[tuple[float, int, int, int, float, float]] = []
+    for left, right, _image_key, _state_key in selected_gpc:
+        left = int(left)
+        right = int(right)
+        pid = int(pids[left].detach().cpu())
+        if int(pids[right].detach().cpu()) != pid:
+            continue
+        excluded = {pid}
+        if bool(hard_valid[left].item()):
+            excluded.add(int(hard_negative_pids[left].item()))
+        if bool(hard_valid[right].item()):
+            excluded.add(int(hard_negative_pids[right].item()))
+        candidate_indices = [
+            int(index)
+            for index in torch.nonzero(pids != pid, as_tuple=False).flatten().detach().cpu().tolist()
+            if int(pids[index].detach().cpu()) not in excluded
+        ]
+        if not candidate_indices:
+            continue
+        positive_common = float((adjacency[left] * adjacency[right]).sum().item())
+        for negative in candidate_indices:
+            affinity = float(0.5 * (pair[negative, left] + pair[negative, right]).item())
+            if not math.isfinite(affinity) or affinity <= 0.0:
+                continue
+            negative_common = float(
+                0.5
+                * (
+                    (adjacency[left] * adjacency[negative]).sum()
+                    + (adjacency[right] * adjacency[negative]).sum()
+                ).item()
+            )
+            # Reliability is high when the GPC positive pair has a coherent
+            # neighborhood, while discrepancy is high when the dangerous
+            # negative does not share that neighborhood.  The 0.5 floor keeps
+            # weak early neighborhoods from making the branch permanently
+            # inactive; the sparse top-1 relation and low lambda control noise.
+            reliability = 0.5 + 0.5 * max(0.0, min(1.0, positive_common))
+            discrepancy = max(0.0, min(1.0, 1.0 - negative_common))
+            score = max(0.0, affinity) * reliability * discrepancy
+            if score > 0.0:
+                candidates.append((score, left, right, negative, positive_common, negative_common))
+    if not candidates:
+        return []
+    candidates.sort(key=lambda item: (-item[0], item[1], item[2], item[3]))
+    selected: list[tuple[torch.Tensor, torch.Tensor, torch.Tensor, int, float, float]] = []
+    used_pairs: set[tuple[int, int]] = set()
+    for score, left, right, negative, positive_common, negative_common in candidates:
+        pair_key = (left, right)
+        if pair_key in used_pairs:
+            continue
+        used_pairs.add(pair_key)
+        positive_similarity = torch.sum(representation[left] * representation[right])
+        negative_similarity = 0.5 * (
+            torch.sum(representation[negative] * representation[left])
+            + torch.sum(representation[negative] * representation[right])
+        )
+        selected.append(
+            (
+                positive_similarity,
+                negative_similarity,
+                torch.as_tensor(score, dtype=representation.dtype, device=representation.device),
+                int(pids[negative].detach().cpu()),
+                positive_common,
+                negative_common,
+            )
+        )
+        if len(selected) >= int(max_relations):
+            break
+    return selected
+
+
+def select_ndp_shn_losses(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    topk: int = NDP_SHN_TOPK,
+    tau: float = NDP_SHN_TAU,
+    max_anchors: int = NDP_SHN_MAX_ANCHORS_PER_BATCH,
+) -> list[tuple[torch.Tensor, float, int, int]]:
+    """Return sparse soft-hard-negative, multi-positive losses for a batch.
+
+    Identity centers are formed from the *current student batch*.  Detached
+    center affinities choose several close negative identities and give them a
+    softmax weight, while the returned contrastive loss uses live centers and
+    live positive features.  Thus the branch is different from Batch-Hard
+    Triplet: it keeps multiple positives and a soft mixture of multiple
+    negative identities rather than one negative image.
+    """
+    if representation.ndim != 2 or representation.shape[0] < 4 or tau <= 0.0:
+        return []
+    unique_pids, inverse = torch.unique(pids.detach(), sorted=True, return_inverse=True)
+    num_ids = int(unique_pids.numel())
+    if num_ids < 3 or max_anchors <= 0:
+        return []
+    live_centers = []
+    positive_indices: list[torch.Tensor] = []
+    anchor_priority: list[tuple[float, int, torch.Tensor, torch.Tensor]] = []
+    with torch.no_grad():
+        detached = representation.detach().float()
+        detached_centers = []
+        for class_index in range(num_ids):
+            members = torch.nonzero(inverse == class_index, as_tuple=False).flatten()
+            detached_centers.append(F.normalize(detached[members].mean(dim=0), dim=0))
+        detached_centers_tensor = torch.stack(detached_centers, dim=0)
+        center_pair = detached_centers_tensor @ detached_centers_tensor.t()
+        center_pair.fill_diagonal_(-float("inf"))
+        negative_count = min(max(1, int(topk)), num_ids - 1)
+        for class_index in range(num_ids):
+            members = torch.nonzero(inverse == class_index, as_tuple=False).flatten()
+            if members.numel() < 2:
+                continue
+            negative_scores, negative_classes = center_pair[class_index].topk(negative_count)
+            # This detached priority identifies anchors for which the local
+            # identity-center neighborhood is most ambiguous.  It does not
+            # alter the original sampler or GPC selector.
+            # The diagonal was masked above; the identity-center self-score
+            # is one, so the closest negative affinity itself is the bounded
+            # ambiguity priority.
+            priority = float(negative_scores[0].item())
+            for anchor in members.detach().cpu().tolist():
+                anchor_priority.append((priority, int(anchor), negative_scores, negative_classes))
+        anchor_priority.sort(key=lambda item: (-item[0], item[1]))
+        chosen = anchor_priority[: int(max_anchors)]
+    if not chosen:
+        return []
+    for class_index in range(num_ids):
+        members = torch.nonzero(inverse == class_index, as_tuple=False).flatten()
+        live_centers.append(F.normalize(representation[members].mean(dim=0), dim=0))
+        positive_indices.append(members)
+    live_centers_tensor = torch.stack(live_centers, dim=0)
+    losses: list[tuple[torch.Tensor, float, int, int]] = []
+    for _priority, anchor, negative_scores, negative_classes in chosen:
+        class_index = int(inverse[anchor].item())
+        members = positive_indices[class_index]
+        positives = members[members != int(anchor)]
+        if positives.numel() == 0:
+            continue
+        # Recompute the live logits only for selected anchors.  The negative
+        # mixture weights are detached topology/center evidence, not a second
+        # gradient path or a historical target.
+        anchor_feature = representation[int(anchor)]
+        positive_logits = representation[positives] @ anchor_feature
+        negative_logits = live_centers_tensor[negative_classes] @ anchor_feature
+        weights = F.softmax(negative_scores.float() / float(tau), dim=0).detach()
+        positive_logsum = torch.logsumexp(positive_logits / float(tau), dim=0)
+        negative_logsum = torch.logsumexp(
+            negative_logits / float(tau) + torch.log(weights.clamp_min(1e-6)), dim=0
+        )
+        loss = F.softplus(negative_logsum - positive_logsum)
+        margin = float((positive_logits.mean() - negative_logits.mean()).detach().float().cpu())
+        losses.append((loss, margin, int(negative_classes.numel()), int(positives.numel())))
+    return losses
+
+
 def select_ndp_gpc_confusions(
     representation: torch.Tensor,
     pids: torch.Tensor,
@@ -1282,8 +1486,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"}:
-        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -1376,7 +1580,17 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     margin_sum = 0.0
     gpc_delta_probes = select_ndp_gpc_delta_probes(representation, pids, selected_gpc) if arm == "NDP_GPC_DELTA" else []
     delta_fix_probes = select_ndp_delta_fix_probes(model, batch, device, pids, selected_gpc) if arm == "NDP_DELTA_FIX" else []
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"}
+    ndp_ad_relations = (
+        select_ndp_ad_relations(representation, pids, selected_gpc)
+        if arm == "NDP_AD" and epoch >= 3 and stats.get("ndp_ad_protection_batches", 0) < NDP_AD_MAX_PROTECTION_BATCHES
+        else []
+    )
+    ndp_shn_losses = (
+        select_ndp_shn_losses(representation, pids)
+        if arm == "NDP_SHN" and epoch >= 3
+        else []
+    )
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"}
     if ndp_enabled:
         ndp_values = []
         if arm == "NDP_GPC":
@@ -1437,8 +1651,32 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 delta_fix_keys.append(risk_key)
             if delta_fix_keys:
                 stats["delta_fix_protection_batches"] += 1
+        if arm == "NDP_AD" and ndp_ad_relations:
+            for positive_similarity, negative_similarity, adaptive_weight, _negative_pid, positive_common, negative_common in ndp_ad_relations:
+                selected_ndp += 1
+                current_margin = positive_similarity - negative_similarity
+                detached_margin = float(current_margin.detach().float().cpu())
+                current_error_pid += int(detached_margin <= 0.0)
+                correct_pid += int(detached_margin > 0.0)
+                margin_sum += detached_margin
+                # ANFI-inspired discrepancy weighting is detached, while the
+                # live pairwise similarities remain differentiable.  This is
+                # a target-free local ranking penalty rather than restoration
+                # to a historical margin.
+                relation_loss = adaptive_weight * (NDP_AD_TAU * F.softplus((negative_similarity - positive_similarity) / NDP_AD_TAU))
+                ndp_values.append(relation_loss)
+                active_ndp += int(float(relation_loss.detach().float().cpu()) > 0.0)
+            stats["ndp_ad_protection_batches"] += 1
+        if arm == "NDP_SHN" and ndp_shn_losses:
+            for shn_loss, detached_margin, negative_count, positive_count in ndp_shn_losses:
+                selected_ndp += 1
+                active_ndp += int(float(shn_loss.detach().float().cpu()) > 0.0)
+                current_error_pid += int(detached_margin <= 0.0)
+                correct_pid += int(detached_margin > 0.0)
+                margin_sum += detached_margin
+                ndp_values.append(shn_loss)
         for local_index, entry in enumerate(entries):
-            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"}:
+            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"}:
                 continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
@@ -1710,7 +1948,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         ndp_enabled
         and (
             stats["batches"] < diagnostic_steps
-            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX"} and active_ndp > 0 and ndp_loss.requires_grad)
+            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"} and active_ndp > 0 and ndp_loss.requires_grad)
         )
     )
     if need_diag:
@@ -1750,11 +1988,15 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     stats["gate_kept"] += int(gate_status == "kept")
     stats["gate_conflict"] += int(gate_status == "conflict")
     stats["gate_invalid"] += int(gate_evaluated and gate_status not in {"kept", "conflict"})
+    # This counter is an explicit sparse-budget diagnostic for NDP-AD.  It is
+    # incremented only when a live discrepancy relation was actually added.
+    # The selection helper is batch-local and never sees query/gallery data.
+    stats.setdefault("ndp_ad_protection_batches", 0)
     if math.isfinite(gate_cosine):
         stats["gate_cosine_sum"] += gate_cosine
     stats["gpc_selected"] += len(selected_gpc)
     gpc_info = dict(gpc_info)
-    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
+    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "ndp_ad_selected_count": len(ndp_ad_relations) if arm == "NDP_AD" else 0, "ndp_ad_budget_batches": stats.get("ndp_ad_protection_batches", 0), "ndp_shn_anchor_count": len(ndp_shn_losses) if arm == "NDP_SHN" else 0, "ndp_shn_negative_count": int(sum(item[2] for item in ndp_shn_losses)) if arm == "NDP_SHN" else 0, "ndp_shn_positive_count": int(sum(item[3] for item in ndp_shn_losses)) if arm == "NDP_SHN" else 0, "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
     return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "gpc_delta_probes": gpc_delta_probes, "delta_fix_probes": delta_fix_probes, "delta_fix_keys": delta_fix_keys if arm == "NDP_DELTA_FIX" else [], "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 

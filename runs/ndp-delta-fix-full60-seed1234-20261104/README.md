@@ -7,3 +7,5 @@ included in the repository archive.
 
 The full Chinese report is at
 `reports/NDP_DELTA_FIX_FULL60_RESULTS_20261104.md`.
+
+Complete evaluator logs are included at `LTCC/eval.log` and `PRCC/eval.log`.

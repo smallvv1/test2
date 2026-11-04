@@ -1,0 +1,2 @@
+2026-11-04 12:31:00,611 INFO epoch 1/2 loss=7.662951 ndp=0.000000 active=0/0 lr=8.422e-07 skip=2
+2026-11-04 12:33:24,247 INFO epoch 2/2 loss=7.170535 ndp=0.000000 active=0/0 lr=9.031e-07 skip=1

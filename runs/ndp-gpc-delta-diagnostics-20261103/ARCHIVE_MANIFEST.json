@@ -1,0 +1,24 @@
+{
+  "experiment": "NDP_GPC_DELTA_DIAGNOSTICS",
+  "archive_date": "2026-11-04",
+  "status": "DIAGNOSTIC_SHORT_RUNS_AND_SMOKES_ARCHIVED",
+  "source_runs": [
+    "ndp_gpc_delta_diag1_20261103",
+    "ndp_gpc_delta_diag1_prcc_20261103",
+    "ndp_gpc_delta_statekey_trainonly2_20261103",
+    "ndp_gpc_delta_trainonly2_20261103",
+    "ndp_gpc_delta_statekey_smoke_20261103",
+    "ndp_gpc_delta_smoke_20261103"
+  ],
+  "datasets": ["LTCC", "PRCC"],
+  "files_archived": 36,
+  "contents": "short-run completion records, training logs, metrics, online-neighbor summaries, and smoke result JSON",
+  "excluded": [
+    "common_init contents",
+    "model weights",
+    "checkpoint files",
+    "image and archive files",
+    "__pycache__"
+  ],
+  "code_commit": "1601a54"
+}

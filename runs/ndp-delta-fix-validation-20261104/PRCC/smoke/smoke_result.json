@@ -1,0 +1,8 @@
+{
+  "arm": "NDP_DELTA_FIX",
+  "created_utc": "2026-11-04T04:27:34Z",
+  "dataset": "prcc",
+  "no_per_rank_checkpoint": true,
+  "passed": true,
+  "steps": 20
+}

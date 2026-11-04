@@ -74,6 +74,14 @@ NDP_GPC_CONFUSION_MARGIN = 0.0
 NDP_GPC_TARGET_MARGIN = 0.01
 NDP_GPC_IMPACT_TARGET_MARGIN = 0.01
 NDP_GPC_DELTA_MAX_RISK = 4096
+NDP_DELTA_FIX_MAX_RISK = 4096
+NDP_DELTA_FIX_MIN_DROP = 1e-4
+# One deterministic, exact pre/post decrease is sufficient evidence.  A
+# later occurrence must still show a deficit against this fixed first target
+# before any protection is applied, so this is not a static-margin gate.
+NDP_DELTA_FIX_MIN_OBSERVATIONS = 1
+NDP_DELTA_FIX_MAX_PROTECTIONS_PER_BATCH = 1
+NDP_DELTA_FIX_MAX_PROTECTION_BATCHES = 16
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -994,6 +1002,209 @@ def measure_gpc_delta_after(
     return observed
 
 
+def gpc_delta_fix_relation_key(state_key: Any, negative_pid: int) -> str:
+    """Identify one fixed positive-state/negative-PID relation.
+
+    The old DELTA key stopped at ``state_key`` and therefore allowed the
+    negative identity to change between observations.  DELTA_FIX makes the
+    negative PID part of the key and stores the serialized state separately
+    for an explicit equality check during protection.
+    """
+    return json.dumps(
+        ["state_negative_pid", json_safe(state_key), int(negative_pid)],
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def _local_identity_margin(
+    representation: torch.Tensor,
+    left: int,
+    right: int,
+    negative: int,
+) -> torch.Tensor:
+    return torch.sum(representation[left] * representation[right]) - 0.5 * (
+        torch.sum(representation[negative] * representation[left])
+        + torch.sum(representation[negative] * representation[right])
+    )
+
+
+@torch.no_grad()
+def _eval_batch_representation(
+    model: torch.nn.Module,
+    batch: dict[str, Any],
+    device: torch.device,
+    indices: list[int],
+) -> torch.Tensor:
+    """Encode selected batch images in deterministic eval mode.
+
+    DELTA_FIX uses this same mode for both pre-step and post-step snapshots.
+    The model's training state and RNG are restored so the snapshot cannot
+    alter the optimizer trajectory or stochastic training stream.
+    """
+    raw_model = model.module if hasattr(model, "module") else model
+    rng = base.rng_state(device)
+    was_training = bool(raw_model.training)
+    raw_model.eval()
+    try:
+        index_tensor = torch.as_tensor(indices, dtype=torch.long, device=device)
+        images = batch["image"].to(device, non_blocking=False).index_select(0, index_tensor)
+        camids = batch["camid"].to(device, non_blocking=False).index_select(0, index_tensor)
+        with amp.autocast(enabled=True):
+            outputs = raw_model(images, cam_label=camids)
+        if isinstance(outputs, (tuple, list)):
+            feature_output = outputs[1]
+            feature_output = feature_output[0] if isinstance(feature_output, (tuple, list)) else feature_output
+        else:
+            # The deployed Bio model returns the feature tensor directly in
+            # eval mode and the ``(score, [feature])`` pair in train mode.
+            feature_output = outputs
+        return F.normalize(feature_output.float(), dim=-1)
+    finally:
+        base.restore_rng(rng, device)
+        raw_model.train(was_training)
+
+
+def _nearest_negative_index(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    left: int,
+    right: int,
+    negative_pid: int | None = None,
+) -> int | None:
+    positive_pid = int(pids[left].detach().cpu())
+    if int(pids[right].detach().cpu()) != positive_pid:
+        return None
+    if negative_pid is None:
+        candidate_indices = torch.nonzero(pids != positive_pid, as_tuple=False).flatten()
+    else:
+        candidate_indices = torch.nonzero(pids == int(negative_pid), as_tuple=False).flatten()
+    if candidate_indices.numel() == 0:
+        return None
+    with torch.no_grad():
+        pair_scores = 0.5 * (
+            representation[candidate_indices] @ representation[left]
+            + representation[candidate_indices] @ representation[right]
+        )
+        return int(candidate_indices[int(torch.argmax(pair_scores).item())].item())
+
+
+def select_ndp_delta_fix_probes(
+    model: torch.nn.Module,
+    batch: dict[str, Any],
+    device: torch.device,
+    pids: torch.Tensor,
+    selected_gpc: list[tuple[int, int, tuple[int, int], tuple[int, int, int]]],
+) -> list[dict[str, Any]]:
+    """Snapshot exact GPC relations before the real optimizer update.
+
+    Candidate identity selection and the pre-step margin are both measured in
+    deterministic eval mode.  The post-step function below uses the same
+    mode and the same three batch indices, removing the train/eval and
+    negative-PID mismatch in the original DELTA arm.
+    """
+    if not selected_gpc:
+        return []
+    all_indices = list(range(int(pids.shape[0])))
+    snapshot = _eval_batch_representation(model, batch, device, all_indices)
+    probes: list[dict[str, Any]] = []
+    for left, right, _image_key, state_key in selected_gpc:
+        left = int(left)
+        right = int(right)
+        negative = _nearest_negative_index(snapshot, pids, left, right)
+        if negative is None:
+            continue
+        negative_pid = int(pids[negative].detach().cpu())
+        probes.append({
+            "left": left,
+            "right": right,
+            "negative": negative,
+            "negative_pid": negative_pid,
+            "positive_pid": int(pids[left].detach().cpu()),
+            "state_key": json_safe(state_key),
+            "key": gpc_delta_fix_relation_key(state_key, negative_pid),
+            "before_margin": float(_local_identity_margin(snapshot, left, right, negative).float().cpu()),
+        })
+    return probes
+
+
+def select_ndp_delta_fix_protections(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    selected_gpc: list[tuple[int, int, tuple[int, int], tuple[int, int, int]]],
+    observed_risks: dict[str, dict[str, Any]] | None,
+    max_relations: int = NDP_DELTA_FIX_MAX_PROTECTIONS_PER_BATCH,
+) -> list[tuple[torch.Tensor, float, int, str]]:
+    """Return at most the single largest deficit for an armed exact relation.
+
+    A risk is eligible only after one observed decrease for the same
+    positive state and negative PID.  Its target is fixed at first evidence;
+    it is never replaced by a later maximum and is consumed once after a
+    successful optimizer update.
+    """
+    if not selected_gpc or not observed_risks or max_relations <= 0:
+        return []
+    candidates: list[tuple[float, torch.Tensor, float, int, str]] = []
+    for left, right, _image_key, state_key in selected_gpc:
+        left = int(left)
+        right = int(right)
+        state_value = json_safe(state_key)
+        for key, risk in observed_risks.items():
+            if risk.get("used", False) or not risk.get("armed", False):
+                continue
+            if int(risk.get("observations", 0)) < NDP_DELTA_FIX_MIN_OBSERVATIONS:
+                continue
+            if risk.get("state_key") != state_value:
+                continue
+            negative_pid = int(risk.get("negative_pid", -1))
+            negative = _nearest_negative_index(representation, pids, left, right, negative_pid)
+            if negative is None:
+                continue
+            current_margin = _local_identity_margin(representation, left, right, negative)
+            target = float(risk.get("target_margin", float("nan")))
+            if not math.isfinite(target):
+                continue
+            deficit = target - float(current_margin.detach().float().cpu())
+            if deficit <= 0.0:
+                continue
+            candidates.append((deficit, current_margin, target, negative_pid, str(key)))
+    candidates.sort(key=lambda item: item[0], reverse=True)
+    return [(item[1], item[2], item[3], item[4]) for item in candidates[:max_relations]]
+
+
+@torch.no_grad()
+def measure_ndp_delta_fix_after(
+    model: torch.nn.Module,
+    batch: dict[str, Any],
+    device: torch.device,
+    probes: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Measure the exact pre-step probe indices after optimizer.step()."""
+    if not probes:
+        return []
+    unique_indices = sorted({int(probe[name]) for probe in probes for name in ("left", "right", "negative")})
+    local_index = {original: position for position, original in enumerate(unique_indices)}
+    representation = _eval_batch_representation(model, batch, device, unique_indices)
+    observed: list[dict[str, Any]] = []
+    for probe in probes:
+        left = local_index[int(probe["left"])]
+        right = local_index[int(probe["right"])]
+        negative = local_index[int(probe["negative"])]
+        after_margin = float(_local_identity_margin(representation, left, right, negative).float().cpu())
+        before_margin = float(probe["before_margin"])
+        observed.append({
+            "key": str(probe["key"]),
+            "state_key": probe["state_key"],
+            "positive_pid": int(probe["positive_pid"]),
+            "negative_pid": int(probe["negative_pid"]),
+            "before_margin": before_margin,
+            "after_margin": after_margin,
+            "delta": after_margin - before_margin,
+        })
+    return observed
+
+
 def gradient_gate_from_grads(g_base: torch.Tensor | None, g_ndp: torch.Tensor | None) -> tuple[bool, float, str]:
     """Return a detached compatibility decision for two feature gradients.
 
@@ -1071,8 +1282,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA"}:
-        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -1164,7 +1375,8 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     triplet_filter_candidates = 0
     margin_sum = 0.0
     gpc_delta_probes = select_ndp_gpc_delta_probes(representation, pids, selected_gpc) if arm == "NDP_GPC_DELTA" else []
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA"}
+    delta_fix_probes = select_ndp_delta_fix_probes(model, batch, device, pids, selected_gpc) if arm == "NDP_DELTA_FIX" else []
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"}
     if ndp_enabled:
         ndp_values = []
         if arm == "NDP_GPC":
@@ -1206,8 +1418,27 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 )
                 active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
                 ndp_values.append(hinge)
+        delta_fix_keys: list[str] = []
+        if arm == "NDP_DELTA_FIX" and stats.get("delta_fix_protection_batches", 0) < NDP_DELTA_FIX_MAX_PROTECTION_BATCHES:
+            for current_margin, target_margin, _negative_pid, risk_key in select_ndp_delta_fix_protections(
+                representation, pids, selected_gpc, gpc_delta_risks, max_relations=1
+            ):
+                selected_ndp += 1
+                current_value = float(current_margin.detach().float().cpu())
+                current_error_pid += int(current_value <= 0.0)
+                correct_pid += int(current_value > 0.0)
+                margin_sum += current_value
+                hinge = F.relu(
+                    torch.as_tensor(target_margin, dtype=current_margin.dtype, device=device)
+                    - current_margin
+                )
+                active_ndp += int(float(hinge.detach().float().cpu()) > 0.0)
+                ndp_values.append(hinge)
+                delta_fix_keys.append(risk_key)
+            if delta_fix_keys:
+                stats["delta_fix_protection_batches"] += 1
         for local_index, entry in enumerate(entries):
-            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA"}:
+            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX"}:
                 continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
@@ -1479,7 +1710,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         ndp_enabled
         and (
             stats["batches"] < diagnostic_steps
-            or (arm == "NDP_GPC_DELTA" and active_ndp > 0 and ndp_loss.requires_grad)
+            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX"} and active_ndp > 0 and ndp_loss.requires_grad)
         )
     )
     if need_diag:
@@ -1524,7 +1755,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     stats["gpc_selected"] += len(selected_gpc)
     gpc_info = dict(gpc_info)
     gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
-    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "gpc_delta_probes": gpc_delta_probes, "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
+    return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "gpc_delta_probes": gpc_delta_probes, "delta_fix_probes": delta_fix_probes, "delta_fix_keys": delta_fix_keys if arm == "NDP_DELTA_FIX" else [], "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 
 def finite_parameters(model: torch.nn.Module) -> bool:

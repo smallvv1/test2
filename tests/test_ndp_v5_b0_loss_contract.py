@@ -11,6 +11,7 @@ from ndp_v5_prcc_runner import (  # noqa: E402
     batch_hard_negative_pid,
     build_online_neighbor_graph,
     compose_total_loss,
+    gpc_delta_fix_relation_key,
     gradient_gate_from_grads,
     listwise_local_rank_loss,
     ndp_relation_excluded_by_triplet_pid,
@@ -21,6 +22,7 @@ from ndp_v5_prcc_runner import (  # noqa: E402
     rng_state_digest,
     select_ndp_gpc_delta_probes,
     select_ndp_gpc_delta_protections,
+    select_ndp_delta_fix_protections,
     select_ndp_gpc_impacts,
 )
 
@@ -107,6 +109,42 @@ def test_gpc_delta_total_uses_fixed_low_coefficient():
     main = torch.tensor(3.0, requires_grad=True)
     ndp = torch.tensor(2.0, requires_grad=True)
     total = compose_total_loss(main, ndp, "NDP_GPC_DELTA")
+    total.backward()
+    assert torch.isclose(total, torch.tensor(3.002))
+    assert torch.isclose(ndp.grad, torch.tensor(0.001))
+
+
+def test_delta_fix_binds_negative_pid_and_does_not_accumulate_target():
+    representation = torch.tensor(
+        [[1.0, 0.0], [1.0, 0.0], [0.9, 0.1], [0.8, 0.2]],
+        requires_grad=True,
+    )
+    pids = torch.tensor([1, 1, 2, 3])
+    state_key = (1, "cloth_a", "cloth_b")
+    selected = [(0, 1, (10, 11), state_key)]
+    key = gpc_delta_fix_relation_key(state_key, 2)
+    risks = {
+        key: {
+            "state_key": [1, "cloth_a", "cloth_b"],
+            "negative_pid": 2,
+            "target_margin": 0.2,
+            "observations": 2,
+            "armed": True,
+            "used": False,
+        }
+    }
+    protected = select_ndp_delta_fix_protections(representation, pids, selected, risks)
+    assert len(protected) == 1
+    assert protected[0][2] == 2
+    assert protected[0][3] == key
+    assert protected[0][1] == 0.2
+    assert protected[0][0].requires_grad
+
+
+def test_delta_fix_total_uses_fixed_low_coefficient():
+    main = torch.tensor(3.0, requires_grad=True)
+    ndp = torch.tensor(2.0, requires_grad=True)
+    total = compose_total_loss(main, ndp, "NDP_DELTA_FIX")
     total.backward()
     assert torch.isclose(total, torch.tensor(3.002))
     assert torch.isclose(ndp.grad, torch.tensor(0.001))

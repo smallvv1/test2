@@ -1,0 +1,21 @@
+{
+  "arm": "NDP_SHN_MP",
+  "seed": 1234,
+  "lambda_gpc": 0.1,
+  "lambda_ndp": 0.001,
+  "epochs": 60,
+  "datasets": {
+    "LTCC": {
+      "general": {"rank1": 86.00405455, "mAP": 55.33131833},
+      "clothes_changing": {"rank1": 57.39796162, "mAP": 33.41174329},
+      "model_sha256": "1202b35434b953e5f5de6fbaf2bbc7ebbb32a84845668973bf70d0cd54c5d990"
+    },
+    "PRCC": {
+      "same_clothes": {"rank1": 100.0, "mAP": 99.52497490},
+      "clothes_changing_C_to_A": {"rank1": 64.15467262, "mAP": 63.77768977},
+      "model_sha256": "784e75df9b35a67a9b3c229488101efa6cdbea0a043d427dae81dac3c5317b41"
+    }
+  },
+  "query_gallery_used_during_training": false,
+  "per_rank_checkpoint_files_created": false
+}

@@ -859,12 +859,13 @@ def select_ndp_ad_relations(
     return selected
 
 
-def select_ndp_shn_losses(
+def _select_ndp_shn_losses(
     representation: torch.Tensor,
     pids: torch.Tensor,
     topk: int = NDP_SHN_TOPK,
     tau: float = NDP_SHN_TAU,
     max_anchors: int = NDP_SHN_MAX_ANCHORS_PER_BATCH,
+    positive_aggregation: str = "logsumexp",
 ) -> list[tuple[torch.Tensor, float, int, int]]:
     """Return sparse soft-hard-negative, multi-positive losses for a batch.
 
@@ -875,6 +876,8 @@ def select_ndp_shn_losses(
     Triplet: it keeps multiple positives and a soft mixture of multiple
     negative identities rather than one negative image.
     """
+    if positive_aggregation not in {"logsumexp", "balanced_mean"}:
+        raise ValueError(f"unsupported SHN positive aggregation: {positive_aggregation}")
     if representation.ndim != 2 or representation.shape[0] < 4 or tau <= 0.0:
         return []
     unique_pids, inverse = torch.unique(pids.detach(), sorted=True, return_inverse=True)
@@ -931,14 +934,61 @@ def select_ndp_shn_losses(
         positive_logits = representation[positives] @ anchor_feature
         negative_logits = live_centers_tensor[negative_classes] @ anchor_feature
         weights = F.softmax(negative_scores.float() / float(tau), dim=0).detach()
-        positive_logsum = torch.logsumexp(positive_logits / float(tau), dim=0)
         negative_logsum = torch.logsumexp(
             negative_logits / float(tau) + torch.log(weights.clamp_min(1e-6)), dim=0
         )
-        loss = F.softplus(negative_logsum - positive_logsum)
+        if positive_aggregation == "balanced_mean":
+            # The historical logsumexp gives most of its positive gradient to
+            # whichever same-PID image is already the most similar.  Averaging
+            # the per-positive softplus terms gives every legal same-PID
+            # positive an equal topological contribution, while retaining the
+            # same detached Top-3 negative mixture and temperature.  This is a
+            # soft ranking objective: reliable positives with a safe margin
+            # receive only a small residual gradient, so hard positives are
+            # not forced to match a fixed target.
+            loss = F.softplus(negative_logsum - positive_logits / float(tau)).mean()
+        else:
+            positive_logsum = torch.logsumexp(positive_logits / float(tau), dim=0)
+            loss = F.softplus(negative_logsum - positive_logsum)
         margin = float((positive_logits.mean() - negative_logits.mean()).detach().float().cpu())
         losses.append((loss, margin, int(negative_classes.numel()), int(positives.numel())))
     return losses
+
+
+def select_ndp_shn_losses(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    topk: int = NDP_SHN_TOPK,
+    tau: float = NDP_SHN_TAU,
+    max_anchors: int = NDP_SHN_MAX_ANCHORS_PER_BATCH,
+) -> list[tuple[torch.Tensor, float, int, int]]:
+    """Historical SHN loss with logsumexp positive aggregation."""
+    return _select_ndp_shn_losses(
+        representation,
+        pids,
+        topk=topk,
+        tau=tau,
+        max_anchors=max_anchors,
+        positive_aggregation="logsumexp",
+    )
+
+
+def select_ndp_shn_mp_losses(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    topk: int = NDP_SHN_TOPK,
+    tau: float = NDP_SHN_TAU,
+    max_anchors: int = NDP_SHN_MAX_ANCHORS_PER_BATCH,
+) -> list[tuple[torch.Tensor, float, int, int]]:
+    """Balanced multi-positive SHN loss used by the NDP_SHN_MP arm."""
+    return _select_ndp_shn_losses(
+        representation,
+        pids,
+        topk=topk,
+        tau=tau,
+        max_anchors=max_anchors,
+        positive_aggregation="balanced_mean",
+    )
 
 
 def select_ndp_gpc_confusions(
@@ -1486,8 +1536,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"}:
-        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.005 if arm == "NDP_SHN" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD"} else LAMBDA_NDP))) if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -1586,11 +1636,11 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         else []
     )
     ndp_shn_losses = (
-        select_ndp_shn_losses(representation, pids)
-        if arm == "NDP_SHN" and epoch >= 3
+        (select_ndp_shn_mp_losses if arm == "NDP_SHN_MP" else select_ndp_shn_losses)(representation, pids)
+        if arm in {"NDP_SHN", "NDP_SHN_MP"} and epoch >= 3
         else []
     )
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP"}
     if ndp_enabled:
         ndp_values = []
         if arm == "NDP_GPC":
@@ -1667,7 +1717,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 ndp_values.append(relation_loss)
                 active_ndp += int(float(relation_loss.detach().float().cpu()) > 0.0)
             stats["ndp_ad_protection_batches"] += 1
-        if arm == "NDP_SHN" and ndp_shn_losses:
+        if arm in {"NDP_SHN", "NDP_SHN_MP"} and ndp_shn_losses:
             for shn_loss, detached_margin, negative_count, positive_count in ndp_shn_losses:
                 selected_ndp += 1
                 active_ndp += int(float(shn_loss.detach().float().cpu()) > 0.0)
@@ -1676,7 +1726,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 margin_sum += detached_margin
                 ndp_values.append(shn_loss)
         for local_index, entry in enumerate(entries):
-            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"}:
+            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP"}:
                 continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
@@ -1948,7 +1998,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         ndp_enabled
         and (
             stats["batches"] < diagnostic_steps
-            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN"} and active_ndp > 0 and ndp_loss.requires_grad)
+            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP"} and active_ndp > 0 and ndp_loss.requires_grad)
         )
     )
     if need_diag:
@@ -1996,7 +2046,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         stats["gate_cosine_sum"] += gate_cosine
     stats["gpc_selected"] += len(selected_gpc)
     gpc_info = dict(gpc_info)
-    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "ndp_ad_selected_count": len(ndp_ad_relations) if arm == "NDP_AD" else 0, "ndp_ad_budget_batches": stats.get("ndp_ad_protection_batches", 0), "ndp_shn_anchor_count": len(ndp_shn_losses) if arm == "NDP_SHN" else 0, "ndp_shn_negative_count": int(sum(item[2] for item in ndp_shn_losses)) if arm == "NDP_SHN" else 0, "ndp_shn_positive_count": int(sum(item[3] for item in ndp_shn_losses)) if arm == "NDP_SHN" else 0, "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
+    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "ndp_ad_selected_count": len(ndp_ad_relations) if arm == "NDP_AD" else 0, "ndp_ad_budget_batches": stats.get("ndp_ad_protection_batches", 0), "ndp_shn_anchor_count": len(ndp_shn_losses) if arm in {"NDP_SHN", "NDP_SHN_MP"} else 0, "ndp_shn_negative_count": int(sum(item[2] for item in ndp_shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP"} else 0, "ndp_shn_positive_count": int(sum(item[3] for item in ndp_shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP"} else 0, "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
     return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "gpc_delta_probes": gpc_delta_probes, "delta_fix_probes": delta_fix_probes, "delta_fix_keys": delta_fix_keys if arm == "NDP_DELTA_FIX" else [], "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 

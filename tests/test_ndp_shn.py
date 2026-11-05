@@ -28,4 +28,5 @@ def test_shn_is_a_supported_loss_arm_and_b0_contract_remains_exact():
     main = torch.tensor(2.0, requires_grad=True)
     ndp_loss = torch.tensor(3.0, requires_grad=True)
     assert torch.equal(ndp.compose_total_loss(main, ndp_loss, "B0"), main)
+    assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN"), torch.tensor(2.015))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN", 0.001), torch.tensor(2.003))

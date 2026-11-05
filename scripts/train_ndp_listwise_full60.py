@@ -85,7 +85,7 @@ NDP_DELTA_FIX_MAX_PROTECTION_BATCHES = 16
 # student-space local relation after a short warm-up.
 LAMBDA_NDP_AD = 0.001
 NDP_AD_START_EPOCH = 3
-LAMBDA_NDP_SHN = 0.001
+LAMBDA_NDP_SHN = 0.005
 NDP_SHN_START_EPOCH = 3
 TAU = 0.1
 GPC_CONTEXT = "phase7i_relation_specificity"

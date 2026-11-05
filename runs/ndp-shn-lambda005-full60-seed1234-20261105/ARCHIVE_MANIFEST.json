@@ -1,0 +1,18 @@
+{
+  "experiment": "NDP_SHN_LAMBDA005_FULL60_SEED1234",
+  "archive_date": "2026-11-05",
+  "status": "COMPLETE_LTCC_PRCC_EVAL",
+  "source_run": "/home/DIFFER/log_NDP/ndp_shn_lambda005_full60_seed1234_20261105/",
+  "datasets": ["LTCC", "PRCC"],
+  "epochs": 60,
+  "files_archived": 16,
+  "contents": "training logs, evaluator logs, metrics, neighbor summaries, completion metadata, and initialization manifests",
+  "excluded": [
+    "model_final.pth",
+    "common-init weight files",
+    "checkpoint files",
+    "image and archive files",
+    "__pycache__"
+  ],
+  "code_commit": "64cba34"
+}

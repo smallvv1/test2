@@ -1,0 +1,8 @@
+{
+  "arm": "NDP_SHN_MP",
+  "created_utc": "2026-11-05T12:39:42Z",
+  "dataset": "ltcc",
+  "no_per_rank_checkpoint": true,
+  "passed": true,
+  "steps": 20
+}

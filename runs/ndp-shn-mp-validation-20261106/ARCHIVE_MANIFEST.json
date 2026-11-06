@@ -1,0 +1,17 @@
+{
+  "experiment": "NDP_SHN_MP_VALIDATION",
+  "archive_date": "2026-11-06",
+  "status": "LTCC_PRCC_SHORT_RUN_AND_SMOKE_ARCHIVED",
+  "source_run": "/home/DIFFER/log_NDP/ndp_shn_mp_validation_20261105/",
+  "datasets": ["LTCC", "PRCC"],
+  "files_archived": 20,
+  "contents": "short-run completion metadata, training logs, metrics, online-neighbor summaries, smoke outputs, and initialization manifests",
+  "excluded": [
+    "model_final.pth",
+    "common-init weight files",
+    "checkpoint files",
+    "image and archive files",
+    "__pycache__"
+  ],
+  "code_commit": "4e12cd8"
+}

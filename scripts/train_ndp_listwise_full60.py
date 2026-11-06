@@ -87,6 +87,7 @@ LAMBDA_NDP_AD = 0.001
 NDP_AD_START_EPOCH = 3
 LAMBDA_NDP_SHN = 0.001
 NDP_SHN_START_EPOCH = 3
+NDP_SHN_BANK_REFRESH_EVERY = 5
 TAU = 0.1
 GPC_CONTEXT = "phase7i_relation_specificity"
 EXPECTED_DEVICE_NAME = "PPU-ZW810E"
@@ -631,6 +632,8 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     model = DDP(raw, device_ids=[rank], output_device=rank, find_unused_parameters=False, broadcast_buffers=False, bucket_cap_mb=25)
     gpc_bank = FORMAL.build_train_only_pair_bank(dataset, args.dataset)
     path_to_index = gpc_bank["path_to_index"]
+    train_bank_pids = torch.tensor([int(item["pid"]) for item in dataset.train], dtype=torch.long, device=device)
+    train_bank_clothes = torch.tensor([int(item.get("clothes_id", -1)) for item in dataset.train], dtype=torch.long, device=device)
     sampler = FORMAL.FinalBatchSampler(dataset.train, int(FORMAL.SPEC[args.dataset]["batch_size"]), int(FORMAL.SPEC[args.dataset]["num_instances"]), int(FORMAL.SPEC[args.dataset]["steps_per_epoch"]), SEED, rank)
     loader = FORMAL.build_train_loader(cfg, dataset, sampler)
     # The formal GPC namespace is part of the frozen selector hash.  It must
@@ -671,6 +674,10 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
     cached_reference_features = torch.empty((0, 1024), dtype=torch.float32, device=device)
     cached_graph_summary = {"online_relation_count": 0, "online_valid_anchor_count": 0, "online_neighbor_change_rate": None, "online_neighbor_graph_sha256": "", "fresh_bank_shape": [], "online_similarity_device": str(device)}
     cached_graph_epoch = 0
+    cached_shn_bank_features = torch.empty((0, 1024), dtype=torch.float32, device=device)
+    cached_shn_bank_centers = torch.empty((0, 1024), dtype=torch.float32, device=device)
+    cached_shn_bank_center_pids = torch.empty((0,), dtype=torch.long, device=device)
+    cached_shn_bank_epoch = 0
     if args.arm in {"NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE"} and resume_nteach_graph is not None:
         cached_reference_rows = resume_nteach_graph["rows"]
         cached_reference_features = resume_nteach_graph["features"].to(device=device, dtype=torch.float32)
@@ -702,7 +709,33 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             reference_rows = cached_reference_rows
             reference_features = cached_reference_features
             graph_summary = cached_graph_summary
-            if args.arm in {"NDP_SR", "NDP_LATE"}:
+            if args.arm == "NDP_SHN_BANK" and epoch >= NDP_SHN_START_EPOCH and (
+                cached_shn_bank_epoch == 0 or epoch - cached_shn_bank_epoch >= NDP_SHN_BANK_REFRESH_EVERY
+            ):
+                cached_shn_bank_features = identity_feature_bank(raw, cfg, dataset, device)
+                cached_shn_bank_centers, cached_shn_bank_center_pids = NDP.build_shn_bank_centers(
+                    cached_shn_bank_features, train_bank_pids
+                )
+                cached_shn_bank_epoch = epoch
+                cached_graph_summary = dict(cached_graph_summary)
+                cached_graph_summary.update({
+                    "fresh_bank_shape": list(cached_shn_bank_features.shape),
+                    "fresh_bank_device": str(cached_shn_bank_features.device),
+                    "bank_refresh_epoch": int(epoch),
+                    "bank_refresh_every": NDP_SHN_BANK_REFRESH_EVERY,
+                    "bank_pid_count": int(cached_shn_bank_center_pids.numel()),
+                    "reference_space": "student",
+                })
+                if logger:
+                    logger.info(
+                        "NDP_SHN_BANK 刷新 train-only 学生特征库：epoch=%d shape=%s pid_count=%d",
+                        epoch,
+                        tuple(cached_shn_bank_features.shape),
+                        int(cached_shn_bank_center_pids.numel()),
+                    )
+            if args.arm == "NDP_SHN_BANK":
+                reference_features, graph_summary = cached_shn_bank_features, cached_graph_summary
+            elif args.arm in {"NDP_SR", "NDP_LATE"}:
                 if cached_graph_epoch == 0:
                     cached_reference_rows, teacher_reference_features, cached_graph_summary, previous_signature = make_online_graph(teacher_graph_model, cfg, dataset, device, previous_signature, args.arm)
                     cached_graph_summary.update(annotate_teacher_graph(cached_reference_rows, teacher_reference_features))
@@ -785,9 +818,42 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     ndp_lambda = LAMBDA_NDP_AD
                 elif args.arm in {"NDP_SHN", "NDP_SHN_MP"} and epoch >= NDP_SHN_START_EPOCH:
                     ndp_lambda = LAMBDA_NDP_SHN
+                elif args.arm == "NDP_SHN_BANK" and epoch >= NDP_SHN_START_EPOCH:
+                    ndp_lambda = LAMBDA_NDP_SHN
                 if args.ndp_lambda_override is not None:
                     ndp_lambda = float(args.ndp_lambda_override)
-                result = NDP.forward_batch(model, loss_fn, batch, device, path_to_index, gpc_bank, reference_rows, reference_features, args.arm, epoch, rank, iteration, global_step, stats, 3, 0.02, ndp_lambda=ndp_lambda, gpc_delta_risks=gpc_delta_risks)
+                batch_bank_indices = torch.tensor(
+                    [int(path_to_index[str(path)]) for path in batch["image_path"]],
+                    dtype=torch.long,
+                    device=device,
+                )
+                result = NDP.forward_batch(
+                    model,
+                    loss_fn,
+                    batch,
+                    device,
+                    path_to_index,
+                    gpc_bank,
+                    reference_rows,
+                    reference_features,
+                    args.arm,
+                    epoch,
+                    rank,
+                    iteration,
+                    global_step,
+                    stats,
+                    3,
+                    0.02,
+                    ndp_lambda=ndp_lambda,
+                    gpc_delta_risks=gpc_delta_risks,
+                    shn_bank_features=cached_shn_bank_features if args.arm == "NDP_SHN_BANK" else None,
+                    shn_bank_pids=train_bank_pids if args.arm == "NDP_SHN_BANK" else None,
+                    shn_bank_indices=batch_bank_indices if args.arm == "NDP_SHN_BANK" else None,
+                    shn_bank_centers=cached_shn_bank_centers if args.arm == "NDP_SHN_BANK" else None,
+                    shn_bank_center_pids=cached_shn_bank_center_pids if args.arm == "NDP_SHN_BANK" else None,
+                    shn_bank_clothes=train_bank_clothes if args.arm == "NDP_SHN_BANK" else None,
+                    shn_batch_clothes=batch["clothes_id"].to(device, non_blocking=False) if args.arm == "NDP_SHN_BANK" else None,
+                )
                 if not bool(torch.isfinite(result["total"].detach()).item()):
                     raise RuntimeError(f"non-finite total loss at {args.dataset}/epoch{epoch}/iteration{iteration}")
                 scaler.scale(result["total"]).backward()
@@ -905,6 +971,8 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     epoch_ndp_lambda = LAMBDA_NDP_AD
                 elif args.arm in {"NDP_SHN", "NDP_SHN_MP"} and epoch >= NDP_SHN_START_EPOCH:
                     epoch_ndp_lambda = LAMBDA_NDP_SHN
+                elif args.arm == "NDP_SHN_BANK" and epoch >= NDP_SHN_START_EPOCH:
+                    epoch_ndp_lambda = LAMBDA_NDP_SHN
                 if args.ndp_lambda_override is not None:
                     epoch_ndp_lambda = float(args.ndp_lambda_override)
                 # ``reduce_vec`` returns a mean across DDP ranks so loss
@@ -964,7 +1032,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         atomic_torch_save(state_final, final_path)
         final_path.chmod(0o444)
         meta = {"dataset": args.dataset, "arm": args.arm, "seed": SEED, "epochs_completed": end_epoch, "global_step": global_step, "model_path": str(final_path), "model_sha256": sha256_file(final_path), "model_state_hash": state_hash(state_final), "model_bytes": final_path.stat().st_size, "initialization_source": init_manifest.get("source"), "model_only_warm_start": bool(init_manifest.get("model_only_warm_start", False)), "gpc_context": GPC_CONTEXT, "lambda_gpc": 0.1, "lambda_ndp": LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_SAFE if args.arm == "NDP_SAFE" else (LAMBDA_NDP_SELECT if args.arm == "NDP_SELECT" else (LAMBDA_NDP_V2 if args.arm == "NDP_V2" else 0.0))))), "ndp_rank_definition": "frozen B0 teacher margin in [0.02,0.10], current student margin <0.05, target=clamp(0.5*teacher_margin,0.01,0.05)" if args.arm == "NDP_RANK" else None, "ndp_sr_definition": "teacher-selected train-only indices; student-space refreshed endpoints; one lowest-margin reliable relation per anchor; ReLU(0.02-student_margin)" if args.arm == "NDP_SR" else None, "ndp_sr_refresh_every": NDP_SR_REFRESH_EVERY if args.arm == "NDP_SR" else None, "ndp_sr_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_sr_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_late_definition": "teacher-selected train-only indices; student-space refreshed endpoints; activation starts at epoch 16; one lowest-margin relation per anchor only when current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_LATE" else None, "ndp_late_start_epoch": NDP_LATE_START_EPOCH if args.arm == "NDP_LATE" else None, "ndp_late_refresh_every": NDP_LATE_REFRESH_EVERY if args.arm == "NDP_LATE" else None, "ndp_late_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_late_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_rank_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_rank_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_safe_margin": NDP_SAFE_MARGIN if args.arm == "NDP_SAFE" else None, "ndp_safe_warmup_epochs": NDP_SAFE_WARMUP_EPOCHS if args.arm == "NDP_SAFE" else None, "ndp_safe_graph_update_every": NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else (NDP_SELECT_GRAPH_UPDATE_EVERY if args.arm == "NDP_SELECT" else (NDP_V2_GRAPH_UPDATE_EVERY if args.arm == "NDP_V2" else None)), "ndp_select_start_epoch": NDP_SELECT_START_EPOCH if args.arm == "NDP_SELECT" else None, "ndp_select_warmup_epochs": NDP_SELECT_WARMUP_EPOCHS if args.arm == "NDP_SELECT" else None, "ndp_v2_start_epoch": NDP_V2_START_EPOCH if args.arm == "NDP_V2" else None, "ndp_v2_warmup_epochs": NDP_V2_WARMUP_EPOCHS if args.arm == "NDP_V2" else None, "nlist_tau": TAU if args.arm == "NLIST" else None, "train_only_reference": True, "query_gallery_used_during_training": False, "per_rank_checkpoint_files_created": False, "created_utc": utc_now()}
-        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else (LAMBDA_NDP_GPC_DELTA if args.arm == "NDP_GPC_DELTA" else (LAMBDA_NDP_DELTA_FIX if args.arm == "NDP_DELTA_FIX" else (LAMBDA_NDP_AD if args.arm == "NDP_AD" else (LAMBDA_NDP_SHN if args.arm in {"NDP_SHN", "NDP_SHN_MP"} else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"])))))))))
+        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else (LAMBDA_NDP_GPC_DELTA if args.arm == "NDP_GPC_DELTA" else (LAMBDA_NDP_DELTA_FIX if args.arm == "NDP_DELTA_FIX" else (LAMBDA_NDP_AD if args.arm == "NDP_AD" else (LAMBDA_NDP_SHN if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"])))))))))
         meta["ndp_gpc_definition"] = "current batch GPC-selected same-ID positive pair; exclude original Batch-Hard negative PID; pair-nearest remaining negative; current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC" else None
         meta["ndp_gpc_impact_definition"] = "current batch GPC-selected same-ID positive pair; pair-nearest different-PID negative including Batch-Hard; retain only negative first-order local-margin projection under GPC descent; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC_IMPACT" else None
         meta["ndp_gpc_impact_lambda"] = LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else None
@@ -977,9 +1045,12 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         meta["ndp_ad_max_protection_batches"] = NDP.NDP_AD_MAX_PROTECTION_BATCHES if args.arm == "NDP_AD" else None
         meta["ndp_shn_definition"] = "after epoch 3, build current student batch identity centers; select up to 3 close different-PID centers with detached softmax weights; use up to 8 ambiguous anchors, all same-PID positives, and live center logits in a multi-positive soft contrastive loss" if args.arm == "NDP_SHN" else None
         meta["ndp_shn_mp_definition"] = "same SHN selector and negative mixture, but average one softplus ranking term per same-PID positive so positive gradients are balanced" if args.arm == "NDP_SHN_MP" else None
-        meta["ndp_shn_topk"] = NDP.NDP_SHN_TOPK if args.arm in {"NDP_SHN", "NDP_SHN_MP"} else None
-        meta["ndp_shn_tau"] = NDP.NDP_SHN_TAU if args.arm in {"NDP_SHN", "NDP_SHN_MP"} else None
-        meta["ndp_shn_max_anchors_per_batch"] = NDP.NDP_SHN_MAX_ANCHORS_PER_BATCH if args.arm in {"NDP_SHN", "NDP_SHN_MP"} else None
+        meta["ndp_shn_bank_definition"] = "after epoch 3, refresh a detached student train-only feature bank every 5 epochs; choose Top-3 hard negative PID centers and up to 8 ambiguous anchors; average live in-batch and reliable cross-batch same-PID positive ranking terms" if args.arm == "NDP_SHN_BANK" else None
+        meta["ndp_shn_bank_refresh_every"] = NDP_SHN_BANK_REFRESH_EVERY if args.arm == "NDP_SHN_BANK" else None
+        meta["ndp_shn_bank_max_cross_positives"] = NDP.NDP_SHN_BANK_MAX_CROSS_POSITIVES if args.arm == "NDP_SHN_BANK" else None
+        meta["ndp_shn_topk"] = NDP.NDP_SHN_TOPK if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else None
+        meta["ndp_shn_tau"] = NDP.NDP_SHN_TAU if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else None
+        meta["ndp_shn_max_anchors_per_batch"] = NDP.NDP_SHN_MAX_ANCHORS_PER_BATCH if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else None
         meta["nteach_start_epoch"] = NTEACH_START_EPOCH if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher"] = "frozen B0 initialization feature bank; graph captured once before epoch-1 updates" if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher_model_path"] = init_manifest.get("source") if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
@@ -1009,7 +1080,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=("prepare", "smoke", "train", "eval"), required=True)
     parser.add_argument("--dataset", choices=("ltcc", "prcc", "all"), required=True)
     parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NLIST"), default="NTEACH")
+    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NLIST"), default="NTEACH")
     parser.add_argument("--teacher-model", type=Path, default=None, help="completed frozen Bio+GPC model used only to build NDP_RANK train-only teacher graph")
     parser.add_argument("--epochs", type=int, default=EPOCHS)
     parser.add_argument("--smoke-steps", type=int, default=0)

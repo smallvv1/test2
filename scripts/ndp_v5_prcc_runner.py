@@ -97,6 +97,9 @@ NDP_SHN_TOPK = 3
 NDP_SHN_TAU = 0.2
 NDP_SHN_MAX_ANCHORS_PER_BATCH = 8
 NDP_SHN_BANK_MAX_CROSS_POSITIVES = 8
+NDP_SHN_RELIABLE_BANK_MAX_ANCHORS = 2
+NDP_SHN_RELIABLE_BANK_AUX_WEIGHT = 0.25
+NDP_SHN_RELIABLE_BANK_RELIABILITY_FLOOR = 0.55
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -1148,6 +1151,143 @@ def select_ndp_shn_bank_losses(
     return losses
 
 
+def select_ndp_shn_reliable_bank_aux_losses(
+    representation: torch.Tensor,
+    pids: torch.Tensor,
+    bank_features: torch.Tensor,
+    bank_pids: torch.Tensor,
+    batch_bank_indices: torch.Tensor,
+    bank_centers: torch.Tensor | None = None,
+    bank_center_pids: torch.Tensor | None = None,
+    bank_clothes: torch.Tensor | None = None,
+    batch_clothes: torch.Tensor | None = None,
+    topk: int = NDP_SHN_TOPK,
+    tau: float = NDP_SHN_TAU,
+    max_anchors: int = NDP_SHN_RELIABLE_BANK_MAX_ANCHORS,
+) -> list[tuple[torch.Tensor, float, int, int, float]]:
+    """Return a sparse, low-weight bank-positive auxiliary loss.
+
+    The main NDP term remains the live ``NDP_SHN_MP`` objective.  This helper
+    only selects at most two reliable cross-batch positives.  Bank features
+    are used for positive reliability and as detached positive endpoints; all
+    negative identities and their soft mixture are computed from the current
+    live batch, so a stale bank cannot replace the current student ordering.
+    """
+    if representation.ndim != 2 or representation.shape[0] < 4 or tau <= 0.0:
+        return []
+    if bank_features.ndim != 2 or bank_features.shape[1] != representation.shape[1]:
+        return []
+    if bank_pids.ndim != 1 or bank_features.shape[0] != bank_pids.shape[0]:
+        return []
+    if batch_bank_indices.ndim != 1 or batch_bank_indices.shape[0] != representation.shape[0]:
+        return []
+    if max_anchors <= 0:
+        return []
+
+    live = F.normalize(representation.detach().float(), dim=1)
+    bank_features = F.normalize(
+        bank_features.detach().to(device=representation.device, dtype=torch.float32), dim=1
+    ).contiguous()
+    bank_pids = bank_pids.detach().to(device=representation.device, dtype=torch.long).contiguous()
+    batch_bank_indices = batch_bank_indices.detach().to(device=representation.device, dtype=torch.long)
+    if bank_clothes is not None:
+        bank_clothes = bank_clothes.detach().to(device=representation.device, dtype=torch.long)
+    if batch_clothes is not None:
+        batch_clothes = batch_clothes.detach().to(device=representation.device, dtype=torch.long)
+    if bank_centers is None or bank_center_pids is None:
+        bank_centers, bank_center_pids = build_shn_bank_centers(bank_features, bank_pids)
+    else:
+        bank_centers = F.normalize(
+            bank_centers.detach().to(device=representation.device, dtype=torch.float32), dim=1
+        )
+        bank_center_pids = bank_center_pids.detach().to(device=representation.device, dtype=torch.long)
+    if bank_centers.ndim != 2 or bank_center_pids.ndim != 1 or bank_centers.shape[0] != bank_center_pids.shape[0]:
+        return []
+
+    unique_pids, inverse = torch.unique(pids.detach(), sorted=True, return_inverse=True)
+    num_ids = int(unique_pids.numel())
+    if num_ids < 3:
+        return []
+    live_centers: list[torch.Tensor] = []
+    live_members: list[torch.Tensor] = []
+    with torch.no_grad():
+        for class_index in range(num_ids):
+            members = torch.nonzero(inverse == class_index, as_tuple=False).flatten()
+            live_members.append(members)
+            live_centers.append(F.normalize(live[members].mean(dim=0), dim=0))
+        detached_live_centers_tensor = torch.stack(live_centers, dim=0)
+        center_pair = detached_live_centers_tensor @ detached_live_centers_tensor.t()
+        center_pair.fill_diagonal_(-float("inf"))
+        negative_count = min(max(1, int(topk)), num_ids - 1)
+        batch_index_set = set(int(value) for value in batch_bank_indices.cpu().tolist())
+        candidates: list[tuple[float, int, int, torch.Tensor, torch.Tensor]] = []
+        for anchor in range(int(representation.shape[0])):
+            class_index = int(inverse[anchor].item())
+            local_positive_indices = [
+                int(index) for index in live_members[class_index].cpu().tolist() if int(index) != anchor
+            ]
+            if not local_positive_indices:
+                continue
+            negative_scores, negative_classes = center_pair[class_index].topk(negative_count)
+            if not bool(torch.isfinite(negative_scores).all().item()):
+                continue
+            pid = int(unique_pids[class_index].item())
+            bank_pid_indices = [
+                int(index)
+                for index in torch.nonzero(bank_pids == pid, as_tuple=False).flatten().cpu().tolist()
+                if int(index) not in batch_index_set
+            ]
+            if bank_pid_indices and bank_clothes is not None and batch_clothes is not None:
+                anchor_clothes = int(batch_clothes[anchor].item())
+                cross_clothes = [
+                    index for index in bank_pid_indices
+                    if int(bank_clothes[index].item()) != anchor_clothes
+                ]
+                if cross_clothes:
+                    bank_pid_indices = cross_clothes
+            bank_center_matches = torch.nonzero(bank_center_pids == pid, as_tuple=False).flatten()
+            if bank_center_matches.numel() != 1:
+                continue
+            bank_center = bank_centers[int(bank_center_matches[0].item())]
+            local_positive_mean = float((live[local_positive_indices] @ live[anchor].detach()).mean().item())
+            for bank_index in bank_pid_indices:
+                bank_positive = bank_features[bank_index]
+                live_alignment = float(torch.dot(live[anchor], bank_positive).item())
+                center_support = float(torch.dot(bank_positive, bank_center).item())
+                # A bank endpoint is accepted only when it is supported by
+                # its own identity center and is not clearly worse than the
+                # live in-batch positives.  This is a detached reliability
+                # gate, not a historical margin target.
+                if center_support < NDP_SHN_RELIABLE_BANK_RELIABILITY_FLOOR:
+                    continue
+                if live_alignment < local_positive_mean - 0.05:
+                    continue
+                reliability = 0.5 * (live_alignment + center_support)
+                candidates.append((reliability, anchor, bank_index, negative_scores, negative_classes))
+        candidates.sort(key=lambda item: (-item[0], item[1], item[2]))
+        chosen = candidates[: int(max_anchors)]
+
+    # Rebuild the selected negative centers from the live representation so
+    # the auxiliary term contributes gradients to current negative identities;
+    # only topology and reliability decisions above are detached.
+    live_centers_tensor = torch.stack(
+        [F.normalize(representation[members].mean(dim=0), dim=0) for members in live_members], dim=0
+    )
+    losses: list[tuple[torch.Tensor, float, int, int, float]] = []
+    for reliability, anchor, bank_index, negative_scores, negative_classes in chosen:
+        anchor_feature = representation[anchor]
+        negative_values = live_centers_tensor.index_select(0, negative_classes) @ anchor_feature
+        weights = F.softmax(negative_scores.float() / float(tau), dim=0).detach()
+        negative_logsum = torch.logsumexp(
+            negative_values / float(tau) + torch.log(weights.clamp_min(1e-6)), dim=0
+        )
+        bank_positive_value = bank_features[bank_index] @ anchor_feature
+        loss = F.softplus(negative_logsum - bank_positive_value / float(tau))
+        margin = float((bank_positive_value - negative_values.mean()).detach().float().cpu())
+        losses.append((loss, margin, int(negative_classes.numel()), 1, float(reliability)))
+    return losses
+
+
 def select_ndp_gpc_confusions(
     representation: torch.Tensor,
     pids: torch.Tensor,
@@ -1693,8 +1833,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"}:
-        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -1793,8 +1933,8 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         else []
     )
     ndp_shn_losses = (
-        (select_ndp_shn_mp_losses if arm == "NDP_SHN_MP" else select_ndp_shn_losses)(representation, pids)
-        if arm in {"NDP_SHN", "NDP_SHN_MP"} and epoch >= 3
+        (select_ndp_shn_mp_losses if arm in {"NDP_SHN_MP", "NDP_SHN_RELIABLE"} else select_ndp_shn_losses)(representation, pids)
+        if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_RELIABLE"} and epoch >= 3
         else []
     )
     ndp_shn_bank_losses = (
@@ -1812,8 +1952,23 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         if arm == "NDP_SHN_BANK" and epoch >= 3 and shn_bank_features is not None and shn_bank_pids is not None and shn_bank_indices is not None
         else []
     )
+    ndp_shn_reliable_bank_aux_losses = (
+        select_ndp_shn_reliable_bank_aux_losses(
+            representation,
+            pids,
+            shn_bank_features,
+            shn_bank_pids,
+            shn_bank_indices,
+            bank_centers=shn_bank_centers,
+            bank_center_pids=shn_bank_center_pids,
+            bank_clothes=shn_bank_clothes,
+            batch_clothes=shn_batch_clothes,
+        )
+        if arm == "NDP_SHN_RELIABLE" and epoch >= 3 and shn_bank_features is not None and shn_bank_pids is not None and shn_bank_indices is not None
+        else []
+    )
     shn_losses = ndp_shn_losses + ndp_shn_bank_losses
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"}
     if ndp_enabled:
         ndp_values = []
         if arm == "NDP_GPC":
@@ -1890,7 +2045,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 ndp_values.append(relation_loss)
                 active_ndp += int(float(relation_loss.detach().float().cpu()) > 0.0)
             stats["ndp_ad_protection_batches"] += 1
-        if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} and shn_losses:
+        if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} and shn_losses:
             for shn_loss, detached_margin, negative_count, positive_count in shn_losses:
                 selected_ndp += 1
                 active_ndp += int(float(shn_loss.detach().float().cpu()) > 0.0)
@@ -1898,8 +2053,15 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 correct_pid += int(detached_margin > 0.0)
                 margin_sum += detached_margin
                 ndp_values.append(shn_loss)
+        if arm == "NDP_SHN_RELIABLE" and ndp_shn_reliable_bank_aux_losses:
+            for aux_loss, detached_margin, negative_count, positive_count, _reliability in ndp_shn_reliable_bank_aux_losses:
+                selected_ndp += 1
+                active_ndp += int(float(aux_loss.detach().float().cpu()) > 0.0)
+                current_error_pid += int(detached_margin <= 0.0)
+                correct_pid += int(detached_margin > 0.0)
+                margin_sum += detached_margin
         for local_index, entry in enumerate(entries):
-            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"}:
+            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"}:
                 continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
@@ -2124,7 +2286,20 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                     active_ndp += len(listwise_negative_similarities)
             if anchor_values:
                 ndp_values.append(torch.stack(anchor_values).mean())
-        ndp_loss = torch.stack(ndp_values).mean() if ndp_values else representation.sum() * 0.0
+        if arm == "NDP_SHN_RELIABLE":
+            live_loss = (
+                torch.stack([item[0] for item in ndp_shn_losses]).mean()
+                if ndp_shn_losses
+                else representation.sum() * 0.0
+            )
+            bank_aux_loss = (
+                torch.stack([item[0] for item in ndp_shn_reliable_bank_aux_losses]).mean()
+                if ndp_shn_reliable_bank_aux_losses
+                else representation.sum() * 0.0
+            )
+            ndp_loss = live_loss + NDP_SHN_RELIABLE_BANK_AUX_WEIGHT * bank_aux_loss
+        else:
+            ndp_loss = torch.stack(ndp_values).mean() if ndp_values else representation.sum() * 0.0
     else:
         # B0 must not inspect or backpropagate through any NDP relation.
         ndp_loss = representation.sum() * 0.0
@@ -2171,7 +2346,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         ndp_enabled
         and (
             stats["batches"] < diagnostic_steps
-            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} and active_ndp > 0 and ndp_loss.requires_grad)
+            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} and active_ndp > 0 and ndp_loss.requires_grad)
         )
     )
     if need_diag:
@@ -2219,7 +2394,14 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         stats["gate_cosine_sum"] += gate_cosine
     stats["gpc_selected"] += len(selected_gpc)
     gpc_info = dict(gpc_info)
-    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "ndp_ad_selected_count": len(ndp_ad_relations) if arm == "NDP_AD" else 0, "ndp_ad_budget_batches": stats.get("ndp_ad_protection_batches", 0), "ndp_shn_anchor_count": len(shn_losses) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else 0, "ndp_shn_negative_count": int(sum(item[2] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else 0, "ndp_shn_positive_count": int(sum(item[3] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK"} else 0, "ndp_shn_bank_cross_positive_count": int(sum(max(0, item[3] - 3) for item in ndp_shn_bank_losses)) if arm == "NDP_SHN_BANK" else 0, "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
+    stats.setdefault("shn_live_relations", 0)
+    stats.setdefault("shn_bank_aux_relations", 0)
+    stats.setdefault("shn_bank_aux_reliability_sum", 0.0)
+    if arm == "NDP_SHN_RELIABLE":
+        stats["shn_live_relations"] += len(ndp_shn_losses)
+        stats["shn_bank_aux_relations"] += len(ndp_shn_reliable_bank_aux_losses)
+        stats["shn_bank_aux_reliability_sum"] += sum(item[4] for item in ndp_shn_reliable_bank_aux_losses)
+    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "ndp_ad_selected_count": len(ndp_ad_relations) if arm == "NDP_AD" else 0, "ndp_ad_budget_batches": stats.get("ndp_ad_protection_batches", 0), "ndp_shn_anchor_count": len(shn_losses) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else 0, "ndp_shn_negative_count": int(sum(item[2] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else 0, "ndp_shn_positive_count": int(sum(item[3] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else 0, "ndp_shn_bank_cross_positive_count": int(sum(max(0, item[3] - 3) for item in ndp_shn_bank_losses)) if arm == "NDP_SHN_BANK" else (len(ndp_shn_reliable_bank_aux_losses) if arm == "NDP_SHN_RELIABLE" else 0), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
     return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "gpc_delta_probes": gpc_delta_probes, "delta_fix_probes": delta_fix_probes, "delta_fix_keys": delta_fix_keys if arm == "NDP_DELTA_FIX" else [], "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 

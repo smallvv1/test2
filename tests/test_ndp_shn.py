@@ -71,6 +71,37 @@ def test_shn_bank_adds_cross_batch_positives_and_keeps_live_gradient():
     assert float(gradient.norm()) > 0.0
 
 
+def test_shn_reliable_bank_is_sparse_auxiliary_and_keeps_live_negatives():
+    torch.manual_seed(1234)
+    representation = torch.nn.functional.normalize(torch.randn(16, 12, requires_grad=True), dim=1)
+    pids = torch.tensor([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3])
+    extra = torch.nn.functional.normalize(representation.detach() + 0.01 * torch.randn_like(representation), dim=1)
+    bank_features = torch.cat([representation.detach(), extra], dim=0)
+    bank_pids = torch.cat([pids, pids], dim=0)
+    bank_indices = torch.arange(16)
+    bank_clothes = torch.cat([torch.zeros(16, dtype=torch.long), torch.ones(16, dtype=torch.long)])
+    batch_clothes = torch.zeros(16, dtype=torch.long)
+
+    selected = ndp.select_ndp_shn_reliable_bank_aux_losses(
+        representation,
+        pids,
+        bank_features,
+        bank_pids,
+        bank_indices,
+        bank_clothes=bank_clothes,
+        batch_clothes=batch_clothes,
+    )
+
+    assert 0 < len(selected) <= ndp.NDP_SHN_RELIABLE_BANK_MAX_ANCHORS
+    assert all(loss.requires_grad for loss, _margin, negative_count, _positive_count, _reliability in selected)
+    assert all(negative_count == ndp.NDP_SHN_TOPK for _loss, _margin, negative_count, _positive_count, _reliability in selected)
+    assert all(positive_count == 1 for _loss, _margin, _negative_count, positive_count, _reliability in selected)
+    total = torch.stack([item[0] for item in selected]).mean()
+    gradient = torch.autograd.grad(total, representation)[0]
+    assert torch.isfinite(gradient).all()
+    assert float(gradient.norm()) > 0.0
+
+
 def test_shn_is_a_supported_loss_arm_and_b0_contract_remains_exact():
     main = torch.tensor(2.0, requires_grad=True)
     ndp_loss = torch.tensor(3.0, requires_grad=True)
@@ -78,4 +109,5 @@ def test_shn_is_a_supported_loss_arm_and_b0_contract_remains_exact():
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_BANK"), torch.tensor(2.003))
+    assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_RELIABLE"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN", 0.001), torch.tensor(2.003))

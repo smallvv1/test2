@@ -1,0 +1,24 @@
+{
+  "arm": "NDP_SHN_RELIABLE",
+  "seed": 1234,
+  "lambda_gpc": 0.1,
+  "lambda_ndp": 0.001,
+  "datasets": {
+    "ltcc": {
+      "epochs_completed": 60,
+      "general": {"rank1": 84.38133597373962, "mAP": 54.04983368209722},
+      "clothes_changing": {"rank1": 55.86734414100647, "mAP": 33.71317347023338}
+    },
+    "prcc": {
+      "epochs_completed": 60,
+      "same_clothes": {"rank1": 100.0, "mAP": 99.49547423227185},
+      "clothes_changing_C_to_A": {"rank1": 64.46514129638672, "mAP": 63.86985769720983}
+    }
+  },
+  "train_only_reference": true,
+  "query_gallery_used_during_training": false,
+  "per_rank_checkpoint_files_created": false,
+  "formal_log_root": "/home/DIFFER/log_NDP/ndp_shn_reliable_full60_seed1234_20261107",
+  "ltcc_model_sha256": "ad93787b0955a3e6f8ea2df29a215a951307c240657827db4b1dedb4bd784b85",
+  "prcc_model_sha256": "d4c379388d822b2ff2159b0f047e05089f1d5d94f843ca2a6574b9c6658c615b"
+}

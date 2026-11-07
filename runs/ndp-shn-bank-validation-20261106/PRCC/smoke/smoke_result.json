@@ -1,0 +1,8 @@
+{
+  "arm": "NDP_SHN_BANK",
+  "created_utc": "2026-11-06T05:13:44Z",
+  "dataset": "prcc",
+  "no_per_rank_checkpoint": true,
+  "passed": true,
+  "steps": 20
+}

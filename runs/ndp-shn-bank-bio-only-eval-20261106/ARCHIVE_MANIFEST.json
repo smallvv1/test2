@@ -1,0 +1,11 @@
+{
+  "experiment": "BIO_ONLY_UNIFIED_EVAL_FOR_NDP_SHN_BANK",
+  "archive_date": "2026-11-07",
+  "status": "LTCC_PRCC_EVAL_ARCHIVED",
+  "source_run": "/home/DIFFER/log_NDP/bio_only_unified_eval_20261106/",
+  "datasets": ["LTCC", "PRCC"],
+  "files_archived": 4,
+  "contents": "unified Bio-only evaluator logs and JSON summaries",
+  "excluded": ["model_final.pth"],
+  "code_commit": "44f16d2"
+}

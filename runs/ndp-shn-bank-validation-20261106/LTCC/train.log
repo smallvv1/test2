@@ -1,0 +1,4 @@
+2026-11-06 13:16:42,594 INFO epoch 1/3 loss=7.665186 ndp=0.000000 active=0/0 lr=8.422e-07 skip=2
+2026-11-06 13:18:55,775 INFO epoch 2/3 loss=7.174629 ndp=0.000000 active=0/0 lr=9.031e-07 skip=0
+2026-11-06 13:19:53,542 INFO NDP_SHN_BANK 刷新 train-only 学生特征库：epoch=3 shape=(9576, 1024) pid_count=77
+2026-11-06 13:23:37,695 INFO epoch 3/3 loss=7.029049 ndp=0.733899 active=4768/4768 lr=9.641e-07 skip=0

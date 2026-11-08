@@ -1,0 +1,16 @@
+{
+  "experiment": "NDP_SHN_RELIABLE_VALIDATION",
+  "archive_date": "2026-11-08",
+  "status": "LTCC_PRCC_SMOKE_ARCHIVED",
+  "source_run": "/home/DIFFER/log_NDP/ndp_shn_reliable_validation_20261107/",
+  "datasets": ["LTCC", "PRCC"],
+  "files_archived": 13,
+  "contents": "initialization manifests, validation metrics, online-neighbor summaries, training log, and smoke outputs",
+  "excluded": [
+    "model_final.pth",
+    "checkpoint files",
+    "image and archive files",
+    "__pycache__"
+  ],
+  "code_commit": "0d736eb"
+}

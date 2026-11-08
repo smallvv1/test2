@@ -1,0 +1,16 @@
+{
+  "experiment": "NDP_SHN_RELIABLE_VALIDATION_RERUN",
+  "archive_date": "2026-11-08",
+  "status": "LTCC_PRCC_SHORT_RUN_ARCHIVED",
+  "source_run": "/home/DIFFER/log_NDP/ndp_shn_reliable_validation_rerun_20261107/",
+  "datasets": ["LTCC", "PRCC"],
+  "files_archived": 10,
+  "contents": "short-run completion metadata, training logs, metrics, and online-neighbor summaries",
+  "excluded": [
+    "model_final.pth",
+    "checkpoint files",
+    "image and archive files",
+    "__pycache__"
+  ],
+  "code_commit": "0d736eb"
+}

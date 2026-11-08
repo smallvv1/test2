@@ -100,6 +100,10 @@ NDP_SHN_BANK_MAX_CROSS_POSITIVES = 8
 NDP_SHN_RELIABLE_BANK_MAX_ANCHORS = 2
 NDP_SHN_RELIABLE_BANK_AUX_WEIGHT = 0.25
 NDP_SHN_RELIABLE_BANK_RELIABILITY_FLOOR = 0.55
+# Select a moderately risky reliable relation rather than the easiest or the
+# single hardest bank endpoint.  This is a fixed data-relative quantile, not a
+# dataset/test-set tuned margin threshold.
+NDP_SHN_RELIABLE_BANK_RISK_QUANTILE = 0.40
 INITIAL_SCALE = 512
 COMMON_INIT = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT.pth"
 COMMON_META = ENGINE / "outputs/new_method_track/phase7a_prcc_relation_validation/PRCC_COMMON_INIT_HASHES.json"
@@ -1164,6 +1168,7 @@ def select_ndp_shn_reliable_bank_aux_losses(
     topk: int = NDP_SHN_TOPK,
     tau: float = NDP_SHN_TAU,
     max_anchors: int = NDP_SHN_RELIABLE_BANK_MAX_ANCHORS,
+    risk_aware: bool = False,
 ) -> list[tuple[torch.Tensor, float, int, int, float]]:
     """Return a sparse, low-weight bank-positive auxiliary loss.
 
@@ -1172,6 +1177,14 @@ def select_ndp_shn_reliable_bank_aux_losses(
     are used for positive reliability and as detached positive endpoints; all
     negative identities and their soft mixture are computed from the current
     live batch, so a stale bank cannot replace the current student ordering.
+
+    ``risk_aware=True`` keeps the same reliability gate but ranks candidates
+    by a moderate local-confusion band.  The bank positive is compared with
+    the current live negative identity centers; candidates close to the
+    lower-middle risk quantile are preferred, while the single hardest
+    relation is not forced.  Selection is greedy with distinct anchors and
+    PIDs so the two auxiliary slots cover different identities whenever the
+    batch provides them.
     """
     if representation.ndim != 2 or representation.shape[0] < 4 or tau <= 0.0:
         return []
@@ -1220,7 +1233,7 @@ def select_ndp_shn_reliable_bank_aux_losses(
         center_pair.fill_diagonal_(-float("inf"))
         negative_count = min(max(1, int(topk)), num_ids - 1)
         batch_index_set = set(int(value) for value in batch_bank_indices.cpu().tolist())
-        candidates: list[tuple[float, int, int, torch.Tensor, torch.Tensor]] = []
+        candidates: list[tuple[float, float, int, int, int, torch.Tensor, torch.Tensor]] = []
         for anchor in range(int(representation.shape[0])):
             class_index = int(inverse[anchor].item())
             local_positive_indices = [
@@ -1263,9 +1276,36 @@ def select_ndp_shn_reliable_bank_aux_losses(
                 if live_alignment < local_positive_mean - 0.05:
                     continue
                 reliability = 0.5 * (live_alignment + center_support)
-                candidates.append((reliability, anchor, bank_index, negative_scores, negative_classes))
-        candidates.sort(key=lambda item: (-item[0], item[1], item[2]))
-        chosen = candidates[: int(max_anchors)]
+                live_negative_peak = float(
+                    (detached_live_centers_tensor.index_select(0, negative_classes) @ bank_positive).max().item()
+                )
+                local_risk_margin = live_alignment - live_negative_peak
+                candidates.append(
+                    (reliability, local_risk_margin, anchor, pid, bank_index, negative_scores, negative_classes)
+                )
+        if not risk_aware:
+            candidates.sort(key=lambda item: (-item[0], item[2], item[4]))
+            chosen = candidates[: int(max_anchors)]
+        elif candidates:
+            risk_values = torch.tensor([item[1] for item in candidates], dtype=torch.float32)
+            target_risk_margin = float(torch.quantile(risk_values, NDP_SHN_RELIABLE_BANK_RISK_QUANTILE).item())
+            ranked = sorted(
+                candidates,
+                key=lambda item: (abs(item[1] - target_risk_margin), -item[0], item[3], item[2], item[4]),
+            )
+            chosen = []
+            used_anchors: set[int] = set()
+            used_pids: set[int] = set()
+            for candidate in ranked:
+                if candidate[2] in used_anchors or candidate[3] in used_pids:
+                    continue
+                chosen.append(candidate)
+                used_anchors.add(candidate[2])
+                used_pids.add(candidate[3])
+                if len(chosen) >= int(max_anchors):
+                    break
+        else:
+            chosen = []
 
     # Rebuild the selected negative centers from the live representation so
     # the auxiliary term contributes gradients to current negative identities;
@@ -1274,7 +1314,7 @@ def select_ndp_shn_reliable_bank_aux_losses(
         [F.normalize(representation[members].mean(dim=0), dim=0) for members in live_members], dim=0
     )
     losses: list[tuple[torch.Tensor, float, int, int, float]] = []
-    for reliability, anchor, bank_index, negative_scores, negative_classes in chosen:
+    for reliability, _local_risk_margin, anchor, _pid, bank_index, negative_scores, negative_classes in chosen:
         anchor_feature = representation[anchor]
         negative_values = live_centers_tensor.index_select(0, negative_classes) @ anchor_feature
         weights = F.softmax(negative_scores.float() / float(tau), dim=0).detach()
@@ -1833,8 +1873,8 @@ def compose_total_loss(main_total: torch.Tensor, ndp_loss: torch.Tensor, arm: st
         if total is not main_total or not torch.equal(total, main_total):
             raise AssertionError("B0 total loss must be exactly main_total")
         return total
-    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"}:
-        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
+    if arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"}:
+        coefficient = (LAMBDA_NDP_GPC if arm == "NDP_GPC" else (0.001 if arm in {"NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else LAMBDA_NDP)) if ndp_lambda is None else float(ndp_lambda)
         return main_total + coefficient * ndp_loss
     raise ValueError(f"unsupported arm: {arm}")
 
@@ -1933,8 +1973,8 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         else []
     )
     ndp_shn_losses = (
-        (select_ndp_shn_mp_losses if arm in {"NDP_SHN_MP", "NDP_SHN_RELIABLE"} else select_ndp_shn_losses)(representation, pids)
-        if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_RELIABLE"} and epoch >= 3
+        (select_ndp_shn_mp_losses if arm in {"NDP_SHN_MP", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else select_ndp_shn_losses)(representation, pids)
+        if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and epoch >= 3
         else []
     )
     ndp_shn_bank_losses = (
@@ -1963,12 +2003,13 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
             bank_center_pids=shn_bank_center_pids,
             bank_clothes=shn_bank_clothes,
             batch_clothes=shn_batch_clothes,
+            risk_aware=arm == "NDP_SHN_RELIABLE_RISK",
         )
-        if arm == "NDP_SHN_RELIABLE" and epoch >= 3 and shn_bank_features is not None and shn_bank_pids is not None and shn_bank_indices is not None
+        if arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and epoch >= 3 and shn_bank_features is not None and shn_bank_pids is not None and shn_bank_indices is not None
         else []
     )
     shn_losses = ndp_shn_losses + ndp_shn_bank_losses
-    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"}
+    ndp_enabled = arm in {"N5", "NF0", "NRG", "NCAP", "NDYN", "NDYN_TOP5", "NGATE", "NFRESH", "NCOMP", "NONLINE", "NLIST", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"}
     if ndp_enabled:
         ndp_values = []
         if arm == "NDP_GPC":
@@ -2045,7 +2086,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 ndp_values.append(relation_loss)
                 active_ndp += int(float(relation_loss.detach().float().cpu()) > 0.0)
             stats["ndp_ad_protection_batches"] += 1
-        if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} and shn_losses:
+        if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and shn_losses:
             for shn_loss, detached_margin, negative_count, positive_count in shn_losses:
                 selected_ndp += 1
                 active_ndp += int(float(shn_loss.detach().float().cpu()) > 0.0)
@@ -2053,7 +2094,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 correct_pid += int(detached_margin > 0.0)
                 margin_sum += detached_margin
                 ndp_values.append(shn_loss)
-        if arm == "NDP_SHN_RELIABLE" and ndp_shn_reliable_bank_aux_losses:
+        if arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and ndp_shn_reliable_bank_aux_losses:
             for aux_loss, detached_margin, negative_count, positive_count, _reliability in ndp_shn_reliable_bank_aux_losses:
                 selected_ndp += 1
                 active_ndp += int(float(aux_loss.detach().float().cpu()) > 0.0)
@@ -2061,7 +2102,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                 correct_pid += int(detached_margin > 0.0)
                 margin_sum += detached_margin
         for local_index, entry in enumerate(entries):
-            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"}:
+            if arm in {"NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"}:
                 continue
             anchor_id = int(path_to_index[entry["image_path"]])
             anchor = representation[local_index]
@@ -2286,7 +2327,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
                     active_ndp += len(listwise_negative_similarities)
             if anchor_values:
                 ndp_values.append(torch.stack(anchor_values).mean())
-        if arm == "NDP_SHN_RELIABLE":
+        if arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"}:
             live_loss = (
                 torch.stack([item[0] for item in ndp_shn_losses]).mean()
                 if ndp_shn_losses
@@ -2346,7 +2387,7 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
         ndp_enabled
         and (
             stats["batches"] < diagnostic_steps
-            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} and active_ndp > 0 and ndp_loss.requires_grad)
+            or (arm in {"NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and active_ndp > 0 and ndp_loss.requires_grad)
         )
     )
     if need_diag:
@@ -2397,11 +2438,11 @@ def forward_batch(model, loss_fn, batch, device, path_to_index, bank, reference_
     stats.setdefault("shn_live_relations", 0)
     stats.setdefault("shn_bank_aux_relations", 0)
     stats.setdefault("shn_bank_aux_reliability_sum", 0.0)
-    if arm == "NDP_SHN_RELIABLE":
+    if arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"}:
         stats["shn_live_relations"] += len(ndp_shn_losses)
         stats["shn_bank_aux_relations"] += len(ndp_shn_reliable_bank_aux_losses)
         stats["shn_bank_aux_reliability_sum"] += sum(item[4] for item in ndp_shn_reliable_bank_aux_losses)
-    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "ndp_ad_selected_count": len(ndp_ad_relations) if arm == "NDP_AD" else 0, "ndp_ad_budget_batches": stats.get("ndp_ad_protection_batches", 0), "ndp_shn_anchor_count": len(shn_losses) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else 0, "ndp_shn_negative_count": int(sum(item[2] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else 0, "ndp_shn_positive_count": int(sum(item[3] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else 0, "ndp_shn_bank_cross_positive_count": int(sum(max(0, item[3] - 3) for item in ndp_shn_bank_losses)) if arm == "NDP_SHN_BANK" else (len(ndp_shn_reliable_bank_aux_losses) if arm == "NDP_SHN_RELIABLE" else 0), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
+    gpc_info.update({"ndp_selected_count": selected_ndp if ndp_enabled else 0, "ndp_active_count": active_ndp if ndp_enabled else 0, "ndp_active": bool(active_ndp > 0 and ndp_enabled), "ndp_ad_selected_count": len(ndp_ad_relations) if arm == "NDP_AD" else 0, "ndp_ad_budget_batches": stats.get("ndp_ad_protection_batches", 0), "ndp_shn_anchor_count": len(shn_losses) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else 0, "ndp_shn_negative_count": int(sum(item[2] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else 0, "ndp_shn_positive_count": int(sum(item[3] for item in shn_losses)) if arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else 0, "ndp_shn_bank_cross_positive_count": int(sum(max(0, item[3] - 3) for item in ndp_shn_bank_losses)) if arm == "NDP_SHN_BANK" else (len(ndp_shn_reliable_bank_aux_losses) if arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else 0), "current_error_pid": current_error_pid if ndp_enabled else 0, "correct_pid": correct_pid if ndp_enabled else 0, "mean_current_margin": margin_sum / max(correct_pid + current_error_pid, 1), "batch_purity10": float(purity.detach().cpu()), "ndp_gate_evaluated": gate_evaluated, "ndp_gate_cosine": gate_cosine, "ndp_gate_status": gate_status, "triplet_hard_excluded_count": triplet_hard_excluded, "triplet_filter_candidate_count": triplet_filter_candidates})
     return {"total": total, "base_total": base_total, "ce": components.get("ce", torch.tensor(float("nan"), device=device)), "triplet": components.get("triplet", torch.tensor(float("nan"), device=device)), "bio": components.get("bio", torch.tensor(float("nan"), device=device)), "gpc": gpc_loss, "ndp": ndp_loss, "ndp_raw": raw_ndp_loss, "main_total": main_total, "ndp_lambda": (float(ndp_lambda) if ndp_enabled and ndp_lambda is not None else (LAMBDA_NDP if ndp_enabled else 0.0)), "relation_info": gpc_info, "gpc_delta_probes": gpc_delta_probes, "delta_fix_probes": delta_fix_probes, "delta_fix_keys": delta_fix_keys if arm == "NDP_DELTA_FIX" else [], "ndp_feature_grad_norm": ndp_feature_norm, "main_feature_grad_norm": main_feature_norm, "ndp_feature_grad_valid": ndp_probe_valid, "main_feature_grad_valid": main_probe_valid, "id_acc": (score["cls_score"].argmax(dim=-1) == pids).float().mean(), "bio_acc": writer.values.get("acc/clip_bio_0", [float("nan")])[-1]}
 
 

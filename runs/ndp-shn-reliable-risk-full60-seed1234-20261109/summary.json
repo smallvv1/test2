@@ -1,0 +1,24 @@
+{
+  "experiment": "NDP_SHN_RELIABLE_RISK_FULL60_SEED1234",
+  "arm": "NDP_SHN_RELIABLE_RISK",
+  "seed": 1234,
+  "lambda_gpc": 0.1,
+  "lambda_ndp": 0.001,
+  "epochs": 60,
+  "datasets": {
+    "LTCC": {
+      "general": {"rank1": 84.58417654037476, "mAP": 54.589980340616805},
+      "clothes_changing": {"rank1": 55.612242221832275, "mAP": 34.218942470164414},
+      "model_sha256": "b559d91efec4dde9ba965260e72e05e25a3880b6d78b81b3c369190913918e28"
+    },
+    "PRCC": {
+      "same_clothes": {"rank1": 100.0, "mAP": 99.56670051964903},
+      "clothes_changing_C_to_A": {"rank1": 64.0417754650116, "mAP": 63.884822112365846},
+      "model_sha256": "98da5b2d56de411a508864a521e959f4403f2d7977de56581d293ce8a34f53ae"
+    }
+  },
+  "train_only_reference": true,
+  "query_gallery_used_during_training": false,
+  "per_rank_checkpoint_files_created": false,
+  "formal_log_root": "/home/DIFFER/log_NDP/ndp_shn_reliable_risk_full60_seed1234_20261108"
+}

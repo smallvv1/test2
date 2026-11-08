@@ -712,7 +712,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
             reference_rows = cached_reference_rows
             reference_features = cached_reference_features
             graph_summary = cached_graph_summary
-            if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} and epoch >= NDP_SHN_START_EPOCH and (
+            if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and epoch >= NDP_SHN_START_EPOCH and (
                 cached_shn_bank_epoch == 0 or epoch - cached_shn_bank_epoch >= NDP_SHN_BANK_REFRESH_EVERY
             ):
                 cached_shn_bank_features = identity_feature_bank(raw, cfg, dataset, device)
@@ -736,7 +736,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                         tuple(cached_shn_bank_features.shape),
                         int(cached_shn_bank_center_pids.numel()),
                     )
-            if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"}:
+            if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"}:
                 reference_features, graph_summary = cached_shn_bank_features, cached_graph_summary
             elif args.arm in {"NDP_SR", "NDP_LATE"}:
                 if cached_graph_epoch == 0:
@@ -821,7 +821,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     ndp_lambda = LAMBDA_NDP_AD
                 elif args.arm in {"NDP_SHN", "NDP_SHN_MP"} and epoch >= NDP_SHN_START_EPOCH:
                     ndp_lambda = LAMBDA_NDP_SHN
-                elif args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} and epoch >= NDP_SHN_START_EPOCH:
+                elif args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and epoch >= NDP_SHN_START_EPOCH:
                     ndp_lambda = LAMBDA_NDP_SHN
                 if args.ndp_lambda_override is not None:
                     ndp_lambda = float(args.ndp_lambda_override)
@@ -849,13 +849,13 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     0.02,
                     ndp_lambda=ndp_lambda,
                     gpc_delta_risks=gpc_delta_risks,
-                    shn_bank_features=cached_shn_bank_features if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None,
-                    shn_bank_pids=train_bank_pids if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None,
-                    shn_bank_indices=batch_bank_indices if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None,
-                    shn_bank_centers=cached_shn_bank_centers if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None,
-                    shn_bank_center_pids=cached_shn_bank_center_pids if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None,
-                    shn_bank_clothes=train_bank_clothes if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None,
-                    shn_batch_clothes=batch["clothes_id"].to(device, non_blocking=False) if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None,
+                    shn_bank_features=cached_shn_bank_features if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None,
+                    shn_bank_pids=train_bank_pids if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None,
+                    shn_bank_indices=batch_bank_indices if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None,
+                    shn_bank_centers=cached_shn_bank_centers if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None,
+                    shn_bank_center_pids=cached_shn_bank_center_pids if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None,
+                    shn_bank_clothes=train_bank_clothes if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None,
+                    shn_batch_clothes=batch["clothes_id"].to(device, non_blocking=False) if args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None,
                 )
                 if not bool(torch.isfinite(result["total"].detach()).item()):
                     raise RuntimeError(f"non-finite total loss at {args.dataset}/epoch{epoch}/iteration{iteration}")
@@ -974,7 +974,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
                     epoch_ndp_lambda = LAMBDA_NDP_AD
                 elif args.arm in {"NDP_SHN", "NDP_SHN_MP"} and epoch >= NDP_SHN_START_EPOCH:
                     epoch_ndp_lambda = LAMBDA_NDP_SHN
-                elif args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE"} and epoch >= NDP_SHN_START_EPOCH:
+                elif args.arm in {"NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} and epoch >= NDP_SHN_START_EPOCH:
                     epoch_ndp_lambda = LAMBDA_NDP_SHN
                 if args.ndp_lambda_override is not None:
                     epoch_ndp_lambda = float(args.ndp_lambda_override)
@@ -1038,7 +1038,7 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         atomic_torch_save(state_final, final_path)
         final_path.chmod(0o444)
         meta = {"dataset": args.dataset, "arm": args.arm, "seed": SEED, "epochs_completed": end_epoch, "global_step": global_step, "model_path": str(final_path), "model_sha256": sha256_file(final_path), "model_state_hash": state_hash(state_final), "model_bytes": final_path.stat().st_size, "initialization_source": init_manifest.get("source"), "model_only_warm_start": bool(init_manifest.get("model_only_warm_start", False)), "gpc_context": GPC_CONTEXT, "lambda_gpc": 0.1, "lambda_ndp": LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_SAFE if args.arm == "NDP_SAFE" else (LAMBDA_NDP_SELECT if args.arm == "NDP_SELECT" else (LAMBDA_NDP_V2 if args.arm == "NDP_V2" else 0.0))))), "ndp_rank_definition": "frozen B0 teacher margin in [0.02,0.10], current student margin <0.05, target=clamp(0.5*teacher_margin,0.01,0.05)" if args.arm == "NDP_RANK" else None, "ndp_sr_definition": "teacher-selected train-only indices; student-space refreshed endpoints; one lowest-margin reliable relation per anchor; ReLU(0.02-student_margin)" if args.arm == "NDP_SR" else None, "ndp_sr_refresh_every": NDP_SR_REFRESH_EVERY if args.arm == "NDP_SR" else None, "ndp_sr_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_sr_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_SR" and args.teacher_model else None, "ndp_late_definition": "teacher-selected train-only indices; student-space refreshed endpoints; activation starts at epoch 16; one lowest-margin relation per anchor only when current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_LATE" else None, "ndp_late_start_epoch": NDP_LATE_START_EPOCH if args.arm == "NDP_LATE" else None, "ndp_late_refresh_every": NDP_LATE_REFRESH_EVERY if args.arm == "NDP_LATE" else None, "ndp_late_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_late_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_LATE" and args.teacher_model else None, "ndp_rank_teacher_model_path": str(Path(args.teacher_model).resolve()) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_rank_teacher_model_sha256": sha256_file(Path(args.teacher_model)) if args.arm == "NDP_RANK" and args.teacher_model else None, "ndp_safe_margin": NDP_SAFE_MARGIN if args.arm == "NDP_SAFE" else None, "ndp_safe_warmup_epochs": NDP_SAFE_WARMUP_EPOCHS if args.arm == "NDP_SAFE" else None, "ndp_safe_graph_update_every": NDP_SAFE_GRAPH_UPDATE_EVERY if args.arm == "NDP_SAFE" else (NDP_SELECT_GRAPH_UPDATE_EVERY if args.arm == "NDP_SELECT" else (NDP_V2_GRAPH_UPDATE_EVERY if args.arm == "NDP_V2" else None)), "ndp_select_start_epoch": NDP_SELECT_START_EPOCH if args.arm == "NDP_SELECT" else None, "ndp_select_warmup_epochs": NDP_SELECT_WARMUP_EPOCHS if args.arm == "NDP_SELECT" else None, "ndp_v2_start_epoch": NDP_V2_START_EPOCH if args.arm == "NDP_V2" else None, "ndp_v2_warmup_epochs": NDP_V2_WARMUP_EPOCHS if args.arm == "NDP_V2" else None, "nlist_tau": TAU if args.arm == "NLIST" else None, "train_only_reference": True, "query_gallery_used_during_training": False, "per_rank_checkpoint_files_created": False, "created_utc": utc_now()}
-        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else (LAMBDA_NDP_GPC_DELTA if args.arm == "NDP_GPC_DELTA" else (LAMBDA_NDP_DELTA_FIX if args.arm == "NDP_DELTA_FIX" else (LAMBDA_NDP_AD if args.arm == "NDP_AD" else (LAMBDA_NDP_SHN if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"])))))))))
+        meta["lambda_ndp"] = LAMBDA_NDP_GPC if args.arm == "NDP_GPC" else (LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else (LAMBDA_NDP_GPC_DELTA if args.arm == "NDP_GPC_DELTA" else (LAMBDA_NDP_DELTA_FIX if args.arm == "NDP_DELTA_FIX" else (LAMBDA_NDP_AD if args.arm == "NDP_AD" else (LAMBDA_NDP_SHN if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else (LAMBDA_NDP_LATE if args.arm == "NDP_LATE" else (LAMBDA_NDP_SR if args.arm == "NDP_SR" else (LAMBDA_NDP_RANK if args.arm == "NDP_RANK" else (LAMBDA_NDP_TEACH if args.arm in {"NTEACH", "NTEACH_SAFE"} else meta["lambda_ndp"])))))))))
         meta["ndp_gpc_definition"] = "current batch GPC-selected same-ID positive pair; exclude original Batch-Hard negative PID; pair-nearest remaining negative; current margin <= 0; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC" else None
         meta["ndp_gpc_impact_definition"] = "current batch GPC-selected same-ID positive pair; pair-nearest different-PID negative including Batch-Hard; retain only negative first-order local-margin projection under GPC descent; ReLU(0.01-student_margin)" if args.arm == "NDP_GPC_IMPACT" else None
         meta["ndp_gpc_impact_lambda"] = LAMBDA_NDP_GPC_IMPACT if args.arm == "NDP_GPC_IMPACT" else None
@@ -1054,13 +1054,15 @@ def train(args: argparse.Namespace) -> dict[str, Any]:
         meta["ndp_shn_bank_definition"] = "after epoch 3, refresh a detached student train-only feature bank every 5 epochs; choose Top-3 hard negative PID centers and up to 8 ambiguous anchors; average live in-batch and reliable cross-batch same-PID positive ranking terms" if args.arm == "NDP_SHN_BANK" else None
         meta["ndp_shn_bank_refresh_every"] = NDP_SHN_BANK_REFRESH_EVERY if args.arm == "NDP_SHN_BANK" else None
         meta["ndp_shn_bank_max_cross_positives"] = NDP.NDP_SHN_BANK_MAX_CROSS_POSITIVES if args.arm == "NDP_SHN_BANK" else None
-        meta["ndp_shn_reliable_bank_definition"] = "retain the live SHN_MP Top-3 negative identity mixture and add at most two detached, cross-clothes, center-supported train-only positives with a fixed 0.25 auxiliary factor; bank negatives never replace live negatives" if args.arm == "NDP_SHN_RELIABLE" else None
-        meta["ndp_shn_reliable_bank_aux_weight"] = NDP.NDP_SHN_RELIABLE_BANK_AUX_WEIGHT if args.arm == "NDP_SHN_RELIABLE" else None
-        meta["ndp_shn_reliable_bank_max_anchors"] = NDP.NDP_SHN_RELIABLE_BANK_MAX_ANCHORS if args.arm == "NDP_SHN_RELIABLE" else None
-        meta["ndp_shn_reliable_bank_reliability_floor"] = NDP.NDP_SHN_RELIABLE_BANK_RELIABILITY_FLOOR if args.arm == "NDP_SHN_RELIABLE" else None
-        meta["ndp_shn_topk"] = NDP.NDP_SHN_TOPK if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None
-        meta["ndp_shn_tau"] = NDP.NDP_SHN_TAU if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None
-        meta["ndp_shn_max_anchors_per_batch"] = NDP.NDP_SHN_MAX_ANCHORS_PER_BATCH if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE"} else None
+        meta["ndp_shn_reliable_bank_definition"] = "retain the live SHN_MP Top-3 negative identity mixture and add at most two detached, cross-clothes, center-supported train-only positives with a fixed 0.25 auxiliary factor; bank negatives never replace live negatives" if args.arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None
+        meta["ndp_shn_reliable_bank_aux_weight"] = NDP.NDP_SHN_RELIABLE_BANK_AUX_WEIGHT if args.arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None
+        meta["ndp_shn_reliable_bank_max_anchors"] = NDP.NDP_SHN_RELIABLE_BANK_MAX_ANCHORS if args.arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None
+        meta["ndp_shn_reliable_bank_reliability_floor"] = NDP.NDP_SHN_RELIABLE_BANK_RELIABILITY_FLOOR if args.arm in {"NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None
+        meta["ndp_shn_reliable_bank_risk_aware"] = args.arm == "NDP_SHN_RELIABLE_RISK"
+        meta["ndp_shn_reliable_bank_risk_quantile"] = NDP.NDP_SHN_RELIABLE_BANK_RISK_QUANTILE if args.arm == "NDP_SHN_RELIABLE_RISK" else None
+        meta["ndp_shn_topk"] = NDP.NDP_SHN_TOPK if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None
+        meta["ndp_shn_tau"] = NDP.NDP_SHN_TAU if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None
+        meta["ndp_shn_max_anchors_per_batch"] = NDP.NDP_SHN_MAX_ANCHORS_PER_BATCH if args.arm in {"NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK"} else None
         meta["nteach_start_epoch"] = NTEACH_START_EPOCH if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher"] = "frozen B0 initialization feature bank; graph captured once before epoch-1 updates" if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
         meta["nteach_teacher_model_path"] = init_manifest.get("source") if args.arm in {"NTEACH", "NTEACH_SAFE"} else None
@@ -1090,7 +1092,7 @@ def main() -> None:
     parser.add_argument("--mode", choices=("prepare", "smoke", "train", "eval"), required=True)
     parser.add_argument("--dataset", choices=("ltcc", "prcc", "all"), required=True)
     parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NLIST"), default="NTEACH")
+    parser.add_argument("--arm", choices=("B0", "NDP_SAFE", "NDP_SELECT", "NDP_V2", "NTEACH", "NTEACH_SAFE", "NDP_RANK", "NDP_SR", "NDP_LATE", "NDP_GPC", "NDP_GPC_IMPACT", "NDP_GPC_DELTA", "NDP_DELTA_FIX", "NDP_AD", "NDP_SHN", "NDP_SHN_MP", "NDP_SHN_BANK", "NDP_SHN_RELIABLE", "NDP_SHN_RELIABLE_RISK", "NLIST"), default="NTEACH")
     parser.add_argument("--teacher-model", type=Path, default=None, help="completed frozen Bio+GPC model used only to build NDP_RANK train-only teacher graph")
     parser.add_argument("--epochs", type=int, default=EPOCHS)
     parser.add_argument("--smoke-steps", type=int, default=0)

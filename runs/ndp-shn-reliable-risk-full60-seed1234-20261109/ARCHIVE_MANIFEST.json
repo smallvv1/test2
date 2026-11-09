@@ -5,6 +5,7 @@
   "source_run": "/home/DIFFER/log_NDP/ndp_shn_reliable_risk_full60_seed1234_20261108/",
   "datasets": ["LTCC", "PRCC"],
   "epochs": 60,
-  "contents": "compact training/evaluation logs, metrics, train-only bank summaries, and completion metadata",
+  "contents": "compact training/evaluation logs, evaluator logs, metrics, train-only bank summaries, and completion metadata",
+  "eval_logs": ["LTCC_eval.log", "PRCC_eval.log"],
   "excluded": ["model_final.pth", "resume_latest.pth", "checkpoint files", "image files", "__pycache__"]
 }

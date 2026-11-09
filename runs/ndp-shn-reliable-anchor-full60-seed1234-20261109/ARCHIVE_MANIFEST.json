@@ -1,0 +1,22 @@
+{
+  "source_root": "/home/DIFFER/log_NDP/ndp_shn_reliable_anchor_full60_seed1234_20261109_restart",
+  "model_files_excluded": true,
+  "files": [
+    "README.md",
+    "summary.json",
+    "ARCHIVE_MANIFEST.json",
+    "LTCC/RUN_COMPLETE.json",
+    "LTCC/eval_final.json",
+    "LTCC/eval.log",
+    "LTCC/metrics_per_epoch.csv",
+    "LTCC/online_neighbor_summary.csv",
+    "LTCC/train.log",
+    "PRCC/RUN_COMPLETE.json",
+    "PRCC/eval_final.json",
+    "PRCC/eval.log",
+    "PRCC/metrics_per_epoch.csv",
+    "PRCC/online_neighbor_summary.csv",
+    "PRCC/train.log"
+  ],
+  "per_rank_checkpoint_files": false
+}

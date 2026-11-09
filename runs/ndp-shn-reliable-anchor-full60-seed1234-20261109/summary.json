@@ -1,0 +1,25 @@
+{
+  "experiment": "NDP_SHN_RELIABLE_ANCHOR",
+  "date": "2026-11-09",
+  "seed": 1234,
+  "epochs": 60,
+  "device": "2x PPU-ZW810E",
+  "lambda_gpc": 0.1,
+  "lambda_ndp": 0.001,
+  "train_only_reference": true,
+  "query_gallery_used_during_training": false,
+  "per_rank_checkpoint_files_created": false,
+  "ltcc": {
+    "general": {"rank1": 84.17850136756897, "mAP": 52.14100171590085},
+    "clothes_changing": {"rank1": 50.51020383834839, "mAP": 28.4991863878028}
+  },
+  "prcc": {
+    "same_clothes": {"rank1": 100.0, "mAP": 99.54805963085815},
+    "clothes_changing_C_to_A": {"rank1": 63.92887234687805, "mAP": 63.76032293906553}
+  },
+  "model_sha256": {
+    "LTCC": "f17483a8bf109f1d7a7330aa37521d200241407d2fbcd0b703232f2662a1ba78",
+    "PRCC": "4bdd06e92a68f29801fee6295998b38356cdd89534bc3f2007e03a54f1deadc1"
+  },
+  "conclusion": "No stable cross-dataset gain; retain as negative evidence and stop similar NDP bank/Margin stacking."
+}

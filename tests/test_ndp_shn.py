@@ -41,6 +41,27 @@ def test_shn_mp_balances_all_positive_terms_with_live_gradient():
     assert float(gradient.norm()) > 0.0
 
 
+def test_shn_mp_abm_uses_anchor_specific_top3_and_pid_coverage():
+    torch.manual_seed(1234)
+    representation = torch.nn.functional.normalize(torch.randn(16, 12, requires_grad=True), dim=1)
+    pids = torch.tensor([0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3])
+
+    selected, info = ndp.select_ndp_shn_mp_abm_losses(representation, pids, return_info=True)
+
+    assert len(selected) == min(ndp.NDP_SHN_MAX_ANCHORS_PER_BATCH, pids.unique().numel())
+    assert info["selected_pid_count"] == len(set(info["selected_anchor_pids"])) == len(selected)
+    assert all(loss.requires_grad for loss, _margin, negative_count, positive_count in selected)
+    assert all(negative_count == ndp.NDP_SHN_TOPK for _loss, _margin, negative_count, _positive_count in selected)
+    assert all(positive_count == 3 for _loss, _margin, _negative_count, positive_count in selected)
+    # A single PID-center ordering would make this diagnostic constant across
+    # anchors of that PID; ABM explicitly records anchor-specific Top-3 lists.
+    assert len({tuple(item["negative_pids"]) for item in info["topk_by_anchor"]}) > 1
+    total = torch.stack([item[0] for item in selected]).mean()
+    gradient = torch.autograd.grad(total, representation)[0]
+    assert torch.isfinite(gradient).all()
+    assert float(gradient.norm()) > 0.0
+
+
 def test_shn_bank_adds_cross_batch_positives_and_keeps_live_gradient():
     torch.manual_seed(1234)
     representation = torch.nn.functional.normalize(torch.randn(16, 12, requires_grad=True), dim=1)
@@ -161,6 +182,7 @@ def test_shn_is_a_supported_loss_arm_and_b0_contract_remains_exact():
     assert torch.equal(ndp.compose_total_loss(main, ndp_loss, "B0"), main)
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP"), torch.tensor(2.003))
+    assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP_ABM"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_BANK"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_RELIABLE"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_RELIABLE_RISK"), torch.tensor(2.003))

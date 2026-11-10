@@ -1,0 +1,10 @@
+{
+  "experiment": "PAPER_AUDIT_ABM_20261110",
+  "archive_date": "2026-11-10",
+  "status": "RAW_AUDIT_OUTPUTS",
+  "source_run": "/home/DIFFER/log_NDP/paper_audit_abm_20261110",
+  "datasets": ["LTCC", "PRCC"],
+  "models": ["Bio_GPC", "SHN_MP", "ABM"],
+  "excluded": ["all model checkpoint binaries"],
+  "code_commit": "66b60cb"
+}

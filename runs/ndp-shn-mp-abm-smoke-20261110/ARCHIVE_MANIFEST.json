@@ -1,0 +1,10 @@
+{
+  "experiment": "NDP_SHN_MP_ABM_SMOKE",
+  "archive_date": "2026-11-10",
+  "status": "SMOKE_PASSED",
+  "source_run": "/home/DIFFER/log_NDP/ndp_shn_mp_abm_smoke_20261110",
+  "dataset": "LTCC",
+  "steps": 20,
+  "excluded": [],
+  "code_commit": "66b60cb"
+}

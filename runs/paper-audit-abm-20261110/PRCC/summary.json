@@ -1,0 +1,86 @@
+{
+  "dataset": "prcc",
+  "models": [
+    {
+      "dataset": "prcc",
+      "label": "Bio_GPC",
+      "model": "/home/DIFFER/log_NDP/ndp_nteach_current_b0_pair_20261031_125146/PRCC_B0_full/PRCC/model_final.pth",
+      "model_sha256": "74aed55925603adfdfb07325f5b6646608a8d60d23c613852c5951d521263772",
+      "query_count": 3543,
+      "valid_query_count": 3543,
+      "rank1_correct_count": 2271,
+      "rank1": 64.09822106361389,
+      "mAP": 63.41430032539343,
+      "mean_first_positive_rank": 38.64408693197855,
+      "median_first_positive_rank": 1.0,
+      "ap_q25": 0.1862368596794731,
+      "ap_median": 0.8279936448073305,
+      "ap_q75": 0.9955086030281926,
+      "protocol": "PRCC C-to-A"
+    },
+    {
+      "dataset": "prcc",
+      "label": "SHN_MP",
+      "model": "/home/DIFFER/log_NDP/ndp_shn_mp_full60_seed1234_20261105/PRCC/model_final.pth",
+      "model_sha256": "784e75df9b35a67a9b3c229488101efa6cdbea0a043d427dae81dac3c5317b41",
+      "query_count": 3543,
+      "valid_query_count": 3543,
+      "rank1_correct_count": 2273,
+      "rank1": 64.15467262268066,
+      "mAP": 63.77768977432304,
+      "mean_first_positive_rank": 37.54501834603443,
+      "median_first_positive_rank": 1.0,
+      "ap_q25": 0.19817220355329454,
+      "ap_median": 0.8322454453857745,
+      "ap_q75": 0.9959578363436803,
+      "protocol": "PRCC C-to-A"
+    },
+    {
+      "dataset": "prcc",
+      "label": "ABM",
+      "model": "/home/DIFFER/log_NDP/ndp_shn_mp_abm_full60_seed1234_20261110/PRCC/model_final.pth",
+      "model_sha256": "52d43fcc738b0e4518fd2852097c0ab409ada332c60e10989dc6bd3f516f0769",
+      "query_count": 3543,
+      "valid_query_count": 3543,
+      "rank1_correct_count": 2251,
+      "rank1": 63.53372931480408,
+      "mAP": 63.34507308074944,
+      "mean_first_positive_rank": 35.60767710979396,
+      "median_first_positive_rank": 1.0,
+      "ap_q25": 0.19245666133480654,
+      "ap_median": 0.8264719577332685,
+      "ap_q75": 0.9960076166553644,
+      "protocol": "PRCC C-to-A"
+    }
+  ],
+  "paired_vs_bio_gpc": [
+    {
+      "baseline": "Bio+GPC",
+      "candidate": "SHN_MP",
+      "paired_valid_queries": 3543,
+      "rank1_gained_queries": 60,
+      "rank1_lost_queries": 58,
+      "net_rank1_change_queries": 2,
+      "mean_ap_delta_pp": 0.3633894489296236,
+      "median_ap_delta_pp": 0.0,
+      "ap_improved_queries": 1585,
+      "ap_decreased_queries": 1350,
+      "ap_unchanged_queries": 608,
+      "sum_ap_delta_pp": 1287.4888175576566
+    },
+    {
+      "baseline": "Bio+GPC",
+      "candidate": "ABM",
+      "paired_valid_queries": 3543,
+      "rank1_gained_queries": 60,
+      "rank1_lost_queries": 80,
+      "net_rank1_change_queries": -20,
+      "mean_ap_delta_pp": -0.06922724464398676,
+      "median_ap_delta_pp": 0.0,
+      "ap_improved_queries": 1491,
+      "ap_decreased_queries": 1432,
+      "ap_unchanged_queries": 620,
+      "sum_ap_delta_pp": -245.27212777364505
+    }
+  ]
+}

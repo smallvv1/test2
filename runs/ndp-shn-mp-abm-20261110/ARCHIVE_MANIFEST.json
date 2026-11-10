@@ -1,0 +1,10 @@
+{
+  "experiment": "NDP_SHN_MP_ABM_FULL60_SEED1234",
+  "archive_date": "2026-11-10",
+  "status": "COMPLETE_LTCC_PRCC_EVAL",
+  "source_run": "/home/DIFFER/log_NDP/ndp_shn_mp_abm_full60_seed1234_20261110",
+  "datasets": ["LTCC", "PRCC"],
+  "formal_eval_logs_added": ["LTCC/eval.log", "PRCC/eval.log"],
+  "excluded": ["LTCC/model_final.pth", "PRCC/model_final.pth"],
+  "code_commit": "66b60cb"
+}

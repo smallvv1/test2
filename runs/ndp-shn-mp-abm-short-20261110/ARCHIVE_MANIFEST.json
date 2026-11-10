@@ -1,0 +1,10 @@
+{
+  "experiment": "NDP_SHN_MP_ABM_SHORT_SEED1234",
+  "archive_date": "2026-11-10",
+  "status": "SHORT_RUN_COMPLETE",
+  "source_run": "/home/DIFFER/log_NDP/ndp_shn_mp_abm_short_20261110",
+  "datasets": ["LTCC", "PRCC"],
+  "epochs_completed": 3,
+  "excluded": ["LTCC/model_final.pth", "PRCC/model_final.pth"],
+  "code_commit": "66b60cb"
+}

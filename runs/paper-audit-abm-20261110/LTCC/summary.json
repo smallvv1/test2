@@ -1,0 +1,86 @@
+{
+  "dataset": "ltcc",
+  "models": [
+    {
+      "dataset": "ltcc",
+      "label": "Bio_GPC",
+      "model": "/home/DIFFER/log_NDP/ndp_nteach_b0_recovery_20261030_210612/LTCC_B0_full/LTCC/model_final.pth",
+      "model_sha256": "f3f89f4359267699c8d7abd55d843d0f30a3b43d506652acb984f7d3b38b7688",
+      "query_count": 493,
+      "valid_query_count": 392,
+      "rank1_correct_count": 217,
+      "rank1": 55.35714030265808,
+      "mAP": 33.936687012748415,
+      "mean_first_positive_rank": 48.87755102040816,
+      "median_first_positive_rank": 1.0,
+      "ap_q25": 0.08210520591482642,
+      "ap_median": 0.27628312826866985,
+      "ap_q75": 0.5495518896980777,
+      "protocol": "LTCC clothes-changing"
+    },
+    {
+      "dataset": "ltcc",
+      "label": "SHN_MP",
+      "model": "/home/DIFFER/log_NDP/ndp_shn_mp_full60_seed1234_20261105/LTCC/model_final.pth",
+      "model_sha256": "1202b35434b953e5f5de6fbaf2bbc7ebbb32a84845668973bf70d0cd54c5d990",
+      "query_count": 493,
+      "valid_query_count": 392,
+      "rank1_correct_count": 225,
+      "rank1": 57.39796161651611,
+      "mAP": 33.411743290835425,
+      "mean_first_positive_rank": 48.05612244897959,
+      "median_first_positive_rank": 1.0,
+      "ap_q25": 0.0810662045235871,
+      "ap_median": 0.2953001483499764,
+      "ap_q75": 0.5537468821006061,
+      "protocol": "LTCC clothes-changing"
+    },
+    {
+      "dataset": "ltcc",
+      "label": "ABM",
+      "model": "/home/DIFFER/log_NDP/ndp_shn_mp_abm_full60_seed1234_20261110/LTCC/model_final.pth",
+      "model_sha256": "231a998c0f7a3f91c8f252286da399b7f68176264d9abff46704c96ef8241c59",
+      "query_count": 493,
+      "valid_query_count": 392,
+      "rank1_correct_count": 200,
+      "rank1": 51.02040767669678,
+      "mAP": 29.291230222001367,
+      "mean_first_positive_rank": 73.8265306122449,
+      "median_first_positive_rank": 1.0,
+      "ap_q25": 0.0575720479832076,
+      "ap_median": 0.2316225574353819,
+      "ap_q75": 0.4622226486414762,
+      "protocol": "LTCC clothes-changing"
+    }
+  ],
+  "paired_vs_bio_gpc": [
+    {
+      "baseline": "Bio+GPC",
+      "candidate": "SHN_MP",
+      "paired_valid_queries": 392,
+      "rank1_gained_queries": 29,
+      "rank1_lost_queries": 21,
+      "net_rank1_change_queries": 8,
+      "mean_ap_delta_pp": -0.5249437219129922,
+      "median_ap_delta_pp": -0.10811433322750769,
+      "ap_improved_queries": 183,
+      "ap_decreased_queries": 209,
+      "ap_unchanged_queries": 0,
+      "sum_ap_delta_pp": -205.7779389898929
+    },
+    {
+      "baseline": "Bio+GPC",
+      "candidate": "ABM",
+      "paired_valid_queries": 392,
+      "rank1_gained_queries": 25,
+      "rank1_lost_queries": 42,
+      "net_rank1_change_queries": -17,
+      "mean_ap_delta_pp": -4.645456790747048,
+      "median_ap_delta_pp": -2.8541847153852786,
+      "ap_improved_queries": 103,
+      "ap_decreased_queries": 289,
+      "ap_unchanged_queries": 0,
+      "sum_ap_delta_pp": -1821.0190619728426
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "Bio_GPC": "/home/DIFFER/log_NDP/ndp_nteach_b0_recovery_20261030_210612/LTCC_B0_full/LTCC/model_final.pth",
+  "SHN_MP": "/home/DIFFER/log_NDP/ndp_shn_mp_full60_seed1234_20261105/LTCC/model_final.pth",
+  "ABM": "/home/DIFFER/log_NDP/ndp_shn_mp_abm_full60_seed1234_20261110/LTCC/model_final.pth"
+}

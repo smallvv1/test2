@@ -1,0 +1,15 @@
+{
+  "experiment": "NDP_PAPER_CLOSURE_AUDIT",
+  "archive_date": "2026-11-10",
+  "status": "LTCC_PRCC_RAW_AUDIT_OUTPUTS_ARCHIVED",
+  "source_run": "/home/DIFFER/log_NDP/paper_audit_20261110/",
+  "datasets": ["LTCC", "PRCC"],
+  "contents": "query-level metrics, model-path metadata, per-model evaluation logs, and dataset summaries",
+  "excluded": [
+    "model weights",
+    "checkpoint files",
+    "image and archive files",
+    "__pycache__"
+  ],
+  "code_commit": "a828a18"
+}

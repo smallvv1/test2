@@ -1,0 +1,6 @@
+{
+  "Bio_GPC": "/home/DIFFER/log_NDP/ndp_nteach_b0_recovery_20261030_210612/LTCC_B0_full/LTCC/model_final.pth",
+  "SHN_MP": "/home/DIFFER/log_NDP/ndp_shn_mp_full60_seed1234_20261105/LTCC/model_final.pth",
+  "SHN_RELIABLE": "/home/DIFFER/log_NDP/ndp_shn_reliable_full60_seed1234_20261107/LTCC/model_final.pth",
+  "SHN_RELIABLE_RISK": "/home/DIFFER/log_NDP/ndp_shn_reliable_risk_full60_seed1234_20261108/LTCC/model_final.pth"
+}

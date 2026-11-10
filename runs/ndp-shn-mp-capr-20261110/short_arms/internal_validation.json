@@ -1,0 +1,27 @@
+{
+  "dataset": "prcc",
+  "split": "train-only PID holdout (sorted PID index mod 5 == 0)",
+  "pid_count": 150,
+  "val_pid_count": 30,
+  "val_image_count": 3691,
+  "models": {
+    "A": {
+      "valid_queries": 3691,
+      "rank1": 70.46870766729883,
+      "mAP": 64.48596747927647,
+      "mean_first_positive_rank": 22.420753183419126
+    },
+    "B": {
+      "valid_queries": 3691,
+      "rank1": 70.49580059604443,
+      "mAP": 64.53639331925145,
+      "mean_first_positive_rank": 23.252777025196423
+    },
+    "C": {
+      "valid_queries": 3691,
+      "rank1": 70.25196423733405,
+      "mAP": 64.13531352698712,
+      "mean_first_positive_rank": 25.56840964508263
+    }
+  }
+}

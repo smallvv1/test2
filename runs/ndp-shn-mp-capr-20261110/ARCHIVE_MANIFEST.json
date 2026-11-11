@@ -1,0 +1,21 @@
+{
+  "experiment": "NDP_SHN_MP_CAPR_B_AND_LAMBDA0_PAIR_SEED1234",
+  "archive_date": "2026-11-11",
+  "status": "FORMAL_AND_PAIRED_LOGS_COMPLETE",
+  "source_runs": [
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_b_full60_seed1234_20261110",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_b_lambda0_pair_full60_seed1234_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_short_20261110",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_smoke_20261110",
+    "/home/DIFFER/log_NDP/paper_audit_capr_pair_20261111"
+  ],
+  "datasets": ["LTCC", "PRCC"],
+  "short_arms": ["A", "B", "C"],
+  "paired_control": "CAPR-B with ndp-lambda override 0.0",
+  "raw_audit_models": ["Bio_GPC", "SHN_MP", "CAPR_B", "CAPR_B_NDP0"],
+  "code_commit": "2a51f17",
+  "excluded": [
+    "all model_final.pth checkpoint binaries",
+    "all common-init checkpoint binaries"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "Bio_GPC": "/home/DIFFER/log_NDP/ndp_nteach_current_b0_pair_20261031_125146/PRCC_B0_full/PRCC/model_final.pth",
+  "SHN_MP": "/home/DIFFER/log_NDP/ndp_shn_mp_full60_seed1234_20261105/PRCC/model_final.pth",
+  "CAPR_B": "/home/DIFFER/log_NDP/ndp_shn_mp_capr_b_full60_seed1234_20261110/PRCC/model_final.pth",
+  "CAPR_B_NDP0": "/home/DIFFER/log_NDP/ndp_shn_mp_capr_b_lambda0_pair_full60_seed1234_20261111/PRCC/model_final.pth"
+}

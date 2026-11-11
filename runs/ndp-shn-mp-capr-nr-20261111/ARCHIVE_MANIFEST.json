@@ -1,0 +1,30 @@
+{
+  "experiment": "NDP_SHN_MP_CAPR_NR_B_SEED1234",
+  "archive_date": "2026-11-11",
+  "status": "FORMAL_AND_CONTROL_RUNS_COMPLETE",
+  "source_runs": [
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_ltcc_b_full60_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_prcc_b_full60_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_ltcc_ndp0_full60_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_prcc_ndp0_full60_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_smoke_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_short_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_idsplit20_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_pair_warmup_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_pair_warmup_ltcc_20261111"
+  ],
+  "datasets": ["LTCC", "PRCC"],
+  "formal_arm": "NDP_SHN_MP_CAPR_NR_B",
+  "paired_control": "same arm with lambda_ndp=0.0",
+  "code_changes": [
+    "CAPR-NR sparse non-redundant ranking supplement",
+    "CAPR-NR-A/B/C arm registration and diagnostics",
+    "CAPR-NR unit-test coverage"
+  ],
+  "code_commit_parent": "f0e03ca",
+  "excluded": [
+    "all model_final.pth checkpoint binaries",
+    "all common-init checkpoint binaries",
+    "ndp_shn_mp_capr_nr_idsplit_20261111 incomplete run with empty train.log"
+  ]
+}

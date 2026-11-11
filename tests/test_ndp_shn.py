@@ -111,6 +111,30 @@ def test_shn_mp_capr_b_c_use_cross_clothes_and_live_hard_negative_path():
     assert len(values["B"]) == len(values["C"])
 
 
+def test_shn_mp_capr_nr_is_sparse_nonredundant_and_live():
+    torch.manual_seed(2468)
+    representation = torch.nn.functional.normalize(torch.randn(32, 12, requires_grad=True), dim=1)
+    pids = torch.tensor([pid for pid in range(8) for _ in range(4)])
+    clothes = torch.tensor([0, 0, 1, 2] * 8)
+    _original, original_info = ndp.select_ndp_shn_mp_losses(representation, pids, return_info=True)
+    _capr, capr_info = ndp.select_ndp_shn_mp_capr_losses(
+        representation, pids, clothes, variant="B", original_info=original_info, return_info=True
+    )
+    hard_pid, hard_valid = ndp.batch_hard_negative_pid(representation, pids)
+    selected, info = ndp.select_ndp_shn_mp_capr_nr_losses(
+        representation, pids, clothes, capr_info, hard_pid, hard_valid, return_info=True
+    )
+    assert info["selected_relation_count"] == len(selected)
+    assert info["selected_relation_count"] <= capr_info["selected_extra_anchor_count"]
+    assert info["selected_nonhard_relation_count"] + info["selected_hard_fallback_count"] == len(selected)
+    assert all(item[0].requires_grad for item in selected)
+    if selected:
+        total = torch.stack([item[0] for item in selected]).mean()
+        gradient = torch.autograd.grad(total, representation, retain_graph=True)[0]
+        assert torch.isfinite(gradient).all()
+        assert float(gradient.norm()) > 0.0
+
+
 def test_shn_bank_adds_cross_batch_positives_and_keeps_live_gradient():
     torch.manual_seed(1234)
     representation = torch.nn.functional.normalize(torch.randn(16, 12, requires_grad=True), dim=1)
@@ -235,6 +259,9 @@ def test_shn_is_a_supported_loss_arm_and_b0_contract_remains_exact():
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP_CAPR_A"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP_CAPR_B"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP_CAPR_C"), torch.tensor(2.003))
+    assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP_CAPR_NR_A"), torch.tensor(2.003))
+    assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP_CAPR_NR_B"), torch.tensor(2.003))
+    assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_MP_CAPR_NR_C"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_BANK"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_RELIABLE"), torch.tensor(2.003))
     assert torch.isclose(ndp.compose_total_loss(main, ndp_loss, "NDP_SHN_RELIABLE_RISK"), torch.tensor(2.003))

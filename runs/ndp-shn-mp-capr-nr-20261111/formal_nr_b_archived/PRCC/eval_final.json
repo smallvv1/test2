@@ -1,0 +1,28 @@
+{
+  "dataset": "prcc",
+  "evaluated_utc": "2026-11-11T05:23:40Z",
+  "model": "/home/DIFFER/log_NDP/ndp_shn_mp_capr_nr_prcc_b_full60_20261111/PRCC/model_final.pth",
+  "model_sha256": "94dac146de2f07062c8c0f21245806baf0b48bb58f628515ba003dae8dba835f",
+  "protocols": {
+    "clothes_changing_C_to_A": {
+      "gallery_count": 3384,
+      "mAP": 0.6418740965312079,
+      "mINP": null,
+      "mINP_status": "Unavailable: repository evaluator does not expose mINP",
+      "query_count": 3543,
+      "rank1": 0.643804669380188,
+      "rank10": 0.7507761716842651,
+      "rank5": 0.7146486043930054
+    },
+    "same_clothes": {
+      "gallery_count": 3384,
+      "mAP": 0.9947859098569127,
+      "mINP": null,
+      "mINP_status": "Unavailable: repository evaluator does not expose mINP",
+      "query_count": 3873,
+      "rank1": 1.0,
+      "rank10": 1.0,
+      "rank5": 1.0
+    }
+  }
+}

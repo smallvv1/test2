@@ -16,6 +16,14 @@
   "datasets": ["LTCC", "PRCC"],
   "formal_arm": "NDP_SHN_MP_CAPR_NR_B",
   "paired_control": "same arm with lambda_ndp=0.0",
+  "latest_code_commit": "2d3744a",
+  "latest_pair_report": "reports/NDP_SHN_MP_CAPR_NR_LTCC_NDP0_PAIR_20261111.md",
+  "small_log_archives": [
+    "formal_nr_b_archived/LTCC",
+    "formal_nr_b_archived/PRCC",
+    "paired_ndp0_archived/LTCC",
+    "paired_ndp0_archived/PRCC"
+  ],
   "code_changes": [
     "CAPR-NR sparse non-redundant ranking supplement",
     "CAPR-NR-A/B/C arm registration and diagnostics",

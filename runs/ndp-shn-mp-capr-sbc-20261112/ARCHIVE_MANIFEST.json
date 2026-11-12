@@ -1,0 +1,33 @@
+{
+  "experiment": "NDP_SHN_MP_CAPR_SBC_SEED1234",
+  "archive_date": "2026-11-12",
+  "status": "FORMAL_PRCC_AND_LATEST_LTCC_SHORT_ARCHIVED",
+  "source_runs": [
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_smoke_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_smoke_retry_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_smoke_ppuenv_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_idsplit5_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_idsplit20_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_prcc_full60_20261111",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_prcc_eta0_full60_20261112",
+    "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_ltcc_short_20261112"
+  ],
+  "datasets": ["PRCC", "LTCC"],
+  "formal_arm": "NDP_SHN_MP_CAPR_SBC",
+  "formal_prcc_seed": 1234,
+  "eta_variants": [0.25, 0.0],
+  "code_changes": [
+    "Add sparse boundary-confusion CAPR-SBC relation selector",
+    "Register CAPR-SBC loss composition, diagnostics, and eta override",
+    "Add CAPR-SBC unit-test coverage"
+  ],
+  "included": [
+    "training and evaluation logs",
+    "metrics_per_epoch.csv and online_neighbor_summary.csv",
+    "run completion, evaluation, initialization, and resume metadata"
+  ],
+  "excluded": [
+    "all model_final.pth checkpoint binaries",
+    "all resume_latest.pth checkpoint binaries"
+  ]
+}

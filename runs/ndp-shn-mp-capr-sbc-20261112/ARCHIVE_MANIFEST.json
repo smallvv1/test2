@@ -16,6 +16,8 @@
   "formal_arm": "NDP_SHN_MP_CAPR_SBC",
   "formal_prcc_seed": 1234,
   "eta_variants": [0.25, 0.0],
+  "report": "reports/NDP_SHN_MP_CAPR_SBC_FULL60_RESULTS_20261112.md",
+  "forbidden_checkpoint_scan": "passed: no rank*state.pt or rank*state.pth files in repository or source run directories",
   "code_changes": [
     "Add sparse boundary-confusion CAPR-SBC relation selector",
     "Register CAPR-SBC loss composition, diagnostics, and eta override",

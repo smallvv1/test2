@@ -126,3 +126,16 @@ using soft triplet loss for training
 
 epoch 1/3 loss=7.663850 ndp=0.000000 active=0/0 lr=8.422e-07 skip=2
 epoch 2/3 loss=7.178184 ndp=0.000000 active=0/0 lr=9.031e-07 skip=1
+epoch 3/3 loss=7.039136 ndp=0.655403 active=4748/4748 lr=9.641e-07 skip=0
+{
+  "dataset": "ltcc",
+  "epochs_completed": 3,
+  "model": null
+}
+{
+  "dataset": "ltcc",
+  "epochs_completed": 3,
+  "model": "/home/DIFFER/log_NDP/ndp_shn_mp_capr_sbc_ltcc_short_20261112/LTCC/model_final.pth"
+}
+
+EXIT_STATUS=0
